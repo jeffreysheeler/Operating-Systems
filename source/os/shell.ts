@@ -229,6 +229,15 @@ module TSOS {
             _StdOut.clearScreen();
             _StdOut.resetXY();
         }
+		
+		public shellDate(args)	{
+			var date = new Date().toLocaleDateString();
+			_StdOut.putText("Today is "+date);
+		}
+		
+		public shellWhereAmI(args)	{
+			_StdOut.putText("You are on your computer");
+		}
 
         public shellMan(args) {
             if (args.length > 0) {
@@ -236,7 +245,36 @@ module TSOS {
                 switch (topic) {
                     case "help":
                         _StdOut.putText("Help displays a list of (hopefully) valid commands.");
-                        break;
+                    break;
+					case "ver":
+						_StdOut.putText("Displays the current version data.");
+					break;
+					case "shutdown":
+						_StdOut.putText("Shuts down the virtual OS but leaves the underlying host / hardware simulation running.");
+					break;
+					case "cls":
+						_StdOut.putText("Clears the screen and resets the cursor position.");
+					break;
+					case "trace":
+						_StdOut.putText("Turns the OS trace on or off.");
+					break;
+					case "man":
+						_StdOut.putText("<topic> - Displays the MANual page for <topic>.");
+					break;
+					case "rot13":
+						_StdOut.putText("<string> - Does rot13 obfuscation on <string>.");
+					break;
+					case "prompt":
+						_StdOut.putText("<string> - Sets the prompt.");
+					break;
+					case "date":
+						_StdOut.putText("Displays the current date.");
+					break;
+					case "whereami":
+						_StdOut.putText("Displays where the user is.");
+					break;
+					case "status":
+                        _StdOut.putText("Displays the current status of the user");
                     // TODO: Make descriptive MANual page entries for the the rest of the shell commands here.
                     default:
                         _StdOut.putText("No manual entry for " + args[0] + ".");

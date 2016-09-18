@@ -247,6 +247,6 @@ var TSOS;
             }
         };
         return Shell;
-    })();
+    }());
     TSOS.Shell = Shell;
 })(TSOS || (TSOS = {}));
