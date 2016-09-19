@@ -81,6 +81,11 @@ var TSOS;
             else {
                 this.krnTrace("Idle");
             }
+            var date = new Date().toLocaleDateString();
+            var time = new Date().toLocaleTimeString();
+            var fullDate = "Today is " + date + " and it is " + time;
+            var returnDate = document.getElementById("dateText");
+            returnDate.value = fullDate;
         };
         //
         // Interrupt Handling

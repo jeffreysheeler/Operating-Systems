@@ -255,8 +255,8 @@ module TSOS {
         }
 		
 		public shellDate(args)	{
-			var date = new Date().toLocaleDateString();
-			_StdOut.putText("Today is "+date);
+            document.getElementById("dateText");
+            var date = new Date().toLocaleDateString();
 		}
 		
 		public shellWhereAmI(args)	{
@@ -264,12 +264,22 @@ module TSOS {
 		}
 
         public shellStatus(args)    {
-            var userStatus = args;
-            _StdOut.putText("status "+userStatus);
+            document.getElementById("statusText");
+            var userStatus = <HTMLInputElement> document.getElementById("statusText");
+            var returnStatus = "";
+
+            userStatus.value = args;
+
+            if(args.length > 0){
+                for(var arg of args){
+                    returnStatus += arg +" ";
+                }
+            }
+             userStatus.value = returnStatus;
         }
 
         public shellLoad(args)  {
-            
+
         }
 
         public shellMan(args) {

@@ -201,15 +201,24 @@ var TSOS;
             _StdOut.resetXY();
         };
         Shell.prototype.shellDate = function (args) {
+            document.getElementById("dateText");
             var date = new Date().toLocaleDateString();
-            _StdOut.putText("Today is " + date);
         };
         Shell.prototype.shellWhereAmI = function (args) {
             _StdOut.putText("You are on your computer");
         };
         Shell.prototype.shellStatus = function (args) {
-            var userStatus = args;
-            _StdOut.putText("status " + userStatus);
+            document.getElementById("statusText");
+            var userStatus = document.getElementById("statusText");
+            var returnStatus = "";
+            userStatus.value = args;
+            if (args.length > 0) {
+                for (var _i = 0, args_1 = args; _i < args_1.length; _i++) {
+                    var arg = args_1[_i];
+                    returnStatus += arg + " ";
+                }
+            }
+            userStatus.value = returnStatus;
         };
         Shell.prototype.shellLoad = function (args) {
         };

@@ -91,6 +91,12 @@ module TSOS {
             } else {                      // If there are no interrupts and there is nothing being executed then just be idle. {
                 this.krnTrace("Idle");
             }
+            var date = new Date().toLocaleDateString();
+            var time = new Date().toLocaleTimeString();
+            var fullDate: string = "Today is "+date+" and it is "+time;
+            var returnDate = <HTMLInputElement> document.getElementById("dateText");
+
+            returnDate.value = fullDate;
         }
 
 

@@ -71,6 +71,14 @@ var TSOS;
                 this.currentXPosition = this.currentXPosition + offset;
             }
         };
+        Console.prototype.scroll = function () {
+            if (this.currentYPosition > _Canvas.height) {
+                var currentCanvas = _DrawingContext.getImageData(0, _DefaultFontSize + 8, _Canvas.width, _Canvas.height);
+                this.clearScreen;
+                _DrawingContext.putImageData(currentCanvas, 0, 0);
+                this.currentYPosition = _Canvas.height - _DefaultFontSize;
+            }
+        };
         Console.prototype.advanceLine = function () {
             this.currentXPosition = 0;
             /*
@@ -81,6 +89,7 @@ var TSOS;
             this.currentYPosition += _DefaultFontSize +
                 _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) +
                 _FontHeightMargin;
+            this.scroll();
             // TODO: Handle scrolling. (iProject 1)
         };
         return Console;
