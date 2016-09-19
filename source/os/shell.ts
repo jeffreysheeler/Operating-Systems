@@ -79,6 +79,30 @@ module TSOS {
                                   "<string> - Sets the prompt.");
             this.commandList[this.commandList.length] = sc;
 
+            // date
+            sc = new ShellCommand(this.shellDate,
+                                  "date",
+                                  "displays the current date and time.");
+            this.commandList[this.commandList.length] = sc;
+
+            // whereami
+            sc = new ShellCommand(this.shellWhereAmI,
+                                  "whereami",
+                                  "displays the users current location.");
+            this.commandList[this.commandList.length] = sc;
+
+            // status <string>
+            sc = new ShellCommand(this.shellStatus,
+                                  "status",
+                                  "<string> - displays a message specified by the user.");
+            this.commandList[this.commandList.length] = sc;
+
+            // load
+            sc = new ShellCommand(this.shellLoad,
+                                  "load",
+                                  "Validates user code in the HTML5 text area.");
+            this.commandList[this.commandList.length] = sc;
+
             // ps  - list the running processes and their IDs
             // kill <id> - kills the specified process id.
 
@@ -239,6 +263,15 @@ module TSOS {
 			_StdOut.putText("You are on your computer");
 		}
 
+        public shellStatus(args)    {
+            var userStatus = args;
+            _StdOut.putText("status "+userStatus);
+        }
+
+        public shellLoad(args)  {
+            
+        }
+
         public shellMan(args) {
             if (args.length > 0) {
                 var topic = args[0];
@@ -274,7 +307,11 @@ module TSOS {
 						_StdOut.putText("Displays where the user is.");
 					break;
 					case "status":
-                        _StdOut.putText("Displays the current status of the user");
+                        _StdOut.putText("Displays the current status of the user.");
+                    break;
+                    case "load":
+                        _StdOut.putText("Validates user code in the HTML5 text area.");
+                    break;
                     // TODO: Make descriptive MANual page entries for the the rest of the shell commands here.
                     default:
                         _StdOut.putText("No manual entry for " + args[0] + ".");

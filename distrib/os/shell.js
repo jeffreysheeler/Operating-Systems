@@ -49,6 +49,18 @@ var TSOS;
             // prompt <string>
             sc = new TSOS.ShellCommand(this.shellPrompt, "prompt", "<string> - Sets the prompt.");
             this.commandList[this.commandList.length] = sc;
+            // date
+            sc = new TSOS.ShellCommand(this.shellDate, "date", "displays the current date and time.");
+            this.commandList[this.commandList.length] = sc;
+            // whereami
+            sc = new TSOS.ShellCommand(this.shellWhereAmI, "whereami", "displays the users current location.");
+            this.commandList[this.commandList.length] = sc;
+            // status <string>
+            sc = new TSOS.ShellCommand(this.shellStatus, "status", "<string> - displays a message specified by the user.");
+            this.commandList[this.commandList.length] = sc;
+            // load
+            sc = new TSOS.ShellCommand(this.shellLoad, "load", "Validates user code in the HTML5 text area.");
+            this.commandList[this.commandList.length] = sc;
             // ps  - list the running processes and their IDs
             // kill <id> - kills the specified process id.
             //
@@ -188,12 +200,58 @@ var TSOS;
             _StdOut.clearScreen();
             _StdOut.resetXY();
         };
+        Shell.prototype.shellDate = function (args) {
+            var date = new Date().toLocaleDateString();
+            _StdOut.putText("Today is " + date);
+        };
+        Shell.prototype.shellWhereAmI = function (args) {
+            _StdOut.putText("You are on your computer");
+        };
+        Shell.prototype.shellStatus = function (args) {
+            var userStatus = args;
+            _StdOut.putText("status " + userStatus);
+        };
+        Shell.prototype.shellLoad = function (args) {
+        };
         Shell.prototype.shellMan = function (args) {
             if (args.length > 0) {
                 var topic = args[0];
                 switch (topic) {
                     case "help":
                         _StdOut.putText("Help displays a list of (hopefully) valid commands.");
+                        break;
+                    case "ver":
+                        _StdOut.putText("Displays the current version data.");
+                        break;
+                    case "shutdown":
+                        _StdOut.putText("Shuts down the virtual OS but leaves the underlying host / hardware simulation running.");
+                        break;
+                    case "cls":
+                        _StdOut.putText("Clears the screen and resets the cursor position.");
+                        break;
+                    case "trace":
+                        _StdOut.putText("Turns the OS trace on or off.");
+                        break;
+                    case "man":
+                        _StdOut.putText("<topic> - Displays the MANual page for <topic>.");
+                        break;
+                    case "rot13":
+                        _StdOut.putText("<string> - Does rot13 obfuscation on <string>.");
+                        break;
+                    case "prompt":
+                        _StdOut.putText("<string> - Sets the prompt.");
+                        break;
+                    case "date":
+                        _StdOut.putText("Displays the current date.");
+                        break;
+                    case "whereami":
+                        _StdOut.putText("Displays where the user is.");
+                        break;
+                    case "status":
+                        _StdOut.putText("Displays the current status of the user.");
+                        break;
+                    case "load":
+                        _StdOut.putText("Validates user code in the HTML5 text area.");
                         break;
                     // TODO: Make descriptive MANual page entries for the the rest of the shell commands here.
                     default:
