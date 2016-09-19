@@ -176,7 +176,7 @@ module TSOS {
             // TODO: Display error on console, perhaps in some sort of colored screen. (Maybe blue?)
 
             _DrawingContext.beginPath();
-            _DrawingContext.clearRect(0, 0, _Canvas.width, _Canvas.length);
+            _DrawingContext.clearRect(0, 0, _Canvas.width, _Canvas.height);
             _DrawingContext.fillStyle = "blue";
             _DrawingContext.fill();
             this.krnShutdown();

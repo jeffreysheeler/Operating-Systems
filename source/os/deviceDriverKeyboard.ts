@@ -125,7 +125,7 @@ module TSOS {
                     _KernelInputQueue.enqueue(chr);
                 }//end = +
 
-                else if (((keyCode >= 48) && (keyCode <= 57)) {
+                else if ((keyCode >= 48) && (keyCode <= 57)) {
                     if(isShifted){
                         if((keyCode == 49) || (keyCode >=51) && (keyCode <= 53)){
                             chr = String.fromCharCode(keyCode - 16);
@@ -153,37 +153,25 @@ module TSOS {
                     }//shifted if
                     else{
                         chr = String.fromCharCode(keyCode);
-                    } //digits
-                    _KernelInputQueue.enqueue(chr);
-
-                    
-
                     }
-                    else if((keyCode == 38) || (keyCode == 40)){
-                        chr = String.fromCharCode(keyCode + 300);
-                        _KernelInputQueue.enqueue(chr);
-                    }//up and down arrows
+                    _KernelInputQueue.enqueue(chr);
+                } //digits
+                    
+                else if((keyCode == 38) || (keyCode == 40)){
+                       chr = String.fromCharCode(keyCode + 300);
+                       _KernelInputQueue.enqueue(chr);
+                }//up and down arrows
 
-                    else if(keyCode == 32)                      ||
+                else if     ((keyCode == 32)                     ||
                             (keyCode == 8)                      ||
                             (keyCode == 127)                    ||
                             (keyCode == 9)                      ||
-                            (keyCode == 13){
+                            (keyCode == 13)){
                                 chr = String.fromCharCode(keyCode);
                                 _KernelInputQueue.enqueue(chr);
                             }// space, backspace, delete, tab, enter
                 }//else
-                
-                
-                
-                
-                                                                ||   // digits
-                            (keyCode == 32)                     ||   // space
-                            (keyCode == 13)) {                       // enter
-                    chr = String.fromCharCode(keyCode);
-                    _KernelInputQueue.enqueue(chr);
-                }
-            }//else
+
         }
     }
 }
