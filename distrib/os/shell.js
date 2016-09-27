@@ -61,6 +61,12 @@ var TSOS;
             // load
             sc = new TSOS.ShellCommand(this.shellLoad, "load", "Validates user code in the HTML5 text area.");
             this.commandList[this.commandList.length] = sc;
+            // bsod
+            sc = new TSOS.ShellCommand(this.shellBsod, "bsod", "test the blue screen of death");
+            this.commandList[this.commandList.length] = sc;
+            // marist
+            sc = new TSOS.ShellCommand(this.shellMarist, "marist", "changes the font and background colors to red and white");
+            this.commandList[this.commandList.length] = sc;
             // ps  - list the running processes and their IDs
             // kill <id> - kills the specified process id.
             //
@@ -221,6 +227,20 @@ var TSOS;
             userStatus.value = returnStatus;
         };
         Shell.prototype.shellLoad = function (args) {
+            var input = document.getElementById("taProgramInput").value;
+            var regexp = new RegExp('^[0-9A-Fa-f\\s]+$');
+            if (regexp.test(input)) {
+                _StdOut.putText("That is valid input!");
+            }
+            else {
+                _StdOut.putText("That is not valid input.");
+            }
+        };
+        Shell.prototype.shellBsod = function (args) {
+            _Kernel.krnTrapError("Error");
+        };
+        Shell.prototype.shellMarist = function (args) {
+            _Kernel.changeMarist();
         };
         Shell.prototype.shellMan = function (args) {
             if (args.length > 0) {
@@ -262,6 +282,11 @@ var TSOS;
                     case "load":
                         _StdOut.putText("Validates user code in the HTML5 text area.");
                         break;
+                    case "bsod":
+                        _StdOut.putText("Test the blue screen of death.");
+                        break;
+                    case "marist":
+                        _StdOut.putText("Changes the background of the canvas to red.");
                     // TODO: Make descriptive MANual page entries for the the rest of the shell commands here.
                     default:
                         _StdOut.putText("No manual entry for " + args[0] + ".");

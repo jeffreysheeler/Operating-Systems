@@ -45,6 +45,12 @@ var TSOS;
                     // ... and reset our buffer.
                     this.buffer = "";
                 }
+                else if (chr === String.fromCharCode(8)) {
+                    this.backspace();
+                }
+                else if (chr === String.fromCharCode(9)) {
+                    this.commandCompletion();
+                }
                 else {
                     // This is a "normal" character, so ...
                     // ... draw it on the screen...
@@ -91,6 +97,33 @@ var TSOS;
                 _FontHeightMargin;
             this.scroll();
             // TODO: Handle scrolling. (iProject 1)
+        };
+        Console.prototype.commandCompletion = function () {
+            var commands = ["ver", "help", "shutdown", "cls", "man", "trace", "rot13", "prompt",
+                "date", "whereami", "status", "load", "bsod", "marist"];
+            var input = this.buffer;
+            for (var i = 0; i < commands.length; i++) {
+                if (commands[i].indexOf(input) == 0) {
+                    this.buffer = commands[i];
+                    break;
+                }
+            }
+            this.clearLine();
+            this.putText(">" + this.buffer);
+        };
+        Console.prototype.backspace = function () {
+            var newStatement = "";
+            var currentStatement = this.buffer.split('');
+            for (var i = 0; i < currentStatement.length - 1; i++) {
+                newStatement = newStatement + currentStatement[i];
+            }
+            this.buffer = newStatement;
+            this.clearLine();
+            this.putText(">" + this.buffer);
+        };
+        Console.prototype.clearLine = function () {
+            _DrawingContext.clearRect(0, this.currentYPosition - this.currentFontSize - 2, _Canvas.width, this.currentFontSize + 7);
+            this.currentXPosition = 0;
         };
         return Console;
     }());
