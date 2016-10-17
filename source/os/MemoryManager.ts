@@ -11,8 +11,8 @@ module TSOS{
     export class MemoryManager{
 
         constructor(public mem: number = 0,
-                    public memMin: [0,256,512],
-                    public memMax: [255, 511, 768]){
+                    public memMin = [0,256,512],
+                    public memMax = [255, 511, 768]){
 
                     }
         
@@ -29,6 +29,9 @@ module TSOS{
                     i++;
                     memIndex++;
                 }//for
+
+                var min = this.memMin[this.mem];
+                var max = this.memMax[this.mem];
             }//if
 
         }

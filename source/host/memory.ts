@@ -1,3 +1,5 @@
+///<reference path="../globals.ts" />
+
 module TSOS{
     export class Memory{
         constructor(public mem = [768],

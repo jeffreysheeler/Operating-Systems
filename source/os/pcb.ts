@@ -1,3 +1,6 @@
+///<reference path="../globals.ts" />
+///<reference path="../host/control.ts" />
+
 //created by Jeff Sheeler
 //10/17/16
 //pcb.ts
@@ -18,7 +21,7 @@ module TSOS{
                     }
         
         public init(min, max): void{
-            this.pid = _shell.pid;
+            this.pid = _OsShell.pid;
             this.state = "new";
             this.PC = this.min;
             this.Acc = 0;
