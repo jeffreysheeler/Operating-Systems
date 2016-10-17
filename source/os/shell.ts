@@ -2,6 +2,7 @@
 ///<reference path="../utils.ts" />
 ///<reference path="shellCommand.ts" />
 ///<reference path="userCommand.ts" />
+///<reference path="../os/MemoryManager.ts" />
 
 
 /* ------------
@@ -22,6 +23,7 @@ module TSOS {
         public commandList = [];
         public curses = "[fuvg],[cvff],[shpx],[phag],[pbpxfhpxre],[zbgureshpxre],[gvgf]";
         public apologies = "[sorry]";
+        public pid = 0;
 
         constructor() {
         }
@@ -296,6 +298,11 @@ module TSOS {
 
             if(regexp.test(input)){
                 _StdOut.putText("That is valid input!");
+                _StdOut.advanceLine;
+                //loads program in to memory
+                _Kernel.krnTrace("Program "+input);
+                _MemoryManager.loadInput(input);
+
             }
             else{
                 _StdOut.putText("That is not valid input.");

@@ -25,7 +25,8 @@ module TSOS {
                     public Yreg: number = 0,
                     public Zflag: number = 0,
                     public Operation: String = "",
-                    public isExecuting: boolean = false) {
+                    public isExecuting: boolean = false,
+                    public pcb: any = null) {
 
         }
 
@@ -36,6 +37,7 @@ module TSOS {
             this.Yreg = 0;
             this.Zflag = 0;
             this.isExecuting = false;
+            this.pcb = null;
         }
 
         public cycle(): void {
@@ -43,7 +45,17 @@ module TSOS {
             // TODO: Accumulate CPU usage and profiling statistics here.
             // Do the real work here. Be sure to set this.isExecuting appropriately.
 
+            if(this.isExecuting){
+                if(this.pcb != null){
+                    this.PC = this.pcb.min;
+                    this.Acc = 0;
+                    this.Xreg = 0;
+                    this.Yreg = 0;
+                    this.Zflag = 0;
 
+                    Control.runPCBTable();
+                }//not null pcb if
+            }//isExecuting if statement
         }
     }
 }
