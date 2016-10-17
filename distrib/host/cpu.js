@@ -56,7 +56,7 @@ var TSOS;
                     this.Xreg = 0;
                     this.Yreg = 0;
                     this.Zflag = 0;
-                    TSOS.Control.runPCBTable();
+                    TSOS.Control.updatePCBTable();
                 } //not null pcb if
                 this.executeCPUCycle();
                 TSOS.Control.initCPUTable();
@@ -100,7 +100,7 @@ var TSOS;
                 case "6D":
                     this.Operation = "6D";
                     index = this.checkMemory();
-                    xreg = parseConst(_Memory.mem[index]);
+                    xreg = parseInt(_Memory.mem[index]);
                     yreg = this.Acc;
                     zflag = xreg + yreg;
                     this.Acc = zflag;
@@ -142,7 +142,7 @@ var TSOS;
                     this.pcb.Xreg = this.Xreg;
                     this.pcb.Yreg = this.Yreg;
                     this.pcb.Zflag = this.Zflag;
-                    TSOS.Control.runPCBTbl();
+                    TSOS.Control.updatePCBTable();
                     break;
                 case "EC":
                     this.Operation = "EC";
@@ -215,7 +215,14 @@ var TSOS;
             this.PC++;
             var block2 = _Memory.mem[this.PC];
             var newMem = block2.concat(block1);
-        };
+            memBlock = _CPU.pcb.min + parseInt(newMem, 16);
+            if (memBlock >= _CPU.pcb.min && memBlock < _CPU.pcb.max) {
+                return memBlock;
+            } //if
+            else {
+                _StdOut.putText("Index out of bounds.");
+            } //else
+        }; //checkMemory
         Cpu.prototype.parseConst = function (num) {
             var x = parseInt(num, 16);
             return x;

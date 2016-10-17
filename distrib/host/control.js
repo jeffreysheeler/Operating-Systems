@@ -30,6 +30,11 @@ var TSOS;
             // This is called from index.html's onLoad event via the onDocumentLoad function pointer.
             // Get a global reference to the canvas.  TODO: Should we move this stuff into a Display Device Driver?
             _Canvas = document.getElementById('display');
+            _UserProgIn = document.getElementById('taHostLog');
+            _MemoryTable = document.getElementById('memoryTable');
+            _CPUTable = document.getElementById('cpuTable');
+            _PCBTable = document.getElementById('pcbTable');
+            this.initMemoryTable();
             // Get a global reference to the drawing context.
             _DrawingContext = _Canvas.getContext("2d");
             // Enable the added-in canvas text functions (see canvastext.ts for provenance and details).
@@ -82,6 +87,63 @@ var TSOS;
             _Kernel = new TSOS.Kernel();
             _Kernel.krnBootstrap(); // _GLaDOS.afterStartup() will get called in there, if configured.
         };
+        Control.initMemoryTable = function () {
+            var row;
+            var cell;
+            for (var i = 0; i < (768 / 8); ++i) {
+                row = _MemoryTable.insertRow(i);
+                for (var j = 0; j < 9; ++j) {
+                    cell = row.insertCell(j);
+                    if (j == 0) {
+                        var val = (i * 8).toString(16).toLocaleUpperCase();
+                        cell.innerHTML = "0x0" + val;
+                    } //if
+                    else {
+                        cell.innerHTML = "00";
+                    } //else
+                } //for j
+            } //for i
+        }; //initMemoryTable
+        Control.updateMemoryTable = function () {
+            var row;
+            var col;
+            var slot;
+            for (var i = 0; i < (768 / 8); ++i) {
+                row = i;
+                for (var j = 0; j < 9; ++j) {
+                    col = j;
+                    if (col != 0) {
+                        if (_Memory.mem[slot] == null) {
+                            _MemoryTable.rows[row].cells[col].innerHTML = "00";
+                            slot++;
+                        } //if memory slot not null
+                        else {
+                            _MemoryTable.rows[row].cells[col].innerHTML = _Memory.mem[slot];
+                            slot++;
+                        } //else
+                    } //if col not 0
+                } //j for
+            } //i for
+        }; //updateMemoryTable
+        Control.initCPUTable = function () {
+            _CPUTable.rows[1].cells[0].innerHTML = _CPU.PC;
+            _CPUTable.rows[1].cells[1].innerHTML = _CPU.Acc;
+            _CPUTable.rows[1].cells[2].innerHTML = _CPU.Xreg;
+            _CPUTable.rows[1].cells[3].innerHTML = _CPU.Yreg;
+            _CPUTable.rows[1].cells[4].innerHTML = _CPU.Zflag;
+            _CPUTable.rows[1].cells[5].innerHTML = _CPU.Operation;
+        }; //initCPUTable
+        Control.updatePCBTable = function () {
+            _PCBTable.rows[1].cells[0].innerHTML = _CPU.pcb.pid;
+            _PCBTable.rows[1].cells[1].innerHTML = _CPU.pcb.state;
+            _PCBTable.rows[1].cells[2].innerHTML = _CPU.pcb.PC;
+            _PCBTable.rows[1].cells[3].innerHTML = _CPU.pcb.Acc;
+            _PCBTable.rows[1].cells[4].innerHTML = _CPU.pcb.Xreg;
+            _PCBTable.rows[1].cells[5].innerHTML = _CPU.pcb.Yreg;
+            _PCBTable.rows[1].cells[6].innerHTML = _CPU.pcb.Zflag;
+            _PCBTable.rows[1].cells[7].innerHTML = _CPU.pcb.min;
+            _PCBTable.rows[1].cells[8].innerHTML = _CPU.pcb.max;
+        }; //updatePCBTable
         Control.hostBtnHaltOS_click = function (btn) {
             Control.hostLog("Emergency halt", "host");
             Control.hostLog("Attempting Kernel shutdown.", "host");

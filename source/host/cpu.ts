@@ -106,7 +106,7 @@ module TSOS {
                 case "6D": //adds the contents of an address to the contents of the accumulator and keeps the result in the accumulator
                     this.Operation = "6D";
                     index = this.checkMemory();
-                    xreg = parseConst(_Memory.mem[index]);
+                    xreg = parseInt(_Memory.mem[index]);
                     yreg = this.Acc;
                     zflag = xreg + yreg;
                     this.Acc = zflag;
@@ -235,7 +235,14 @@ module TSOS {
             this.PC++;
             var block2 = _Memory.mem[this.PC];
             var newMem = block2.concat(block1);
-        }
+            memBlock = _CPU.pcb.min + parseInt(newMem, 16);
+            if(memBlock >= _CPU.pcb.min && memBlock < _CPU.pcb.max){
+                return memBlock;
+            }//if
+            else{
+                _StdOut.putText("Index out of bounds.");
+            }//else
+        }//checkMemory
 
         public parseConst(num:string):number{
             var x = parseInt(num, 16);
