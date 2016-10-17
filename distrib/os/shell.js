@@ -2,6 +2,7 @@
 ///<reference path="../utils.ts" />
 ///<reference path="shellCommand.ts" />
 ///<reference path="userCommand.ts" />
+///<reference path="../os/MemoryManager.ts" />
 /* ------------
    Shell.ts
 
@@ -20,6 +21,7 @@ var TSOS;
             this.commandList = [];
             this.curses = "[fuvg],[cvff],[shpx],[phag],[pbpxfhpxre],[zbgureshpxre],[gvgf]";
             this.apologies = "[sorry]";
+            this.pid = 0;
         }
         Shell.prototype.init = function () {
             var sc;
@@ -231,6 +233,10 @@ var TSOS;
             var regexp = new RegExp('^[0-9A-Fa-f\\s]+$');
             if (regexp.test(input)) {
                 _StdOut.putText("That is valid input!");
+                _StdOut.advanceLine;
+                //loads program in to memory
+                _Kernel.krnTrace("Program " + input);
+                _MemoryManager.loadInput(input);
             }
             else {
                 _StdOut.putText("That is not valid input.");

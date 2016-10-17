@@ -231,7 +231,10 @@ module TSOS {
         public checkMemory():number{
             var memBlock;
             this.PC++;
-            var block1 = 
+            var block1 = _Memory.mem[this.PC];
+            this.PC++;
+            var block2 = _Memory.mem[this.PC];
+            var newMem = block2.concat(block1);
         }
 
         public parseConst(num:string):number{

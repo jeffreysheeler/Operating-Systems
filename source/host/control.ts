@@ -33,6 +33,13 @@ module TSOS {
             // Get a global reference to the canvas.  TODO: Should we move this stuff into a Display Device Driver?
             _Canvas = <HTMLCanvasElement>document.getElementById('display');
 
+            _UserProgIn = <HTMLTextAreaElement>document.getElementById('taHostLog');
+            _MemoryTable = <HTMLTextAreaElement>document.getElementById('memoryTable');
+            _CPUTable = <HTMLTextAreaElement>document.getElementById('cpuTable');
+            _PCBTable = <HTMLTextAreaElement>document.getElementById('pcbTable');
+
+            this.initMemoryTable();
+
             // Get a global reference to the drawing context.
             _DrawingContext = _Canvas.getContext("2d");
 
@@ -99,6 +106,24 @@ module TSOS {
             _Kernel = new Kernel();
             _Kernel.krnBootstrap();  // _GLaDOS.afterStartup() will get called in there, if configured.
 
+        }
+
+        public static initMemoryTable(): void{
+            var row;
+            var cell;
+            for(var i = 0; i < (768/8); ++i){
+                row = _MemoryTable.insertRow(i);
+                for(var j = 0; j < 9; ++j){
+                    cell = row.insertCell(j);
+                    if(j == 0){
+                        var val = (i*8).toString(16).toLocaleUpperCase();
+                        cell.innerHTML = "0x0"+val;
+                    }//if
+                    else{
+                        cell.innerHTML = "00";
+                    }//else
+                }//for j
+            }//for i
         }
 
         public static hostBtnHaltOS_click(btn): void {
