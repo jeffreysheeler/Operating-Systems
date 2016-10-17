@@ -1,5 +1,6 @@
 ///<reference path="../globals.ts" />
 ///<reference path="queue.ts" />
+///<reference path="deviceDriverKeyboard.ts" />
 
 /* ------------
      Kernel.ts

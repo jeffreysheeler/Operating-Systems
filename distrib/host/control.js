@@ -30,10 +30,9 @@ var TSOS;
             // This is called from index.html's onLoad event via the onDocumentLoad function pointer.
             // Get a global reference to the canvas.  TODO: Should we move this stuff into a Display Device Driver?
             _Canvas = document.getElementById('display');
-            _UserProgIn = document.getElementById('taHostLog');
-            _MemoryTable = document.getElementById('memoryTable');
-            _CPUTable = document.getElementById('cpuTable');
-            _PCBTable = document.getElementById('pcbTable');
+            _MemoryTable = document.getElementById('MemoryTable');
+            _CPUTable = document.getElementById('CPUTable');
+            _PCBTable = document.getElementById('PCBTable');
             this.initMemoryTable();
             // Get a global reference to the drawing context.
             _DrawingContext = _Canvas.getContext("2d");
