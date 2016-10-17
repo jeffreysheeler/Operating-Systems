@@ -33,8 +33,8 @@ module TSOS{
                 var min = this.memMin[this.mem];
                 var max = this.memMax[this.mem];
 
-                _PCB = new pcb();
-                _PCB.init(min, max);
+                var pcb = new pcb();
+                pcb.init(min, max);
             }//if
 
         }
