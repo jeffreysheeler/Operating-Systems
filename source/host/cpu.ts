@@ -55,7 +55,7 @@ module TSOS {
                     this.Yreg = 0;
                     this.Zflag = 0;
 
-                    Control.runPCBTable();
+                    Control.updatePCBTable();
                 }//not null pcb if
 
                 this.executeCPUCycle();
@@ -154,7 +154,7 @@ module TSOS {
                     this.pcb.Xreg = this.Xreg;
                     this.pcb.Yreg = this.Yreg;
                     this.pcb.Zflag = this.Zflag;
-                    Control.runPCBTbl();
+                    Control.updatePCBTable();
                     break;
 
                 case "EC": //compare a byte in memory to the X reg, sets the Z flag in equal

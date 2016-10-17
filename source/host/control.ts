@@ -124,7 +124,50 @@ module TSOS {
                     }//else
                 }//for j
             }//for i
-        }
+        }//initMemoryTable
+
+        public static updateMemoryTable(): void{
+            var row;
+            var col;
+            var slot;
+            for(var i = 0; i < (768/8); ++i){
+                row = i;
+                for(var j =0; j < 9; ++j){
+                    col = j;
+                    if(col != 0){
+                        if(_Memory.mem[slot] == null){
+                            _MemoryTable.rows[row].cells[col].innerHTML = "00";
+                            slot++;
+                        }//if memory slot not null
+                        else{
+                            _MemoryTable.rows[row].cells[col].innerHTML = _Memory.mem[slot];
+                            slot++;
+                        }//else
+                    }//if col not 0
+                }//j for
+            }//i for
+        }//updateMemoryTable
+
+        public static initCPUTable(): void{
+            _CPUTable.rows[1].cells[0].innerHTML = _CPU.PC;
+            _CPUTable.rows[1].cells[1].innerHTML = _CPU.Acc;
+            _CPUTable.rows[1].cells[2].innerHTML = _CPU.Xreg;
+            _CPUTable.rows[1].cells[3].innerHTML = _CPU.Yreg;
+            _CPUTable.rows[1].cells[4].innerHTML = _CPU.Zflag;
+            _CPUTable.rows[1].cells[5].innerHTML = _CPU.Operation;
+        }//initCPUTable
+        
+        public static updatePCBTable(): void{
+            _PCBTable.rows[1].cells[0].innerHTML = _CPU.pcb.pid;
+            _PCBTable.rows[1].cells[1].innerHTML = _CPU.pcb.state;
+            _PCBTable.rows[1].cells[2].innerHTML = _CPU.pcb.PC;
+            _PCBTable.rows[1].cells[3].innerHTML = _CPU.pcb.Acc;
+            _PCBTable.rows[1].cells[4].innerHTML = _CPU.pcb.Xreg;
+            _PCBTable.rows[1].cells[5].innerHTML = _CPU.pcb.Yreg;
+            _PCBTable.rows[1].cells[6].innerHTML = _CPU.pcb.Zflag;
+            _PCBTable.rows[1].cells[7].innerHTML = _CPU.pcb.min;
+            _PCBTable.rows[1].cells[8].innerHTML = _CPU.pcb.max;
+        }//updatePCBTable
 
         public static hostBtnHaltOS_click(btn): void {
             Control.hostLog("Emergency halt", "host");
