@@ -33,10 +33,9 @@ module TSOS {
             // Get a global reference to the canvas.  TODO: Should we move this stuff into a Display Device Driver?
             _Canvas = <HTMLCanvasElement>document.getElementById('display');
 
-            _UserProgIn = <HTMLTextAreaElement>document.getElementById('taHostLog');
-            _MemoryTable = <HTMLTextAreaElement>document.getElementById('memoryTable');
-            _CPUTable = <HTMLTextAreaElement>document.getElementById('cpuTable');
-            _PCBTable = <HTMLTextAreaElement>document.getElementById('pcbTable');
+            _MemoryTable = <HTMLTextAreaElement>document.getElementById('MemoryTable');
+            _CPUTable = <HTMLTextAreaElement>document.getElementById('CPUTable');
+            _PCBTable = <HTMLTextAreaElement>document.getElementById('PCBTable');
 
             this.initMemoryTable();
 
