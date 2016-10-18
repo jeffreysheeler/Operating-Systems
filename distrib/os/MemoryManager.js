@@ -40,7 +40,7 @@ var TSOS;
             else {
                 _StdOut.putText("Failed to load to memory");
             }
-        };
+        }; //loadInput
         return MemoryManager;
     }());
     TSOS.MemoryManager = MemoryManager;

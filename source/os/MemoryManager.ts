@@ -35,7 +35,7 @@ module TSOS{
                 var max = this.memMax[this.mem];
 
                 _PCB = new pcb();
-                _PCB.init(min, max);
+                _PCB.init(min,max);
                 _StdOut.putText("Program loaded to memory, pid = "+_OsShell.pid);
                 _OsShell.pid++;
                 Control.updateMemoryTable();
@@ -46,6 +46,6 @@ module TSOS{
                 _StdOut.putText("Failed to load to memory");
             }
 
-        }
+        }//loadInput
     }
 }
