@@ -36,9 +36,9 @@ module TSOS {
             // Get a global reference to the canvas.  TODO: Should we move this stuff into a Display Device Driver?
             _Canvas = <HTMLCanvasElement>document.getElementById('display');
 
-            _MemoryTable = <HTMLTextAreaElement>document.getElementById('MemoryTable');
-            _CPUTable = <HTMLTextAreaElement>document.getElementById('CPUTable');
-            _PCBTable = <HTMLTextAreaElement>document.getElementById('PCBTable');
+            _MemoryTable = <HTMLTableElement>document.getElementById('MemoryTable');
+            _CPUTable = <HTMLTableElement>document.getElementById('CPUTable');
+            _PCBTable = <HTMLTableElement>document.getElementById('PCBTable');
 
             this.initMemoryTable();
 
@@ -111,12 +111,10 @@ module TSOS {
         }
 
         public static initMemoryTable(): void{
-            var row;
-            var cell;
             for(var i = 0; i < (768/8); ++i){
-                row = _MemoryTable.insertRow(i);
+                var row = _MemoryTable.insertRow(i);
                 for(var j = 0; j < 9; ++j){
-                    cell = row.insertCell(j);
+                    var cell = row.insertCell(j);
                     if(j == 0){
                         var val = (i*8).toString(16).toLocaleUpperCase();
                         cell.innerHTML = "0x0"+val;

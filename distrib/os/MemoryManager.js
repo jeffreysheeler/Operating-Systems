@@ -29,9 +29,20 @@ var TSOS;
                 } //for
                 var min = this.memMin[this.mem];
                 var max = this.memMax[this.mem];
-                var pcb = new pcb();
-                pcb.init(min, max);
+                _PCB = new TSOS.pcb();
+                _PCB.init(min, max);
+                _resTable[_resTable.length] = _PCB;
+                _StdOut.putText("Program loaded to memory, pid = " + _resTable[this.mem].pid);
+                _OsShell.pid++;
+                TSOS.Control.updateMemoryTable();
+                this.mem++;
+                for (var i = 0; i < _resTable.length; i++) {
+                    _Kernel.krnTrace("resident list: " + _resTable[i].pid);
+                } //for
             } //if
+            else {
+                _StdOut.putText("Failed to load to memory");
+            }
         };
         return MemoryManager;
     }());

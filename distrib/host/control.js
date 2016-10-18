@@ -1,5 +1,8 @@
 ///<reference path="../globals.ts" />
 ///<reference path="../os/canvastext.ts" />
+///<reference path="../host/cpu.ts" />
+///<reference path="../host/devices.ts" />
+///<reference path="../os/kernel.ts" />
 /* ------------
      Control.ts
 
@@ -87,12 +90,10 @@ var TSOS;
             _Kernel.krnBootstrap(); // _GLaDOS.afterStartup() will get called in there, if configured.
         };
         Control.initMemoryTable = function () {
-            var row;
-            var cell;
             for (var i = 0; i < (768 / 8); ++i) {
-                row = _MemoryTable.insertRow(i);
+                var row = _MemoryTable.insertRow(i);
                 for (var j = 0; j < 9; ++j) {
-                    cell = row.insertCell(j);
+                    var cell = row.insertCell(j);
                     if (j == 0) {
                         var val = (i * 8).toString(16).toLocaleUpperCase();
                         cell.innerHTML = "0x0" + val;
