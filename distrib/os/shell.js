@@ -242,9 +242,7 @@ var TSOS;
                 _StdOut.advanceLine;
                 _StdOut.putText(input);
                 _Kernel.krnTrace("Program " + input);
-                if (input != null) {
-                    _MemoryManager.loadInput(input); //loads program in to memory
-                }
+                _MemoryManager.loadInput(input); //loads program in to memory
             } //if
             else {
                 _StdOut.putText("That is not valid input.");
