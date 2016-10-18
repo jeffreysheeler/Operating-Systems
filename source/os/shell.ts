@@ -305,7 +305,7 @@ module TSOS {
             var regexp = new RegExp('^[0-9A-Fa-f\\s]+$');
 
             if(regexp.test(input)){
-                input.replace(/\s/g, "");
+                input = input.replace(/[\s]/g, "");
                 //_StdOut.putText("That is valid input!");
                 _StdOut.advanceLine;
                 _StdOut.putText(input);
@@ -321,7 +321,14 @@ module TSOS {
         }
 
         public shellRun(args){
-
+            if(args.length > 0){
+                if(args[0] == _PCB.pid.toString()){
+                    _CPU.isExecuting = true;
+                }//if
+                else{
+                    _StdOut.putText("Please enter a valid PID");
+                }//else
+            }//if
         }//shellRun
 
         public shellBsod(args)  {

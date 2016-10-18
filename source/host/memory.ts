@@ -2,7 +2,7 @@
 
 module TSOS{
     export class Memory{
-        constructor(public mem = [768],
+        constructor(public mem: Array<string> = new Array (768),
                     public memMin: number = 0,
                     public memMax: number = 768){
 
@@ -14,7 +14,7 @@ module TSOS{
             this.memMax = 768;
 
             for(var i = 0; i < 768; i++){
-                this.mem[i] = parseInt("00");
+                this.mem[i] = "00";
             }
         }
     }

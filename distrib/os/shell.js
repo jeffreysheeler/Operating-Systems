@@ -237,7 +237,7 @@ var TSOS;
             var input = document.getElementById("taProgramInput").value;
             var regexp = new RegExp('^[0-9A-Fa-f\\s]+$');
             if (regexp.test(input)) {
-                input.replace(/\s/g, "");
+                input = input.replace(/[\s]/g, "");
                 //_StdOut.putText("That is valid input!");
                 _StdOut.advanceLine;
                 _StdOut.putText(input);

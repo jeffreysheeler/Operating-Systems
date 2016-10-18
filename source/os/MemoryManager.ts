@@ -15,7 +15,7 @@ module TSOS{
                     public memMin = [0,256,512],
                     public memMax = [255, 511, 768]){
 
-                    }
+                    }//constructor
         
         public loadInput(input:string):void{
             var addToMem;
@@ -47,5 +47,9 @@ module TSOS{
             }
 
         }//loadInput
+
+        public getMemoryAddress(address): string{
+            return _Memory.mem[address];
+        }
     }
 }

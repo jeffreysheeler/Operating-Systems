@@ -41,6 +41,9 @@ var TSOS;
                 _StdOut.putText("Failed to load to memory");
             }
         }; //loadInput
+        MemoryManager.prototype.getMemoryAddress = function (address) {
+            return _Memory.mem[address];
+        };
         return MemoryManager;
     }());
     TSOS.MemoryManager = MemoryManager;
