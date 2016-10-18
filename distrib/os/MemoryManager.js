@@ -2,6 +2,7 @@
 ///<reference path="../host/control.ts" />
 ///<reference path="../os/shell.ts"/>
 ///<reference path="../host/memory.ts"/>
+///<reference path="../os/pcb.ts"/>
 //created by Jeff Sheeler
 //10/17/2016
 //MemoryManager
@@ -19,11 +20,11 @@ var TSOS;
         MemoryManager.prototype.loadInput = function (input) {
             var addToMem;
             var memIndex = this.memMin[this.mem];
-            if (this.mem < 3 && input.length / 2 <= 256) {
+            if (input.length / 2 <= 256) {
                 for (var i = 0; i < input.length; i++) {
                     addToMem = input.slice(i, i + 2);
-                    _Memory.mem[memIndex = addToMem];
-                    _Kernel.krnTrace(input + " added to memory at index: " + memIndex);
+                    _Memory.mem[memIndex] = addToMem;
+                    //_Kernel.krnTrace(input+" added to memory at index: "+memIndex);
                     i++;
                     memIndex++;
                 } //for
@@ -31,14 +32,10 @@ var TSOS;
                 var max = this.memMax[this.mem];
                 _PCB = new TSOS.pcb();
                 _PCB.init(min, max);
-                _resTable[_resTable.length] = _PCB;
-                _StdOut.putText("Program loaded to memory, pid = " + _resTable[this.mem].pid);
+                _StdOut.putText("Program loaded to memory, pid = " + _OsShell.pid);
                 _OsShell.pid++;
                 TSOS.Control.updateMemoryTable();
                 this.mem++;
-                for (var i = 0; i < _resTable.length; i++) {
-                    _Kernel.krnTrace("resident list: " + _resTable[i].pid);
-                } //for
             } //if
             else {
                 _StdOut.putText("Failed to load to memory");

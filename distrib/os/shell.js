@@ -3,6 +3,9 @@
 ///<reference path="shellCommand.ts" />
 ///<reference path="userCommand.ts" />
 ///<reference path="../os/MemoryManager.ts" />
+///<reference path="../os/pcb.ts" />
+///<reference path="../host/memory.ts" />
+///<reference path="../host/control.ts" />
 /* ------------
    Shell.ts
 
@@ -68,6 +71,8 @@ var TSOS;
             this.commandList[this.commandList.length] = sc;
             // marist
             sc = new TSOS.ShellCommand(this.shellMarist, "marist", "changes the font and background colors to red and white");
+            this.commandList[this.commandList.length] = sc;
+            sc = new TSOS.ShellCommand(this.shellRun, "run", "runs the program that is currently loaded in memory");
             this.commandList[this.commandList.length] = sc;
             // ps  - list the running processes and their IDs
             // kill <id> - kills the specified process id.
@@ -232,7 +237,7 @@ var TSOS;
             var input = document.getElementById("taProgramInput").value;
             var regexp = new RegExp('^[0-9A-Fa-f\\s]+$');
             if (regexp.test(input)) {
-                _StdOut.putText("That is valid input!");
+                //_StdOut.putText("That is valid input!");
                 _StdOut.advanceLine;
                 //loads program in to memory
                 _Kernel.krnTrace("Program " + input);
@@ -242,6 +247,8 @@ var TSOS;
                 _StdOut.putText("That is not valid input.");
             }
         };
+        Shell.prototype.shellRun = function (args) {
+        }; //shellRun
         Shell.prototype.shellBsod = function (args) {
             _Kernel.krnTrapError("Error");
         };
@@ -287,6 +294,9 @@ var TSOS;
                         break;
                     case "load":
                         _StdOut.putText("Validates user code in the HTML5 text area.");
+                        break;
+                    case "run":
+                        _StdOut.putText("<int> Runs the program currently loaded in memory");
                         break;
                     case "bsod":
                         _StdOut.putText("Test the blue screen of death.");
