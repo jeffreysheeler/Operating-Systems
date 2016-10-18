@@ -33,9 +33,21 @@ module TSOS{
                 var min = this.memMin[this.mem];
                 var max = this.memMax[this.mem];
 
-                var pcb = new pcb();
-                pcb.init(min, max);
+                _PCB = new pcb();
+                _PCB.init(min, max);
+                _resTable[_resTable.length] = _PCB;
+                _StdOut.putText("Program loaded to memory, pid = "+_resTable[this.mem].pid);
+                _OsShell.pid++;
+                Control.updateMemoryTable();
+                this.mem++;
+                for(var i = 0; i < _resTable.length; i++){
+                    _Kernel.krnTrace("resident list: "+_resTable[i].pid);
+                }//for
             }//if
+
+            else{
+                _StdOut.putText("Failed to load to memory");
+            }
 
         }
     }

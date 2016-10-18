@@ -1,5 +1,8 @@
 ///<reference path="../globals.ts" />
 ///<reference path="../os/canvastext.ts" />
+///<reference path="../host/cpu.ts" />
+///<reference path="../host/devices.ts" />
+///<reference path="../os/kernel.ts" />
 
 /* ------------
      Control.ts
