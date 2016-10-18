@@ -16,13 +16,13 @@ var TSOS;
             this.mem = mem;
             this.memMin = memMin;
             this.memMax = memMax;
-        }
+        } //constructor
         MemoryManager.prototype.loadInput = function (input) {
             var addToMem;
             var memIndex = this.memMin[this.mem];
             if (input.length / 2 <= 256) {
                 for (var i = 0; i < input.length; i++) {
-                    addToMem = input.slice(i, i + 2);
+                    addToMem = input.slice(i, i + 1);
                     _Memory.mem[memIndex] = addToMem;
                     //_Kernel.krnTrace(input+" added to memory at index: "+memIndex);
                     i++;

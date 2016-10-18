@@ -311,8 +311,8 @@ module TSOS {
                 _StdOut.putText(input);
 
                 _Kernel.krnTrace("Program "+input);
-                _MemoryManager.loadInput(input);                //loads program in to memory
 
+                _MemoryManager.loadInput(input);                //loads program in to memory
             }//if
             else{
                 _StdOut.putText("That is not valid input.");
