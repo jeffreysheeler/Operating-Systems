@@ -173,18 +173,18 @@ module TSOS {
                 case "D0": //branch n bytes if Zflag == 0
                     this.Operation = "D0";
                     ++this.PC;
-                    alert(this.PC);
+                    //alert(this.PC);
                     var branch = this.PC + this.parseConst(_Memory.mem[this.PC]);
                     if(this.Zflag == 0){
-                        this.PC = branch + 1;
+                        this.PC = branch;
                         if(this.PC > 255 + _PCB.min){
                             this.PC -=256;
                         }//PC if
                     }//zflag = 0 if
                     else{
-                        this.PC++;
+                        
                     }//else
-                    alert(this.PC);
+                    //alert(this.PC);
                     break;
 
                 case "EE": //increment the value of a byte
@@ -225,13 +225,13 @@ module TSOS {
 
                 default:
                     this.isExecuting = false;
-                    alert(this.Operation);
+                    //alert(this.Operation);
                     _StdOut.putText("Invalid opcode");
             }//opcode switch statement
 
             this.PC++;
-            _StdOut.putText("PC: "+this.PC+" Opcode: "+this.Operation);
-            _Console.advanceLine();
+            //_StdOut.putText("PC: "+this.PC+" Opcode: "+this.Operation);
+            //_Console.advanceLine();
         }//end executeCPUCycle
 
         public checkMemory():number{
