@@ -251,6 +251,7 @@ var TSOS;
         Shell.prototype.shellRun = function (args) {
             if (args.length > 0) {
                 if (args[0] == _PCB.pid.toString()) {
+                    _CPU.init();
                     _CPU.isExecuting = true;
                 } //if
                 else {

@@ -73,13 +73,13 @@ var TSOS;
                     this.Operation = "A9";
                     this.PC++;
                     this.Acc = parseInt(_Memory.mem[this.PC], 16);
-                    this.PC++;
+                    //this.PC++;
                     break;
                 case "AD":
                     this.Operation = "AD";
                     index = this.checkMemory();
                     this.Acc = parseInt(_Memory.mem[index], 16);
-                    this.PC++;
+                    //this.PC++;
                     break;
                 case "8D":
                     this.Operation = "8D";
@@ -90,7 +90,7 @@ var TSOS;
                     }
                     _Memory.mem[index] = hold;
                     _Kernel.krnTrace("Saving " + hold + " to memory.");
-                    this.PC++;
+                    //this.PC++;
                     break;
                 case "6D":
                     this.Operation = "6D";
@@ -99,35 +99,35 @@ var TSOS;
                     yreg = this.Acc;
                     zflag = xreg + yreg;
                     this.Acc = zflag;
-                    this.PC++;
+                    //this.PC++;
                     break;
                 case "A2":
                     this.Operation = "A2";
                     this.PC++;
                     this.Xreg = parseInt(_Memory.mem[this.PC], 16);
-                    this.PC++;
+                    //this.PC++;
                     break;
                 case "AE":
                     this.Operation = "AE";
                     index = this.checkMemory();
                     this.Xreg = parseInt(_Memory.mem[index], 16);
-                    this.PC++;
+                    //this.PC++;
                     break;
                 case "A0":
                     this.Operation = "A0";
                     this.PC++;
                     this.Yreg = parseInt(_Memory.mem[this.PC], 16);
-                    this.PC++;
+                    //this.PC++;
                     break;
                 case "AC":
                     this.Operation = "AC";
                     index = this.checkMemory();
                     this.Yreg = parseInt(_Memory.mem[index], 16);
-                    this.PC++;
+                    //this.PC++;
                     break;
                 case "EA":
                     this.Operation = "EA";
-                    this.PC++;
+                    //this.PC++;
                     break;
                 case "00":
                     this.Operation = "00";
@@ -138,6 +138,7 @@ var TSOS;
                     _PCB.Yreg = this.Yreg;
                     _PCB.Zflag = this.Zflag;
                     TSOS.Control.updatePCBTable();
+                    //alert("00" +this.PC);
                     this.isExecuting = false;
                     break;
                 case "EC":
@@ -151,11 +152,12 @@ var TSOS;
                     else {
                         this.Zflag = 0;
                     } //else
-                    this.PC++;
+                    //this.PC++;
                     break;
                 case "D0":
                     this.Operation = "D0";
                     ++this.PC;
+                    alert(this.PC);
                     var branch = this.PC + this.parseConst(_Memory.mem[this.PC]);
                     if (this.Zflag == 0) {
                         this.PC = branch + 1;
@@ -166,6 +168,7 @@ var TSOS;
                     else {
                         this.PC++;
                     } //else
+                    alert(this.PC);
                     break;
                 case "EE":
                     this.Operation = "EE";
@@ -177,13 +180,12 @@ var TSOS;
                         hold = "0" + hold;
                     } //if
                     _Memory.mem[index] = hold;
-                    this.PC++;
+                    //this.PC++;
                     break;
                 case "FF":
                     this.Operation = "FF";
                     if (this.Xreg == 1) {
                         _StdOut.putText(this.Yreg.toString());
-                        this.PC++;
                     } //xreg = 1 if
                     else if (this.Xreg == 2) {
                         index = this.Yreg + _PCB.min;
@@ -192,7 +194,6 @@ var TSOS;
                             _StdOut.putText(outputString);
                             index++;
                         } //while
-                        this.PC++;
                     } //else if xreg = 2
                     else {
                         _StdOut.putText("Invalid xreg");
@@ -201,9 +202,12 @@ var TSOS;
                     break;
                 default:
                     this.isExecuting = false;
+                    alert(this.Operation);
                     _StdOut.putText("Invalid opcode");
             } //opcode switch statement
             this.PC++;
+            _StdOut.putText("PC: " + this.PC + " Opcode: " + this.Operation);
+            _Console.advanceLine();
         }; //end executeCPUCycle
         Cpu.prototype.checkMemory = function () {
             var memBlock;

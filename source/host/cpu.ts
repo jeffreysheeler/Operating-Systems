@@ -78,14 +78,14 @@ module TSOS {
                     this.Operation = "A9";
                     this.PC++;
                     this.Acc = parseInt(_Memory.mem[this.PC], 16);
-                    this.PC++;
+                    //this.PC++;
                     break;
 
                 case "AD": //load the accumulator from memory
                     this.Operation = "AD";
                     index = this.checkMemory();
                     this.Acc = parseInt(_Memory.mem[index], 16);
-                    this.PC++;
+                    //this.PC++;
                     break;
 
                 case "8D": //Store the accumulator in memory  
@@ -97,7 +97,7 @@ module TSOS {
                     }
                     _Memory.mem[index] = hold;
                     _Kernel.krnTrace("Saving "+hold+" to memory.");
-                    this.PC++;
+                    //this.PC++;
                     break;
 
                 case "6D": //adds the contents of an address to the contents of the accumulator and keeps the result in the accumulator
@@ -107,40 +107,40 @@ module TSOS {
                     yreg = this.Acc;
                     zflag = xreg + yreg;
                     this.Acc = zflag;
-                    this.PC++;
+                    //this.PC++;
                     break;
                 
                 case "A2": //Load the X register with a constant   
                     this.Operation = "A2";
                     this.PC++;
                     this.Xreg = parseInt(_Memory.mem[this.PC], 16);
-                    this.PC++;
+                    //this.PC++;
                     break;
 
                 case "AE": //Load the X register from memory
                     this.Operation = "AE";
                     index = this.checkMemory();
                     this.Xreg = parseInt(_Memory.mem[index], 16);
-                    this.PC++;
+                    //this.PC++;
                     break;
 
                 case "A0": //load the Y register with a constant    
                     this.Operation = "A0";
                     this.PC++;
                     this.Yreg = parseInt(_Memory.mem[this.PC], 16);
-                    this.PC++;
+                    //this.PC++;
                     break;
 
                 case "AC": //load the Y register from memory
                     this.Operation = "AC";
                     index = this.checkMemory();
                     this.Yreg = parseInt(_Memory.mem[index], 16);
-                    this.PC++;
+                    //this.PC++;
                     break;
 
                 case "EA": //no Operation
                     this.Operation = "EA";
-                    this.PC++;
+                    //this.PC++;
                     break;
 
                 case "00": //break / System call
@@ -152,6 +152,7 @@ module TSOS {
                     _PCB.Yreg = this.Yreg;
                     _PCB.Zflag = this.Zflag;
                     Control.updatePCBTable();
+                    //alert("00" +this.PC);
                     this.isExecuting = false;
                     break;
 
@@ -166,12 +167,13 @@ module TSOS {
                     else{
                         this.Zflag = 0;
                     }//else
-                    this.PC++;
+                    //this.PC++;
                     break;
 
                 case "D0": //branch n bytes if Zflag == 0
                     this.Operation = "D0";
                     ++this.PC;
+                    alert(this.PC);
                     var branch = this.PC + this.parseConst(_Memory.mem[this.PC]);
                     if(this.Zflag == 0){
                         this.PC = branch + 1;
@@ -182,6 +184,7 @@ module TSOS {
                     else{
                         this.PC++;
                     }//else
+                    alert(this.PC);
                     break;
 
                 case "EE": //increment the value of a byte
@@ -194,14 +197,14 @@ module TSOS {
                         hold = "0"+hold;
                     }//if
                     _Memory.mem[index] = hold;
-                    this.PC++;
+                    //this.PC++;
                     break;
                 
                 case "FF": //System call
                     this.Operation = "FF";
                     if(this.Xreg == 1){
                         _StdOut.putText(this.Yreg.toString());
-                        this.PC++;
+                        //this.PC++;
                     }//xreg = 1 if
                     else if(this.Xreg == 2){
                         index = this.Yreg + _PCB.min;
@@ -212,7 +215,7 @@ module TSOS {
                             _StdOut.putText(outputString);
                             index++;
                         }//while
-                        this.PC++;
+                        //this.PC++;
                     }//else if xreg = 2
                     else{
                         _StdOut.putText("Invalid xreg");
@@ -222,10 +225,13 @@ module TSOS {
 
                 default:
                     this.isExecuting = false;
+                    alert(this.Operation);
                     _StdOut.putText("Invalid opcode");
             }//opcode switch statement
 
             this.PC++;
+            _StdOut.putText("PC: "+this.PC+" Opcode: "+this.Operation);
+            _Console.advanceLine();
         }//end executeCPUCycle
 
         public checkMemory():number{
