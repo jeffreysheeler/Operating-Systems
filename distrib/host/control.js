@@ -127,7 +127,7 @@ var TSOS;
                 } //j for
             } //i for
         }; //updateMemoryTable
-        Control.initCPUTable = function () {
+        Control.updateCPUTable = function () {
             _CPUTable.rows[1].cells[0].innerHTML = _CPU.PC;
             _CPUTable.rows[1].cells[1].innerHTML = _CPU.Acc;
             _CPUTable.rows[1].cells[2].innerHTML = _CPU.Xreg;
@@ -136,15 +136,15 @@ var TSOS;
             _CPUTable.rows[1].cells[5].innerHTML = _CPU.Operation;
         }; //initCPUTable
         Control.updatePCBTable = function () {
-            _PCBTable.rows[1].cells[0].innerHTML = _CPU.pcb.pid;
-            _PCBTable.rows[1].cells[1].innerHTML = _CPU.pcb.state;
-            _PCBTable.rows[1].cells[2].innerHTML = _CPU.pcb.PC;
-            _PCBTable.rows[1].cells[3].innerHTML = _CPU.pcb.Acc;
-            _PCBTable.rows[1].cells[4].innerHTML = _CPU.pcb.Xreg;
-            _PCBTable.rows[1].cells[5].innerHTML = _CPU.pcb.Yreg;
-            _PCBTable.rows[1].cells[6].innerHTML = _CPU.pcb.Zflag;
-            _PCBTable.rows[1].cells[7].innerHTML = _CPU.pcb.min;
-            _PCBTable.rows[1].cells[8].innerHTML = _CPU.pcb.max;
+            _PCBTable.rows[1].cells[0].innerHTML = _PCB.pid;
+            _PCBTable.rows[1].cells[1].innerHTML = _PCB.state;
+            _PCBTable.rows[1].cells[2].innerHTML = _PCB.PC;
+            _PCBTable.rows[1].cells[3].innerHTML = _PCB.Acc;
+            _PCBTable.rows[1].cells[4].innerHTML = _PCB.Xreg;
+            _PCBTable.rows[1].cells[5].innerHTML = _PCB.Yreg;
+            _PCBTable.rows[1].cells[6].innerHTML = _PCB.Zflag;
+            _PCBTable.rows[1].cells[7].innerHTML = _PCB.min;
+            _PCBTable.rows[1].cells[8].innerHTML = _PCB.max;
         }; //updatePCBTable
         Control.hostBtnHaltOS_click = function (btn) {
             Control.hostLog("Emergency halt", "host");

@@ -1,6 +1,7 @@
 ///<reference path="../globals.ts" />
 ///<reference path="queue.ts" />
 ///<reference path="deviceDriverKeyboard.ts" />
+///<reference path="../os/pcb.ts" />
 /* ------------
      Kernel.ts
 
@@ -29,6 +30,7 @@ var TSOS;
             // Initialize the console.
             _Console = new TSOS.Console(); // The command line interface / console I/O device.
             _Console.init();
+            _MemoryManager = new TSOS.MemoryManager();
             // Initialize standard input and output to the _Console.
             _StdIn = _Console;
             _StdOut = _Console;

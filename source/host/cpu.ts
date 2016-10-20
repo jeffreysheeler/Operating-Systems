@@ -27,8 +27,8 @@ module TSOS {
                     public Yreg: number = 0,
                     public Zflag: number = 0,
                     public Operation: String = "",
-                    public isExecuting: boolean = false,
-                    public pcb: any = null) {
+                    public isExecuting: boolean = false
+                    ) {
 
         }
 
@@ -39,7 +39,6 @@ module TSOS {
             this.Yreg = 0;
             this.Zflag = 0;
             this.isExecuting = false;
-            this.pcb = null;
         }
 
         public cycle(): void {
@@ -48,21 +47,19 @@ module TSOS {
             // Do the real work here. Be sure to set this.isExecuting appropriately.
 
             if(this.isExecuting){
-                if(this.pcb != null){
-                    this.PC = this.pcb.min;
-                    this.Acc = 0;
-                    this.Xreg = 0;
-                    this.Yreg = 0;
-                    this.Zflag = 0;
+                    _PCB.PC = this.PC;
+                    _PCB.Acc = this.Acc;
+                    _PCB.Xreg = this.Xreg;
+                    _PCB.Yreg = this.Yreg;
+                    _PCB.Zflag = this.Zflag;
 
                     Control.updatePCBTable();
                 }//not null pcb if
 
                 this.executeCPUCycle();
-                Control.initCPUTable();
+                Control.updateCPUTable();
                 Control.updateMemoryTable();
             }//isExecuting if statement
-        }
 
         public executeCPUCycle(): void {
             var command; 
@@ -148,13 +145,14 @@ module TSOS {
 
                 case "00": //break / System call
                     this.Operation = "00"; 
-                    this.pcb.state = "Complete";
-                    this.pcb.PC = this.PC;
-                    this.pcb.Acc = this.Acc;
-                    this.pcb.Xreg = this.Xreg;
-                    this.pcb.Yreg = this.Yreg;
-                    this.pcb.Zflag = this.Zflag;
+                    _PCB.state = "Complete";
+                    _PCB.PC = this.PC;
+                    _PCB.Acc = this.Acc;
+                    _PCB.Xreg = this.Xreg;
+                    _PCB.Yreg = this.Yreg;
+                    _PCB.Zflag = this.Zflag;
                     Control.updatePCBTable();
+                    this.isExecuting = false;
                     break;
 
                 case "EC": //compare a byte in memory to the X reg, sets the Z flag in equal
@@ -177,7 +175,7 @@ module TSOS {
                     var branch = this.PC + this.parseConst(_Memory.mem[this.PC]);
                     if(this.Zflag == 0){
                         this.PC = branch + 1;
-                        if(this.PC > 255 + this.pcb.min){
+                        if(this.PC > 255 + _PCB.min){
                             this.PC -=256;
                         }//PC if
                     }//zflag = 0 if
@@ -206,7 +204,7 @@ module TSOS {
                         this.PC++;
                     }//xreg = 1 if
                     else if(this.Xreg == 2){
-                        index = this.Yreg + this.pcb.min;
+                        index = this.Yreg + _PCB.min;
 
                         while(_Memory.mem[index] != "00"){
                             outputString = String.fromCharCode(parseInt(_Memory.mem[index], 16));
@@ -220,12 +218,14 @@ module TSOS {
                         _StdOut.putText("Invalid xreg");
                         this.isExecuting = false;
                     }
-                    break;
+                break;
 
-                    default:
-                        this.isExecuting = false;
-                        _StdOut.putText("Invalid opcode");
+                default:
+                    this.isExecuting = false;
+                    _StdOut.putText("Invalid opcode");
             }//opcode switch statement
+
+            this.PC++;
         }//end executeCPUCycle
 
         public checkMemory():number{
@@ -235,8 +235,8 @@ module TSOS {
             this.PC++;
             var block2 = _Memory.mem[this.PC];
             var newMem = block2.concat(block1);
-            memBlock = _CPU.pcb.min + parseInt(newMem, 16);
-            if(memBlock >= _CPU.pcb.min && memBlock < _CPU.pcb.max){
+            memBlock = _PCB.min + parseInt(newMem, 16);
+            if(memBlock >= _PCB.min && memBlock < _PCB.max){
                 return memBlock;
             }//if
             else{

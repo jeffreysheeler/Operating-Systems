@@ -29,6 +29,7 @@ var _CPU: TSOS.Cpu;  // Utilize TypeScript's type annotation system to ensure th
 var _MemoryManager: TSOS.MemoryManager;
 var _Memory: TSOS.Memory;
 var _PCB: TSOS.pcb;
+var _currentProcess;
 
 var _OSclock: number = 0;  // Page 23.
 

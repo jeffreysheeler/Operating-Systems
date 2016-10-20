@@ -18,7 +18,7 @@
 var TSOS;
 (function (TSOS) {
     var Cpu = (function () {
-        function Cpu(PC, Acc, Xreg, Yreg, Zflag, Operation, isExecuting, pcb) {
+        function Cpu(PC, Acc, Xreg, Yreg, Zflag, Operation, isExecuting) {
             if (PC === void 0) { PC = 0; }
             if (Acc === void 0) { Acc = 0; }
             if (Xreg === void 0) { Xreg = 0; }
@@ -26,7 +26,6 @@ var TSOS;
             if (Zflag === void 0) { Zflag = 0; }
             if (Operation === void 0) { Operation = ""; }
             if (isExecuting === void 0) { isExecuting = false; }
-            if (pcb === void 0) { pcb = null; }
             this.PC = PC;
             this.Acc = Acc;
             this.Xreg = Xreg;
@@ -34,7 +33,6 @@ var TSOS;
             this.Zflag = Zflag;
             this.Operation = Operation;
             this.isExecuting = isExecuting;
-            this.pcb = pcb;
         }
         Cpu.prototype.init = function () {
             this.PC = 0;
@@ -43,26 +41,23 @@ var TSOS;
             this.Yreg = 0;
             this.Zflag = 0;
             this.isExecuting = false;
-            this.pcb = null;
         };
         Cpu.prototype.cycle = function () {
             _Kernel.krnTrace('CPU cycle');
             // TODO: Accumulate CPU usage and profiling statistics here.
             // Do the real work here. Be sure to set this.isExecuting appropriately.
             if (this.isExecuting) {
-                if (this.pcb != null) {
-                    this.PC = this.pcb.min;
-                    this.Acc = 0;
-                    this.Xreg = 0;
-                    this.Yreg = 0;
-                    this.Zflag = 0;
-                    TSOS.Control.updatePCBTable();
-                } //not null pcb if
-                this.executeCPUCycle();
-                TSOS.Control.initCPUTable();
-                TSOS.Control.updateMemoryTable();
-            } //isExecuting if statement
-        };
+                _PCB.PC = this.PC;
+                _PCB.Acc = this.Acc;
+                _PCB.Xreg = this.Xreg;
+                _PCB.Yreg = this.Yreg;
+                _PCB.Zflag = this.Zflag;
+                TSOS.Control.updatePCBTable();
+            } //not null pcb if
+            this.executeCPUCycle();
+            TSOS.Control.updateCPUTable();
+            TSOS.Control.updateMemoryTable();
+        }; //isExecuting if statement
         Cpu.prototype.executeCPUCycle = function () {
             var command;
             var index;
@@ -136,13 +131,14 @@ var TSOS;
                     break;
                 case "00":
                     this.Operation = "00";
-                    this.pcb.state = "Complete";
-                    this.pcb.PC = this.PC;
-                    this.pcb.Acc = this.Acc;
-                    this.pcb.Xreg = this.Xreg;
-                    this.pcb.Yreg = this.Yreg;
-                    this.pcb.Zflag = this.Zflag;
+                    _PCB.state = "Complete";
+                    _PCB.PC = this.PC;
+                    _PCB.Acc = this.Acc;
+                    _PCB.Xreg = this.Xreg;
+                    _PCB.Yreg = this.Yreg;
+                    _PCB.Zflag = this.Zflag;
                     TSOS.Control.updatePCBTable();
+                    this.isExecuting = false;
                     break;
                 case "EC":
                     this.Operation = "EC";
@@ -163,7 +159,7 @@ var TSOS;
                     var branch = this.PC + this.parseConst(_Memory.mem[this.PC]);
                     if (this.Zflag == 0) {
                         this.PC = branch + 1;
-                        if (this.PC > 255 + this.pcb.min) {
+                        if (this.PC > 255 + _PCB.min) {
                             this.PC -= 256;
                         } //PC if
                     } //zflag = 0 if
@@ -190,7 +186,7 @@ var TSOS;
                         this.PC++;
                     } //xreg = 1 if
                     else if (this.Xreg == 2) {
-                        index = this.Yreg + this.pcb.min;
+                        index = this.Yreg + _PCB.min;
                         while (_Memory.mem[index] != "00") {
                             outputString = String.fromCharCode(parseInt(_Memory.mem[index], 16));
                             _StdOut.putText(outputString);
@@ -207,6 +203,7 @@ var TSOS;
                     this.isExecuting = false;
                     _StdOut.putText("Invalid opcode");
             } //opcode switch statement
+            this.PC++;
         }; //end executeCPUCycle
         Cpu.prototype.checkMemory = function () {
             var memBlock;
@@ -215,8 +212,8 @@ var TSOS;
             this.PC++;
             var block2 = _Memory.mem[this.PC];
             var newMem = block2.concat(block1);
-            memBlock = _CPU.pcb.min + parseInt(newMem, 16);
-            if (memBlock >= _CPU.pcb.min && memBlock < _CPU.pcb.max) {
+            memBlock = _PCB.min + parseInt(newMem, 16);
+            if (memBlock >= _PCB.min && memBlock < _PCB.max) {
                 return memBlock;
             } //if
             else {

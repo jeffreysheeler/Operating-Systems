@@ -23,7 +23,7 @@ module TSOS{
 
             if(input.length/2 <= 256){
                 for(var i = 0; i < input.length; i++){
-                    addToMem = input.slice(i, i+1);
+                    addToMem = input.slice(i, i+2);
                     _Memory.mem[memIndex] = addToMem;
                     //_Kernel.krnTrace(input+" added to memory at index: "+memIndex);
 

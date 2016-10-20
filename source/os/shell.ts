@@ -308,7 +308,7 @@ module TSOS {
                 input = input.replace(/[\s]/g, "");
                 //_StdOut.putText("That is valid input!");
                 _StdOut.advanceLine;
-                _StdOut.putText(input);
+                //_StdOut.putText(input);
 
                 _Kernel.krnTrace("Program "+input);
 
@@ -324,6 +324,7 @@ module TSOS {
             if(args.length > 0){
                 if(args[0] == _PCB.pid.toString()){
                     _CPU.isExecuting = true;
+                    //_CPU.cycle();
                 }//if
                 else{
                     _StdOut.putText("Please enter a valid PID");

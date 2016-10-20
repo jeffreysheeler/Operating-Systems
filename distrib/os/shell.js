@@ -240,7 +240,7 @@ var TSOS;
                 input = input.replace(/[\s]/g, "");
                 //_StdOut.putText("That is valid input!");
                 _StdOut.advanceLine;
-                _StdOut.putText(input);
+                //_StdOut.putText(input);
                 _Kernel.krnTrace("Program " + input);
                 _MemoryManager.loadInput(input); //loads program in to memory
             } //if
