@@ -23,6 +23,19 @@ module TSOS{
 
             change = _readyQueue.remove(interm.pid);
             _MemoryManager.progSwap(change, readyProg);
+            readyProg.min = change.min;
+            readyProg.max = change.max;
+            readyProg.PC = change.PC;
+            change.min = 0;
+            change.max = 0;
+            change.PC = 0;
+
+            _readyQueue.enqueue(change);
+
+
+            readyProg.State = "Running";
+            _CPU.thisPCB = readyProg;
+            _CPU.PC = readyProg.min;
         }
     }
 }
