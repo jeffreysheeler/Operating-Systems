@@ -31,6 +31,7 @@ var _Canvas; // Initialized in Control.hostInit().
 var _MemoryTable;
 var _CPUTable;
 var _PCBTable;
+var _Scheduler;
 var _readyQueue = null;
 var _resList = [];
 var _DrawingContext; // = _Canvas.getContext("2d");  // Assigned here for type safety, but re-initialized in Control.hostInit() for OCD and logic.

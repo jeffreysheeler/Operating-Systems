@@ -72,12 +72,18 @@ var TSOS;
             // marist
             sc = new TSOS.ShellCommand(this.shellMarist, "marist", "changes the font and background colors to red and white");
             this.commandList[this.commandList.length] = sc;
+            //shellRun
             sc = new TSOS.ShellCommand(this.shellRun, "run", "runs the program that is currently loaded in memory");
             this.commandList[this.commandList.length] = sc;
             // clearMem
             sc = new TSOS.ShellCommand(this.shellClearmem, "clearmem", "- Clears all of the existing memory");
             this.commandList[this.commandList.length] = sc;
+            // quantum
+            sc = new TSOS.ShellCommand(this.shellQuantum, "quantum", "- Sets the quantum for each process");
+            this.commandList[this.commandList.length] = sc;
             // ps  - list the running processes and their IDs
+            sc = new TSOS.ShellCommand(this.shellPS, "ps", "- Lists the running processes and their IDs");
+            this.commandList[this.commandList.length] = sc;
             // kill <id> - kills the specified process id.
             //
             // Display the initial prompt.
@@ -275,6 +281,32 @@ var TSOS;
             TSOS.Control.updateMemoryTable();
             _MemoryManager.mem = 0;
         }; //clearmem
+        Shell.prototype.shellQuantum = function (args) {
+            var quantum;
+            if (isNaN(parseInt(args)) || ((quantum = parseInt(args)) < 0)) {
+                _StdOut.putText("That is not a valid quantum");
+                _StdOut.advanceLine();
+            } //if
+            else {
+                _Scheduler.quantum = quantum;
+                _StdOut.putText("Quantum set to: " + quantum);
+                _StdOut.advanceLine();
+            }
+        }; //shellQuantum
+        Shell.prototype.shellPS = function (args) {
+            if (_CPU.isExecuting) {
+                _StdOut.putText("Executing process: " + _PCB.pid);
+                _StdOut.advanceLine();
+                for (var i = 0; i < _readyQueue.getSize(); i++) {
+                    _StdOut.putText("Processes in queue: " + _readyQueue.getIndex(i).pid);
+                    _StdOut.advanceLine();
+                } //for
+            } //if
+            else {
+                _StdOut.putText("There are no processes in execution");
+                _StdOut.advanceLine();
+            } //else
+        }; //shellPS
         Shell.prototype.shellMan = function (args) {
             if (args.length > 0) {
                 var topic = args[0];

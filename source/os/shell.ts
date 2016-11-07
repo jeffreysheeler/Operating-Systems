@@ -120,6 +120,7 @@ module TSOS {
                                   "changes the font and background colors to red and white");
             this.commandList[this.commandList.length] = sc;
 
+            //shellRun
             sc = new ShellCommand(this.shellRun,
                                   "run",
                                   "runs the program that is currently loaded in memory");
@@ -130,8 +131,19 @@ module TSOS {
                                   "clearmem",
                                   "- Clears all of the existing memory");
             this.commandList[this.commandList.length] = sc;
+
+            // quantum
+            sc = new ShellCommand(this.shellQuantum,
+                                   "quantum",
+                                   "- Sets the quantum for each process");
+            this.commandList[this.commandList.length] = sc;
             
             // ps  - list the running processes and their IDs
+            sc = new ShellCommand(this.shellPS,
+                                    "ps",
+                                    "- Lists the running processes and their IDs");
+            this.commandList[this.commandList.length] = sc;
+
             // kill <id> - kills the specified process id.
 
             //
@@ -367,6 +379,21 @@ module TSOS {
                 _StdOut.advanceLine();
             }
         }//shellQuantum
+
+        public shellPS(args)    {
+            if(_CPU.isExecuting){
+                _StdOut.putText("Executing process: "+_PCB.pid);
+                _StdOut.advanceLine();
+                for(var i = 0; i < _readyQueue.getSize(); i++){
+                    _StdOut.putText("Processes in queue: "+_readyQueue.getIndex(i).pid);
+                    _StdOut.advanceLine();
+                }//for
+            }//if
+            else{
+                _StdOut.putText("There are no processes in execution");
+                _StdOut.advanceLine();
+            }//else
+        }//shellPS
 
         public shellMan(args) {
             if (args.length > 0) {
