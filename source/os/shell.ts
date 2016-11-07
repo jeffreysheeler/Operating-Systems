@@ -124,6 +124,12 @@ module TSOS {
                                   "run",
                                   "runs the program that is currently loaded in memory");
             this.commandList[this.commandList.length] = sc;
+
+            // clearMem
+            sc = new ShellCommand(this.shellClearmem,
+                                  "clearmem",
+                                  "- Clears all of the existing memory");
+            this.commandList[this.commandList.length] = sc;
             
             // ps  - list the running processes and their IDs
             // kill <id> - kills the specified process id.
@@ -335,11 +341,19 @@ module TSOS {
 
         public shellBsod(args)  {
             _Kernel.krnTrapError("Error");
-        }
+        }//blue screen of death
 
         public shellMarist(args)  {
             _Kernel.changeMarist();
-        }
+        }//marist
+
+        public shellClearmem(args)  {
+            for(var i = 0; i < 768; i++){
+                _Memory.mem[i] = "00";
+            }//for
+            Control.updateMemoryTable();
+            _MemoryManager.mem = 0;
+        }//clearmem
 
         public shellMan(args) {
             if (args.length > 0) {
