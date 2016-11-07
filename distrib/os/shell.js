@@ -74,6 +74,9 @@ var TSOS;
             this.commandList[this.commandList.length] = sc;
             sc = new TSOS.ShellCommand(this.shellRun, "run", "runs the program that is currently loaded in memory");
             this.commandList[this.commandList.length] = sc;
+            // clearMem
+            sc = new TSOS.ShellCommand(this.shellClearmem, "clearmem", "- Clears all of the existing memory");
+            this.commandList[this.commandList.length] = sc;
             // ps  - list the running processes and their IDs
             // kill <id> - kills the specified process id.
             //
@@ -261,10 +264,17 @@ var TSOS;
         }; //shellRun
         Shell.prototype.shellBsod = function (args) {
             _Kernel.krnTrapError("Error");
-        };
+        }; //blue screen of death
         Shell.prototype.shellMarist = function (args) {
             _Kernel.changeMarist();
-        };
+        }; //marist
+        Shell.prototype.shellClearmem = function (args) {
+            for (var i = 0; i < 768; i++) {
+                _Memory.mem[i] = "00";
+            } //for
+            TSOS.Control.updateMemoryTable();
+            _MemoryManager.mem = 0;
+        }; //clearmem
         Shell.prototype.shellMan = function (args) {
             if (args.length > 0) {
                 var topic = args[0];

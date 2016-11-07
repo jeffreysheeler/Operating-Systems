@@ -355,6 +355,19 @@ module TSOS {
             _MemoryManager.mem = 0;
         }//clearmem
 
+        public shellQuantum(args)   {
+            var quantum;
+            if(isNaN(parseInt(args)) || ((quantum=parseInt(args))<0)){
+                _StdOut.putText("That is not a valid quantum");
+                _StdOut.advanceLine();
+            }//if
+            else{
+                _Scheduler.quantum = quantum;
+                _StdOut.putText("Quantum set to: "+quantum);
+                _StdOut.advanceLine();
+            }
+        }//shellQuantum
+
         public shellMan(args) {
             if (args.length > 0) {
                 var topic = args[0];
