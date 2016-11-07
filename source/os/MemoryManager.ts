@@ -51,5 +51,20 @@ module TSOS{
         public getMemoryAddress(address): string{
             return _Memory.mem[address];
         }
+
+        public progSwap(oldPCB, program){
+            var x = oldPCB.min;
+            var atMemory;
+            for(var i = oldPCB.min; i < oldPCB.max; i++){
+                x++;
+            }//for
+            x = oldPCB.min;
+            for(var j = 0; j < program.length; j++){
+                atMemory = program.slice(j, j+2);
+                _Memory.mem[i] = atMemory;
+                j++;
+                x++;
+            }//for
+        }
     }
 }
