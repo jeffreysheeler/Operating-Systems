@@ -135,7 +135,7 @@ module TSOS {
             // quantum
             sc = new ShellCommand(this.shellQuantum,
                                    "quantum",
-                                   "- Sets the quantum for each process");
+                                   "<int> - Sets the quantum for each process");
             this.commandList[this.commandList.length] = sc;
             
             // ps  - list the running processes and their IDs
@@ -369,7 +369,14 @@ module TSOS {
 
         public shellQuantum(args)   {
             var quantum;
-            if(isNaN(parseInt(args)) || ((quantum=parseInt(args))<0)){
+            if(!isNaN(args)){
+                quantum = parseInt(args);
+            }//if
+            else{
+                _StdOut.putText("Quantum can not be null");
+                _StdOut.advanceLine();
+            }
+            if(quantum <= 0){
                 _StdOut.putText("That is not a valid quantum");
                 _StdOut.advanceLine();
             }//if

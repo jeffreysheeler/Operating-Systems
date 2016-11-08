@@ -1,6 +1,7 @@
 ///<reference path="../globals.ts" />
 ///<reference path="../host/control.ts" />
 ///<reference path="../host/memory.ts" />
+///<reference path="../os/interrupt.ts" />
 /* ------------
      CPU.ts
 
@@ -47,17 +48,22 @@ var TSOS;
             // TODO: Accumulate CPU usage and profiling statistics here.
             // Do the real work here. Be sure to set this.isExecuting appropriately.
             if (this.isExecuting) {
-                _PCB.PC = this.PC;
-                _PCB.Acc = this.Acc;
-                _PCB.Xreg = this.Xreg;
-                _PCB.Yreg = this.Yreg;
-                _PCB.Zflag = this.Zflag;
-                TSOS.Control.updatePCBTable();
-            } //not null pcb if
-            this.executeCPUCycle();
-            TSOS.Control.updateCPUTable();
-            TSOS.Control.updateMemoryTable();
-        }; //isExecuting if statement
+                if (_PCB == null) {
+                    _KernelInterruptQueue.enqueue(new TSOS.Interrupt(SCHEDULER_INIT_IRQ, 0));
+                }
+                else {
+                    _PCB.PC = this.PC;
+                    _PCB.Acc = this.Acc;
+                    _PCB.Xreg = this.Xreg;
+                    _PCB.Yreg = this.Yreg;
+                    _PCB.Zflag = this.Zflag;
+                    TSOS.Control.updatePCBTable();
+                } //not null pcb if
+                this.executeCPUCycle();
+                TSOS.Control.updateCPUTable();
+                TSOS.Control.updateMemoryTable();
+            } //isExecuting if statement
+        }; //cycle
         Cpu.prototype.executeCPUCycle = function () {
             var command;
             var index;
@@ -68,143 +74,155 @@ var TSOS;
             var outputString;
             command = _Memory.mem[this.PC];
             //switch statement for each 6502a opcodes
-            switch (command) {
-                case "A9":
-                    this.Operation = "A9";
-                    this.PC++;
-                    this.Acc = parseInt(_Memory.mem[this.PC], 16);
-                    //this.PC++;
-                    break;
-                case "AD":
-                    this.Operation = "AD";
-                    index = this.checkMemory();
-                    this.Acc = parseInt(_Memory.mem[index], 16);
-                    //this.PC++;
-                    break;
-                case "8D":
-                    this.Operation = "8D";
-                    index = this.checkMemory();
-                    hold = this.Acc.toString(16);
-                    if (hold.length < 2) {
-                        hold = "0" + hold;
-                    }
-                    _Memory.mem[index] = hold;
-                    _Kernel.krnTrace("Saving " + hold + " to memory.");
-                    //this.PC++;
-                    break;
-                case "6D":
-                    this.Operation = "6D";
-                    index = this.checkMemory();
-                    xreg = parseInt(_Memory.mem[index]);
-                    yreg = this.Acc;
-                    zflag = xreg + yreg;
-                    this.Acc = zflag;
-                    //this.PC++;
-                    break;
-                case "A2":
-                    this.Operation = "A2";
-                    this.PC++;
-                    this.Xreg = parseInt(_Memory.mem[this.PC], 16);
-                    //this.PC++;
-                    break;
-                case "AE":
-                    this.Operation = "AE";
-                    index = this.checkMemory();
-                    this.Xreg = parseInt(_Memory.mem[index], 16);
-                    //this.PC++;
-                    break;
-                case "A0":
-                    this.Operation = "A0";
-                    this.PC++;
-                    this.Yreg = parseInt(_Memory.mem[this.PC], 16);
-                    //this.PC++;
-                    break;
-                case "AC":
-                    this.Operation = "AC";
-                    index = this.checkMemory();
-                    this.Yreg = parseInt(_Memory.mem[index], 16);
-                    //this.PC++;
-                    break;
-                case "EA":
-                    this.Operation = "EA";
-                    //this.PC++;
-                    break;
-                case "00":
-                    this.Operation = "00";
-                    _PCB.state = "Complete";
-                    _PCB.PC = this.PC;
-                    _PCB.Acc = this.Acc;
-                    _PCB.Xreg = this.Xreg;
-                    _PCB.Yreg = this.Yreg;
-                    _PCB.Zflag = this.Zflag;
-                    TSOS.Control.updatePCBTable();
-                    //alert("00" +this.PC);
-                    this.isExecuting = false;
-                    break;
-                case "EC":
-                    this.Operation = "EC";
-                    index = this.checkMemory();
-                    xreg = this.parseConst(_Memory.mem[index]);
-                    yreg = this.Xreg;
-                    if (xreg == yreg) {
-                        this.Zflag = 1;
-                    } //if
-                    else {
-                        this.Zflag = 0;
-                    } //else
-                    //this.PC++;
-                    break;
-                case "D0":
-                    this.Operation = "D0";
-                    ++this.PC;
-                    //alert(this.PC);
-                    var branch = this.PC + this.parseConst(_Memory.mem[this.PC]);
-                    if (this.Zflag == 0) {
-                        this.PC = branch;
-                        if (this.PC > 255 + _PCB.min) {
-                            this.PC -= 256;
-                        } //PC if
-                    } //zflag = 0 if
-                    else {
-                    } //else
-                    //alert(this.PC);
-                    break;
-                case "EE":
-                    this.Operation = "EE";
-                    index = this.checkMemory();
-                    xreg = parseInt(_Memory.mem[index], 16);
-                    xreg++;
-                    hold = xreg.toString(16);
-                    if (hold.length < 2) {
-                        hold = "0" + hold;
-                    } //if
-                    _Memory.mem[index] = hold;
-                    //this.PC++;
-                    break;
-                case "FF":
-                    this.Operation = "FF";
-                    if (this.Xreg == 1) {
-                        _StdOut.putText(this.Yreg.toString());
-                    } //xreg = 1 if
-                    else if (this.Xreg == 2) {
-                        index = this.Yreg + _PCB.min;
-                        while (_Memory.mem[index] != "00") {
-                            outputString = String.fromCharCode(parseInt(_Memory.mem[index], 16));
-                            _StdOut.putText(outputString);
-                            index++;
-                        } //while
-                    } //else if xreg = 2
-                    else {
-                        _StdOut.putText("Invalid xreg");
+            if (_Scheduler.tab < _Scheduler.quantum) {
+                switch (command) {
+                    case "A9":
+                        this.Operation = "A9";
+                        this.PC++;
+                        this.Acc = parseInt(_Memory.mem[this.PC], 16);
+                        //this.PC++;
+                        break;
+                    case "AD":
+                        this.Operation = "AD";
+                        index = this.checkMemory();
+                        this.Acc = parseInt(_Memory.mem[index], 16);
+                        //this.PC++;
+                        break;
+                    case "8D":
+                        this.Operation = "8D";
+                        index = this.checkMemory();
+                        hold = this.Acc.toString(16);
+                        if (hold.length < 2) {
+                            hold = "0" + hold;
+                        }
+                        _Memory.mem[index] = hold;
+                        _Kernel.krnTrace("Saving " + hold + " to memory.");
+                        //this.PC++;
+                        break;
+                    case "6D":
+                        this.Operation = "6D";
+                        index = this.checkMemory();
+                        xreg = parseInt(_Memory.mem[index]);
+                        yreg = this.Acc;
+                        zflag = xreg + yreg;
+                        this.Acc = zflag;
+                        //this.PC++;
+                        break;
+                    case "A2":
+                        this.Operation = "A2";
+                        this.PC++;
+                        this.Xreg = parseInt(_Memory.mem[this.PC], 16);
+                        //this.PC++;
+                        break;
+                    case "AE":
+                        this.Operation = "AE";
+                        index = this.checkMemory();
+                        this.Xreg = parseInt(_Memory.mem[index], 16);
+                        //this.PC++;
+                        break;
+                    case "A0":
+                        this.Operation = "A0";
+                        this.PC++;
+                        this.Yreg = parseInt(_Memory.mem[this.PC], 16);
+                        //this.PC++;
+                        break;
+                    case "AC":
+                        this.Operation = "AC";
+                        index = this.checkMemory();
+                        this.Yreg = parseInt(_Memory.mem[index], 16);
+                        //this.PC++;
+                        break;
+                    case "EA":
+                        this.Operation = "EA";
+                        //this.PC++;
+                        break;
+                    case "00":
+                        if (_readyQueue.isEmpty() == false) {
+                            this.Operation = "00";
+                            _PCB.state = "Complete";
+                            _PCB.PC = this.PC;
+                            _PCB.Acc = this.Acc;
+                            _PCB.Xreg = this.Xreg;
+                            _PCB.Yreg = this.Yreg;
+                            _PCB.Zflag = this.Zflag;
+                            TSOS.Control.updatePCBTable();
+                            _KernelInterruptQueue.enqueue(new TSOS.Interrupt(CPU_REPLACE_IRQ, 0));
+                        } //empty ready queue
+                        else {
+                            this.killProcess();
+                        } //else
+                        break;
+                    case "EC":
+                        this.Operation = "EC";
+                        index = this.checkMemory();
+                        xreg = this.parseConst(_Memory.mem[index]);
+                        yreg = this.Xreg;
+                        if (xreg == yreg) {
+                            this.Zflag = 1;
+                        } //if
+                        else {
+                            this.Zflag = 0;
+                        } //else
+                        //this.PC++;
+                        break;
+                    case "D0":
+                        this.Operation = "D0";
+                        ++this.PC;
+                        //alert(this.PC);
+                        var branch = this.PC + this.parseConst(_Memory.mem[this.PC]);
+                        if (this.Zflag == 0) {
+                            this.PC = branch;
+                            if (this.PC > 255 + _PCB.min) {
+                                this.PC -= 256;
+                            } //PC if
+                        } //zflag = 0 if
+                        else {
+                        } //else
+                        //alert(this.PC);
+                        break;
+                    case "EE":
+                        this.Operation = "EE";
+                        index = this.checkMemory();
+                        xreg = parseInt(_Memory.mem[index], 16);
+                        xreg++;
+                        hold = xreg.toString(16);
+                        if (hold.length < 2) {
+                            hold = "0" + hold;
+                        } //if
+                        _Memory.mem[index] = hold;
+                        //this.PC++;
+                        break;
+                    case "FF":
+                        this.Operation = "FF";
+                        if (this.Xreg == 1) {
+                            _StdOut.putText(this.Yreg.toString());
+                        } //xreg = 1 if
+                        else if (this.Xreg == 2) {
+                            index = this.Yreg + _PCB.min;
+                            while (_Memory.mem[index] != "00") {
+                                outputString = String.fromCharCode(parseInt(_Memory.mem[index], 16));
+                                _StdOut.putText(outputString);
+                                index++;
+                            } //while
+                        } //else if xreg = 2
+                        else {
+                            _StdOut.putText("Invalid xreg");
+                            this.isExecuting = false;
+                        }
+                        break;
+                    default:
                         this.isExecuting = false;
-                    }
-                    break;
-                default:
-                    this.isExecuting = false;
-                    //alert(this.Operation);
-                    _StdOut.putText("Invalid opcode");
-            } //opcode switch statement
-            this.PC++;
+                        //alert(this.Operation);
+                        _StdOut.putText("Invalid opcode");
+                } //opcode switch statement
+                this.PC++;
+            } //quantum if
+            if (_Scheduler.scheduler == "rr") {
+                _Scheduler.tab++;
+            }
+            else {
+                this.updatePCB();
+            }
             //_StdOut.putText("PC: "+this.PC+" Opcode: "+this.Operation);
             //_Console.advanceLine();
         }; //end executeCPUCycle
@@ -227,6 +245,30 @@ var TSOS;
             var x = parseInt(num, 16);
             return x;
         }; //parseConst
+        Cpu.prototype.updatePCB = function () {
+            _PCB.state = "waiting";
+            _PCB.PC = this.PC;
+            _PCB.Acc = this.Acc;
+            _PCB.Xreg = this.Xreg;
+            _PCB.Yreg = this.Yreg;
+            _PCB.Zflag = this.Zflag;
+            _KernelInterruptQueue.enqueue(new TSOS.Interrupt(CPU_PROCESS_CHANGE_IRQ, 0));
+        };
+        Cpu.prototype.killProcess = function () {
+            this.isExecuting = false;
+            _PCB.state = "Terminated";
+            _PCB.PC = this.PC;
+            _PCB.Acc = this.Acc;
+            _PCB.Xreg = this.Xreg;
+            _PCB.Yreg = this.Yreg;
+            _PCB.Zflag = this.Zflag;
+            TSOS.Control.updatePCBTable();
+            for (var i = 0; i < _resList.getSize(); i++) {
+                _Kernel.krnTrace("PID: " + _resList[i]);
+            }
+            _StdOut.advanceLine();
+            _OsShell.putPrompt();
+        }; //killProcess
         return Cpu;
     }());
     TSOS.Cpu = Cpu;

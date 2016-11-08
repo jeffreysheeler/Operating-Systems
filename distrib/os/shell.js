@@ -79,7 +79,7 @@ var TSOS;
             sc = new TSOS.ShellCommand(this.shellClearmem, "clearmem", "- Clears all of the existing memory");
             this.commandList[this.commandList.length] = sc;
             // quantum
-            sc = new TSOS.ShellCommand(this.shellQuantum, "quantum", "- Sets the quantum for each process");
+            sc = new TSOS.ShellCommand(this.shellQuantum, "quantum", "<int> - Sets the quantum for each process");
             this.commandList[this.commandList.length] = sc;
             // ps  - list the running processes and their IDs
             sc = new TSOS.ShellCommand(this.shellPS, "ps", "- Lists the running processes and their IDs");
@@ -283,7 +283,10 @@ var TSOS;
         }; //clearmem
         Shell.prototype.shellQuantum = function (args) {
             var quantum;
-            if (isNaN(parseInt(args)) || ((quantum = parseInt(args)) < 0)) {
+            if (!isNaN(args)) {
+                quantum = parseInt(args);
+            } //if
+            if (quantum == null || (quantum <= 0)) {
                 _StdOut.putText("That is not a valid quantum");
                 _StdOut.advanceLine();
             } //if
