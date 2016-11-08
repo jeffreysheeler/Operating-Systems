@@ -387,6 +387,10 @@ module TSOS {
             }
         }//shellQuantum
 
+        public shellRunAll(args)    {
+            
+        }//runall
+
         public shellPS(args)    {
             if(_CPU.isExecuting){
                 _StdOut.putText("Executing process: "+_PCB.pid);

@@ -13,7 +13,7 @@ module TSOS{
 
         constructor(public mem: number = 0,
                     public memMin = [0,256,512],
-                    public memMax = [255, 511, 768]){
+                    public memMax = [255,511,768]){
 
                     }//constructor
         
@@ -41,8 +41,8 @@ module TSOS{
                 _OsShell.pid++;
                 Control.updateMemoryTable();
                 this.mem++;
-                for(var i = 0; i<_resList.length; i++){
-                    _Kernel.krnTrace("Resident list: " +_resList[i].pid);
+                for(var j = 0; j < _resList.length; j++){
+                    _Kernel.krnTrace("Resident list: " +_resList[j].pid);
                 }
             }//if
 
