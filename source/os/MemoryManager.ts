@@ -21,11 +21,11 @@ module TSOS{
             var addToMem;
             var memIndex = this.memMin[this.mem];
 
-            if(input.length/2 <= 256){
+            if(this.mem < 3 && input.length/2 <= 256){
                 for(var i = 0; i < input.length; i++){
                     addToMem = input.slice(i, i+2);
                     _Memory.mem[memIndex] = addToMem;
-                    //_Kernel.krnTrace(input+" added to memory at index: "+memIndex);
+                    _Kernel.krnTrace(input+" added to memory at index: "+memIndex);
 
                     i++;
                     memIndex++;
@@ -36,11 +36,16 @@ module TSOS{
 
                 _PCB = new pcb();
                 _PCB.init(min,max);
+                _resList[_resList.length] = _PCB;
                 _StdOut.putText("Program loaded to memory, pid = "+_OsShell.pid);
                 _OsShell.pid++;
                 Control.updateMemoryTable();
                 this.mem++;
+                for(var i = 0; i<_resList.length; i++){
+                    _Kernel.krnTrace("Resident list: " +_resList[i].pid);
+                }
             }//if
+
 
             else{
                 _StdOut.putText("Failed to load to memory");

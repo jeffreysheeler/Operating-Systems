@@ -1,6 +1,7 @@
 ///<reference path="../globals.ts" />
 ///<reference path="../host/control.ts" />
 ///<reference path="../host/memory.ts" />
+///<reference path="../os/interrupt.ts" />
 
 /* ------------
      CPU.ts
@@ -149,16 +150,20 @@ module TSOS {
                         break;
 
                     case "00": //break / System call
-                        this.Operation = "00"; 
-                        _PCB.state = "Complete";
-                        _PCB.PC = this.PC;
-                        _PCB.Acc = this.Acc;
-                        _PCB.Xreg = this.Xreg;
-                        _PCB.Yreg = this.Yreg;
-                        _PCB.Zflag = this.Zflag;
-                        Control.updatePCBTable();
-                        //alert("00" +this.PC);
-                        this.isExecuting = false;
+                        if(_readyQueue.isEmpty() == false){
+                            this.Operation = "00"; 
+                            _PCB.state = "Complete";
+                            _PCB.PC = this.PC;
+                            _PCB.Acc = this.Acc;
+                            _PCB.Xreg = this.Xreg;
+                            _PCB.Yreg = this.Yreg;
+                            _PCB.Zflag = this.Zflag;
+                            Control.updatePCBTable();
+                            _KernelInterruptQueue.enqueue(new Interrupt(CPU_REPLACE_IRQ, 0));
+                        }//empty ready queue
+                        else{
+                            this.killProcess();
+                        }//else
                         break;
 
                     case "EC": //compare a byte in memory to the X reg, sets the Z flag in equal
@@ -277,5 +282,22 @@ module TSOS {
             _PCB.Zflag=this.Zflag;
             _KernelInterruptQueue.enqueue(new Interrupt(CPU_PROCESS_CHANGE_IRQ, 0));
         }
+
+        public killProcess(): void{
+            this.isExecuting = false;
+            _PCB.state = "Terminated";
+            _PCB.PC = this.PC;
+            _PCB.Acc = this.Acc;
+            _PCB.Xreg = this.Xreg;
+            _PCB.Yreg = this.Yreg;
+            _PCB.Zflag = this.Zflag;
+            Control.updatePCBTable();
+
+            for(var i = 0; i < _resList.getSize(); i++){
+                _Kernel.krnTrace("PID: "+_resList[i]);
+            }
+            _StdOut.advanceLine();
+            _OsShell.putPrompt();
+        }//killProcess
     }
 }
