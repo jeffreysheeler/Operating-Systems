@@ -6,6 +6,7 @@
 ///<reference path="../os/pcb.ts" />
 ///<reference path="../host/memory.ts" />
 ///<reference path="../host/control.ts" />
+///<reference path="../os/scheduler.ts" />
 
 
 /* ------------

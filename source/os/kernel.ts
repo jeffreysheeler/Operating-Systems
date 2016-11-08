@@ -34,6 +34,8 @@ module TSOS {
             _Console.init();
 
             _MemoryManager = new MemoryManager();
+            _Scheduler = new scheduler();
+            _readyQueue = new Queue();
 
             // Initialize standard input and output to the _Console.
             _StdIn  = _Console;
@@ -85,6 +87,7 @@ module TSOS {
                that it has to look for interrupts and process them if it finds any.                           */
 
             // Check for an interrupt, are any. Page 560
+            //Control.updateReadyQueueTable();
             if (_KernelInterruptQueue.getSize() > 0) {
                 // Process the first interrupt on the interrupt queue.
                 // TODO: Implement a priority queue based on the IRQ number/id to enforce interrupt priority.
