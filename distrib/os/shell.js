@@ -84,6 +84,9 @@ var TSOS;
             // ps  - list the running processes and their IDs
             sc = new TSOS.ShellCommand(this.shellPS, "ps", "- Lists the running processes and their IDs");
             this.commandList[this.commandList.length] = sc;
+            // quantum
+            sc = new TSOS.ShellCommand(this.shellRunAll, "runall", "executes all programs in the resident list at once");
+            this.commandList[this.commandList.length] = sc;
             // kill <id> - kills the specified process id.
             //
             // Display the initial prompt.
@@ -286,7 +289,11 @@ var TSOS;
             if (!isNaN(args)) {
                 quantum = parseInt(args);
             } //if
-            if (quantum == null || (quantum <= 0)) {
+            else {
+                _StdOut.putText("Quantum can not be null");
+                _StdOut.advanceLine();
+            }
+            if (quantum <= 0) {
                 _StdOut.putText("That is not a valid quantum");
                 _StdOut.advanceLine();
             } //if
@@ -296,6 +303,12 @@ var TSOS;
                 _StdOut.advanceLine();
             }
         }; //shellQuantum
+        Shell.prototype.shellRunAll = function (args) {
+            while (_resList.length > 0) {
+                _readyQueue.enqueue(_resList[0]);
+            } //while
+            _CPU.isExecuting = true;
+        }; //runall
         Shell.prototype.shellPS = function (args) {
             if (_CPU.isExecuting) {
                 _StdOut.putText("Executing process: " + _PCB.pid);

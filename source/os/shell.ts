@@ -144,6 +144,12 @@ module TSOS {
                                     "- Lists the running processes and their IDs");
             this.commandList[this.commandList.length] = sc;
 
+            // quantum
+            sc = new ShellCommand(this.shellRunAll,
+                                   "runall",
+                                   "executes all programs in the resident list at once");
+            this.commandList[this.commandList.length] = sc;
+
             // kill <id> - kills the specified process id.
 
             //
@@ -388,7 +394,10 @@ module TSOS {
         }//shellQuantum
 
         public shellRunAll(args)    {
-            
+            while(_resList.length > 0){
+                _readyQueue.enqueue(_resList[0]);
+            }//while
+            _CPU.isExecuting = true;
         }//runall
 
         public shellPS(args)    {
