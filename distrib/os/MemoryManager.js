@@ -32,6 +32,7 @@ var TSOS;
                 var max = this.memMax[this.mem];
                 _PCB = new TSOS.pcb();
                 _PCB.init(min, max);
+                _PCB.pid = _OsShell.pid;
                 _resList[_resList.length] = _PCB;
                 _StdOut.putText("Program loaded to memory, pid = " + _OsShell.pid);
                 _OsShell.pid++;
