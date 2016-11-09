@@ -89,6 +89,8 @@ var TSOS;
             sc = new TSOS.ShellCommand(this.shellRunAll, "runall", "executes all programs in the resident list at once");
             this.commandList[this.commandList.length] = sc;
             // kill <id> - kills the specified process id.
+            sc = new TSOS.ShellCommand(this.shellKill, "kill", "<int> - kills the specified process id");
+            this.commandList[this.commandList.length] = sc;
             //
             // Display the initial prompt.
             this.putPrompt();
@@ -262,15 +264,34 @@ var TSOS;
             }
         };
         Shell.prototype.shellRun = function (args) {
-            if (args.length > 0) {
-                if (args[0] == _PCB.pid.toString()) {
-                    _CPU.init();
+            var exists = false;
+            for (var i = 0; i < _resList.length; i++) {
+                if (args == _resList[i].pid) {
+                    exists = true;
+                    _resList[i].state = "Ready";
+                    _resList[i].PC = _resList[i].min;
+                    _readyQueue.enqueue(_resList[i]);
+                    for (var j = 0; j < _resList.length; j++) {
+                        _Kernel.krnTrace("pid: " + _resList.pid);
+                    } //for
+                    TSOS.Control.updateMemoryTable();
+                    _readyQueue.enqueue(_resList[i]);
                     _CPU.isExecuting = true;
                 } //if
-                else {
-                    _StdOut.putText("Please enter a valid PID");
-                } //else
+            } //for
+            if (exists == false) {
+                _StdOut.putText("Please enter a valid PID");
             } //if
+            /*if(args.length > 0){
+                if(args[0] == _PCB.pid.toString()){
+                    _CPU.init();
+                    _CPU.isExecuting = true;
+                    //_CPU.cycle();
+                }//if
+                else{
+                    _StdOut.putText("Please enter a valid PID");
+                }//else
+            }//if */
         }; //shellRun
         Shell.prototype.shellBsod = function (args) {
             _Kernel.krnTrapError("Error");
@@ -324,6 +345,12 @@ var TSOS;
                 _StdOut.advanceLine();
             } //else
         }; //shellPS
+        Shell.prototype.shellKill = function (args) {
+            var pid;
+            var exists;
+            if (_CPU.isExecuting) {
+            } //if
+        }; //shellKill
         Shell.prototype.shellMan = function (args) {
             if (args.length > 0) {
                 var topic = args[0];

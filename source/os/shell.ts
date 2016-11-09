@@ -152,6 +152,10 @@ module TSOS {
             this.commandList[this.commandList.length] = sc;
 
             // kill <id> - kills the specified process id.
+            sc = new ShellCommand(this.shellKill,
+                                    "kill",
+                                    "<int> - kills the specified process id");
+            this.commandList[this.commandList.length] = sc;
 
             //
             // Display the initial prompt.
@@ -346,7 +350,32 @@ module TSOS {
         }
 
         public shellRun(args){
-            if(args.length > 0){
+            var exists = false;
+
+            for(var i = 0; i < _resList.length; i++){
+                if(args == _resList[i].pid){
+                    exists = true;
+
+                    _resList[i].state = "Ready";
+                    _resList[i].PC = _resList[i].min;
+                    _readyQueue.enqueue(_resList[i]);
+
+                    for(var j = 0; j < _resList.length; j++){
+                        _Kernel.krnTrace("pid: "+_resList.pid);
+                    }//for
+
+                    Control.updateMemoryTable();
+                    _readyQueue.enqueue(_resList[i]);
+                    _CPU.isExecuting = true;
+                    }//if
+            }//for
+
+            if(exists == false){
+                _StdOut.putText("Please enter a valid PID");
+            }//if
+
+
+            /*if(args.length > 0){
                 if(args[0] == _PCB.pid.toString()){
                     _CPU.init();
                     _CPU.isExecuting = true;
@@ -355,7 +384,7 @@ module TSOS {
                 else{
                     _StdOut.putText("Please enter a valid PID");
                 }//else
-            }//if
+            }//if */
         }//shellRun
 
         public shellBsod(args)  {
@@ -415,6 +444,15 @@ module TSOS {
                 _StdOut.advanceLine();
             }//else
         }//shellPS
+
+        public shellKill(args)  {
+            var pid;
+            var exists;
+
+            if(_CPU.isExecuting){
+
+            }//if
+        }//shellKill
 
         public shellMan(args) {
             if (args.length > 0) {
