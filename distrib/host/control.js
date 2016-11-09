@@ -36,6 +36,7 @@ var TSOS;
             _MemoryTable = document.getElementById('MemoryTable');
             _CPUTable = document.getElementById('CPUTable');
             _PCBTable = document.getElementById('PCBTable');
+            _readyQueueTable = document.getElementById('readyQueueTable');
             this.initMemoryTable();
             // Get a global reference to the drawing context.
             _DrawingContext = _Canvas.getContext("2d");
@@ -146,6 +147,24 @@ var TSOS;
             _PCBTable.rows[1].cells[7].innerHTML = _PCB.min;
             _PCBTable.rows[1].cells[8].innerHTML = _PCB.max;
         }; //updatePCBTable
+        Control.updateReadyQueueTable = function () {
+            var thisPCB;
+            while (_readyQueueTable.rows.length != 1) {
+                _readyQueueTable.deleteRow(1);
+            } //while
+            for (var i = 1; i < _readyQueue.getSize(); i++) {
+                thisPCB = _readyQueue.getIndex(i - 1);
+                var row = _readyQueueTable.insertRow(i);
+                for (var j = 0; j < 6; ++j) {
+                    var cell = row.insertCell(j);
+                } //for
+                _readyQueueTable.rows[i].cells[0].innerHTML = thisPCB.pid;
+                _readyQueueTable.rows[i].cells[1].innerHTML = thisPCB.state;
+                _readyQueueTable.rows[i].cells[2].innerHTML = thisPCB.min;
+                _readyQueueTable.rows[i].cells[3].innerHTML = thisPCB.max;
+                _readyQueueTable.rows[i].cells[4].innerHTML = thisPCB.PC;
+            } //for
+        }; //updateReadyQueueTable
         Control.hostBtnHaltOS_click = function (btn) {
             Control.hostLog("Emergency halt", "host");
             Control.hostLog("Attempting Kernel shutdown.", "host");

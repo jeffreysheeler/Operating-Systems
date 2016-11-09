@@ -272,7 +272,7 @@ var TSOS;
                     _resList[i].PC = _resList[i].min;
                     _readyQueue.enqueue(_resList[i]);
                     for (var j = 0; j < _resList.length; j++) {
-                        _Kernel.krnTrace("pid: " + _resList.pid);
+                        _Kernel.krnTrace("pid: " + _resList[j].pid);
                     } //for
                     TSOS.Control.updateMemoryTable();
                     _readyQueue.enqueue(_resList[i]);

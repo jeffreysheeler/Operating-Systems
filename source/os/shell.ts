@@ -361,7 +361,7 @@ module TSOS {
                     _readyQueue.enqueue(_resList[i]);
 
                     for(var j = 0; j < _resList.length; j++){
-                        _Kernel.krnTrace("pid: "+_resList.pid);
+                        _Kernel.krnTrace("pid: "+_resList[j].pid);
                     }//for
 
                     Control.updateMemoryTable();

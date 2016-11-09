@@ -34,6 +34,7 @@ var _Canvas; // Initialized in Control.hostInit().
 var _MemoryTable;
 var _CPUTable;
 var _PCBTable;
+var _readyQueueTable;
 var _resList = [];
 var _Scheduler;
 var _readyQueue = null;
