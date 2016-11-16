@@ -137,7 +137,7 @@ var TSOS;
                         //this.PC++;
                         break;
                     case "00":
-                        if (_readyQueue.isEmpty() == false) {
+                        if (_readyQueue.isEmpty()) {
                             this.Operation = "00";
                             _PCB.state = "Complete";
                             _PCB.PC = this.PC;
@@ -263,7 +263,7 @@ var TSOS;
             _PCB.Yreg = this.Yreg;
             _PCB.Zflag = this.Zflag;
             TSOS.Control.updatePCBTable();
-            for (var i = 0; i < _resList.getSize(); i++) {
+            for (var i = 0; i < _resList.length; i++) {
                 _Kernel.krnTrace("PID: " + _resList[i]);
             }
             _StdOut.advanceLine();

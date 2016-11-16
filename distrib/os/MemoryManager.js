@@ -24,10 +24,11 @@ var TSOS;
                 for (var i = 0; i < input.length; i++) {
                     addToMem = input.slice(i, i + 2);
                     _Memory.mem[memIndex] = addToMem;
-                    _Kernel.krnTrace(input + " added to memory at index: " + memIndex);
+                    //_Kernel.krnTrace(input+" added to memory at index: "+memIndex);
                     i++;
                     memIndex++;
                 } //for
+                _Kernel.krnTrace(input + " added to memory at index: " + memIndex);
                 var min = this.memMin[this.mem];
                 var max = this.memMax[this.mem];
                 _PCB = new TSOS.pcb();

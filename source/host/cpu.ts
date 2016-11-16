@@ -150,7 +150,7 @@ module TSOS {
                         break;
 
                     case "00": //break / System call
-                        if(_readyQueue.isEmpty() == false){
+                        if(_readyQueue.isEmpty() ){
                             this.Operation = "00"; 
                             _PCB.state = "Complete";
                             _PCB.PC = this.PC;
@@ -293,7 +293,7 @@ module TSOS {
             _PCB.Zflag = this.Zflag;
             Control.updatePCBTable();
 
-            for(var i = 0; i < _resList.getSize(); i++){
+            for(var i = 0; i < _resList.length; i++){
                 _Kernel.krnTrace("PID: "+_resList[i]);
             }
             _StdOut.advanceLine();

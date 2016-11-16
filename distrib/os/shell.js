@@ -321,7 +321,7 @@ var TSOS;
             } //if
             else {
                 _Scheduler.quantum = quantum;
-                _StdOut.putText("Quantum set to: " + quantum);
+                _StdOut.putText("Quantum set to: " + _Scheduler.quantum);
                 _StdOut.advanceLine();
             }
         }; //shellQuantum
