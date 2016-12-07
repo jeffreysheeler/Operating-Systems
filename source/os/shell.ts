@@ -365,7 +365,7 @@ module TSOS {
                     }//for
 
                     Control.updateMemoryTable();
-                    _readyQueue.enqueue(_resList[i]);
+                   // _readyQueue.enqueue(_resList[i]);
                     _CPU.isExecuting = true;
                     }//if
             }//for
@@ -373,6 +373,8 @@ module TSOS {
             if(exists == false){
                 _StdOut.putText("Please enter a valid PID");
             }//if
+
+            
 
 
             /*if(args.length > 0){

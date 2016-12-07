@@ -57,7 +57,7 @@ module TSOS {
                     _PCB.Xreg = this.Xreg;
                     _PCB.Yreg = this.Yreg;
                     _PCB.Zflag = this.Zflag;
-                    Control.updatePCBTable();
+                    //Control.updatePCBTable();
                 }//not null pcb if
 
                 this.executeCPUCycle();
@@ -83,7 +83,8 @@ module TSOS {
                     case "A9": //load the accumulator with a constant
                         this.Operation = "A9";
                         this.PC++;
-                        this.Acc = parseInt(_Memory.mem[this.PC], 16);
+                        this.Acc = parseInt(logicalAddress(_Memory.mem[this.PC], this.PC), 16);
+                        //this.Acc = parseInt(_Memory.mem[this.PC], 16);
                         //this.PC++;
                         break;
 
@@ -97,6 +98,7 @@ module TSOS {
                     case "8D": //Store the accumulator in memory  
                         this.Operation = "8D";
                         index = this.checkMemory();
+                        //alert(this.Acc);
                         hold = this.Acc.toString(16);
                         if(hold.length < 2){
                             hold = "0"+hold;
@@ -158,7 +160,7 @@ module TSOS {
                             _PCB.Xreg = this.Xreg;
                             _PCB.Yreg = this.Yreg;
                             _PCB.Zflag = this.Zflag;
-                            Control.updatePCBTable();
+                            //Control.updatePCBTable();
                             _KernelInterruptQueue.enqueue(new Interrupt(CPU_REPLACE_IRQ, 0));
                         }//empty ready queue
                         else{
@@ -291,7 +293,7 @@ module TSOS {
             _PCB.Xreg = this.Xreg;
             _PCB.Yreg = this.Yreg;
             _PCB.Zflag = this.Zflag;
-            Control.updatePCBTable();
+            //Control.updatePCBTable();
 
             for(var i = 0; i < _resList.length; i++){
                 _Kernel.krnTrace("PID: "+_resList[i]);
@@ -299,5 +301,10 @@ module TSOS {
             _StdOut.advanceLine();
             _OsShell.putPrompt();
         }//killProcess
+
+        public logicalAddress(currentMemory:number, currentPC:number): number{
+            var x = currentMemory + currentPC;
+            return x;
+        }
     }
 }

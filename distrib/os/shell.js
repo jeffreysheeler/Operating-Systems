@@ -275,7 +275,7 @@ var TSOS;
                         _Kernel.krnTrace("pid: " + _resList[j].pid);
                     } //for
                     TSOS.Control.updateMemoryTable();
-                    _readyQueue.enqueue(_resList[i]);
+                    // _readyQueue.enqueue(_resList[i]);
                     _CPU.isExecuting = true;
                 } //if
             } //for

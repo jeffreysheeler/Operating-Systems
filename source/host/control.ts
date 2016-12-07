@@ -161,7 +161,7 @@ module TSOS {
             _CPUTable.rows[1].cells[5].innerHTML = _CPU.Operation;
         }//initCPUTable
         
-        public static updatePCBTable(): void{
+        /*public static updatePCBTable(): void{
             _PCBTable.rows[1].cells[0].innerHTML = _PCB.pid;
             _PCBTable.rows[1].cells[1].innerHTML = _PCB.state;
             _PCBTable.rows[1].cells[2].innerHTML = _PCB.PC;
@@ -171,7 +171,7 @@ module TSOS {
             _PCBTable.rows[1].cells[6].innerHTML = _PCB.Zflag;
             _PCBTable.rows[1].cells[7].innerHTML = _PCB.min;
             _PCBTable.rows[1].cells[8].innerHTML = _PCB.max;
-        }//updatePCBTable
+        }*///updatePCBTable
 
         public static updateReadyQueueTable(): void{
             var thisPCB;
@@ -184,7 +184,7 @@ module TSOS {
                 thisPCB = _readyQueue.getIndex(i-1);
                 var row = _readyQueueTable.insertRow(i);
 
-                for(var j = 0; j < 6; ++j){
+                for(var j = 0; j < 9; ++j){
                     var cell = row.insertCell(j);
                 }//for
 
@@ -193,6 +193,10 @@ module TSOS {
                 _readyQueueTable.rows[i].cells[2].innerHTML = thisPCB.min;
                 _readyQueueTable.rows[i].cells[3].innerHTML = thisPCB.max;
                 _readyQueueTable.rows[i].cells[4].innerHTML = thisPCB.PC;
+                _readyQueueTable.rows[i].cells[5].innerHTML = thisPCB.Acc;
+                _readyQueueTable.rows[i].cells[6].innerHTML = thisPCB.Xreg;
+                _readyQueueTable.rows[i].cells[7].innerHTML = thisPCB.Yreg;
+                _readyQueueTable.rows[i].cells[8].innerHTML = thisPCB.Zflag;
             }//for
         }//updateReadyQueueTable
 
