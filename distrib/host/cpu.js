@@ -165,7 +165,7 @@ var TSOS;
                             _PCB.Xreg = this.Xreg;
                             _PCB.Yreg = this.Yreg;
                             _PCB.Zflag = this.Zflag;
-                            //Control.updatePCBTable();
+                            TSOS.Control.updatePCBTable();
                             _KernelInterruptQueue.enqueue(new TSOS.Interrupt(CPU_REPLACE_IRQ, 0));
                         } //empty ready queue
                         else {
@@ -282,7 +282,7 @@ var TSOS;
             _PCB.Xreg = this.Xreg;
             _PCB.Yreg = this.Yreg;
             _PCB.Zflag = this.Zflag;
-            //Control.updatePCBTable();
+            TSOS.Control.updatePCBTable();
             for (var i = 0; i < _resList.length; i++) {
                 _Kernel.krnTrace("PID: " + _resList[i]);
             }
