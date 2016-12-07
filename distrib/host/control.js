@@ -136,7 +136,7 @@ var TSOS;
             _CPUTable.rows[1].cells[4].innerHTML = _CPU.Zflag;
             _CPUTable.rows[1].cells[5].innerHTML = _CPU.Operation;
         }; //initCPUTable
-        /*public static updatePCBTable(): void{
+        Control.updatePCBTable = function () {
             _PCBTable.rows[1].cells[0].innerHTML = _PCB.pid;
             _PCBTable.rows[1].cells[1].innerHTML = _PCB.state;
             _PCBTable.rows[1].cells[2].innerHTML = _PCB.PC;
@@ -146,7 +146,7 @@ var TSOS;
             _PCBTable.rows[1].cells[6].innerHTML = _PCB.Zflag;
             _PCBTable.rows[1].cells[7].innerHTML = _PCB.min;
             _PCBTable.rows[1].cells[8].innerHTML = _PCB.max;
-        }*/ //updatePCBTable
+        }; //updatePCBTable
         Control.updateReadyQueueTable = function () {
             var thisPCB;
             while (_readyQueueTable.rows.length != 1) {

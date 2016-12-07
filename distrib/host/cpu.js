@@ -57,6 +57,7 @@ var TSOS;
                     _PCB.Xreg = this.Xreg;
                     _PCB.Yreg = this.Yreg;
                     _PCB.Zflag = this.Zflag;
+                    TSOS.Control.updatePCBTable();
                 } //not null pcb if
                 this.executeCPUCycle();
                 TSOS.Control.updateCPUTable();
@@ -71,14 +72,33 @@ var TSOS;
             var zflag;
             var hold;
             var outputString;
-            command = _Memory.mem[this.PC];
+            if (_PCB.min == 0) {
+                command = _Memory.mem[0 + this.PC];
+            }
+            else if (_PCB.min == 256) {
+                command = _Memory.mem[256 + this.PC];
+            }
+            else if (_PCB.min == 512) {
+                command = _Memory.mem[512 + this.PC];
+            }
+            //command = logicalAddress(_Memory.memMin(), this.PC);
+            //command = _Memory.mem[this.PC];
             //switch statement for each 6502a opcodes
             if (_Scheduler.tab < _Scheduler.quantum) {
                 switch (command) {
                     case "A9":
                         this.Operation = "A9";
                         this.PC++;
-                        this.Acc = parseInt(_Memory.mem[this.PC], 16);
+                        if (_PCB.min == 0) {
+                            this.Acc = parseInt(_Memory.mem[this.PC], 16);
+                        }
+                        else if (_PCB.min == 256) {
+                            this.Acc = parseInt(_Memory.mem[this.PC + 256], 16);
+                        }
+                        else if (_PCB.min == 512) {
+                            this.Acc = parseInt(_Memory.mem[this.PC + 512], 16);
+                        }
+                        //this.Acc = parseInt(_Memory.mem[this.PC + _PCB.min], 16);
                         //this.PC++;
                         break;
                     case "AD":
@@ -269,6 +289,10 @@ var TSOS;
             _StdOut.advanceLine();
             _OsShell.putPrompt();
         }; //killProcess
+        Cpu.prototype.logicalAddress = function (currentMemory, currentPC) {
+            var x = currentMemory + currentPC;
+            return x;
+        };
         return Cpu;
     }());
     TSOS.Cpu = Cpu;

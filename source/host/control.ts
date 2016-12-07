@@ -161,7 +161,7 @@ module TSOS {
             _CPUTable.rows[1].cells[5].innerHTML = _CPU.Operation;
         }//initCPUTable
         
-        /*public static updatePCBTable(): void{
+        public static updatePCBTable(): void{
             _PCBTable.rows[1].cells[0].innerHTML = _PCB.pid;
             _PCBTable.rows[1].cells[1].innerHTML = _PCB.state;
             _PCBTable.rows[1].cells[2].innerHTML = _PCB.PC;
@@ -171,7 +171,7 @@ module TSOS {
             _PCBTable.rows[1].cells[6].innerHTML = _PCB.Zflag;
             _PCBTable.rows[1].cells[7].innerHTML = _PCB.min;
             _PCBTable.rows[1].cells[8].innerHTML = _PCB.max;
-        }*///updatePCBTable
+        }//updatePCBTable
 
         public static updateReadyQueueTable(): void{
             var thisPCB;

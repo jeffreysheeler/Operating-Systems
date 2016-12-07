@@ -57,7 +57,7 @@ module TSOS {
                     _PCB.Xreg = this.Xreg;
                     _PCB.Yreg = this.Yreg;
                     _PCB.Zflag = this.Zflag;
-                    //Control.updatePCBTable();
+                    Control.updatePCBTable();
                 }//not null pcb if
 
                 this.executeCPUCycle();
@@ -74,7 +74,17 @@ module TSOS {
             var zflag;
             var hold;
             var outputString;
-            command =_Memory.mem[this.PC];
+            if(_PCB.min == 0){
+                command = _Memory.mem[0 + this.PC];
+            }
+            else if(_PCB.min == 256){
+                command = _Memory.mem[256 + this.PC];
+            }
+            else if(_PCB.min == 512){
+                command = _Memory.mem[512 + this.PC];
+            }
+            //command = logicalAddress(_Memory.memMin(), this.PC);
+            //command = _Memory.mem[this.PC];
 
             //switch statement for each 6502a opcodes
 
@@ -83,8 +93,16 @@ module TSOS {
                     case "A9": //load the accumulator with a constant
                         this.Operation = "A9";
                         this.PC++;
-                        this.Acc = parseInt(logicalAddress(_Memory.mem[this.PC], this.PC), 16);
-                        //this.Acc = parseInt(_Memory.mem[this.PC], 16);
+                        if(_PCB.min == 0){
+                            this.Acc = parseInt(_Memory.mem[this.PC], 16);
+                        }
+                        else if(_PCB.min == 256){
+                            this.Acc = parseInt(_Memory.mem[this.PC + 256], 16);
+                        }
+                        else if(_PCB.min == 512){
+                            this.Acc = parseInt(_Memory.mem[this.PC + 512], 16);
+                        }
+                        //this.Acc = parseInt(_Memory.mem[this.PC + _PCB.min], 16);
                         //this.PC++;
                         break;
 
