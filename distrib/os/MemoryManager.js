@@ -37,7 +37,7 @@ var TSOS;
                 _resList[_resList.length] = _PCB;
                 _StdOut.putText("Program loaded to memory, pid = " + _OsShell.pid);
                 _OsShell.pid++;
-                TSOS.Control.updateMemoryTable();
+                //Control.updateMemoryTable();
                 this.mem++;
                 for (var j = 0; j < _resList.length; j++) {
                     _Kernel.krnTrace("Resident list: " + _resList[j].pid);

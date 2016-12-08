@@ -19,7 +19,7 @@
 var TSOS;
 (function (TSOS) {
     var Cpu = (function () {
-        function Cpu(PC, Acc, Xreg, Yreg, Zflag, Operation, isExecuting) {
+        function Cpu(PC, Acc, Xreg, Yreg, Zflag, Operation, isExecuting, currentPCB) {
             if (PC === void 0) { PC = 0; }
             if (Acc === void 0) { Acc = 0; }
             if (Xreg === void 0) { Xreg = 0; }
@@ -27,6 +27,7 @@ var TSOS;
             if (Zflag === void 0) { Zflag = 0; }
             if (Operation === void 0) { Operation = ""; }
             if (isExecuting === void 0) { isExecuting = false; }
+            if (currentPCB === void 0) { currentPCB = null; }
             this.PC = PC;
             this.Acc = Acc;
             this.Xreg = Xreg;
@@ -34,6 +35,7 @@ var TSOS;
             this.Zflag = Zflag;
             this.Operation = Operation;
             this.isExecuting = isExecuting;
+            this.currentPCB = currentPCB;
         }
         Cpu.prototype.init = function () {
             this.PC = 0;
@@ -42,26 +44,26 @@ var TSOS;
             this.Yreg = 0;
             this.Zflag = 0;
             this.isExecuting = false;
+            this.currentPCB = null;
         };
         Cpu.prototype.cycle = function () {
             _Kernel.krnTrace('CPU cycle');
             // TODO: Accumulate CPU usage and profiling statistics here.
             // Do the real work here. Be sure to set this.isExecuting appropriately.
             if (this.isExecuting) {
-                if (_PCB == null) {
+                if (this.currentPCB == null) {
                     _KernelInterruptQueue.enqueue(new TSOS.Interrupt(SCHEDULER_INIT_IRQ, 0));
                 }
                 else {
-                    _PCB.PC = this.PC;
-                    _PCB.Acc = this.Acc;
-                    _PCB.Xreg = this.Xreg;
-                    _PCB.Yreg = this.Yreg;
-                    _PCB.Zflag = this.Zflag;
+                    this.PC = this.currentPCB.min;
+                    this.Acc = 0;
+                    this.Xreg = 0;
+                    this.Yreg = 0;
+                    this.Zflag = 0;
                     TSOS.Control.updatePCBTable();
                 } //not null pcb if
                 this.executeCPUCycle();
                 TSOS.Control.updateCPUTable();
-                TSOS.Control.updateMemoryTable();
             } //isExecuting if statement
         }; //cycle
         Cpu.prototype.executeCPUCycle = function () {
@@ -72,17 +74,17 @@ var TSOS;
             var zflag;
             var hold;
             var outputString;
-            command = _Memory.mem[this.PC + _PCB.min];
-            alert("min =  " + _PCB.min);
-            alert(command);
-            alert(this.PC);
+            command = _Memory.mem[this.PC];
+            //alert("min =  "+_PCB.min);
+            alert("current command = " + command);
+            alert("current PC = " + this.PC);
             //switch statement for each 6502a opcodes
             if (_Scheduler.tab < _Scheduler.quantum) {
                 switch (command) {
                     case "A9":
                         this.Operation = "A9";
                         this.PC++;
-                        this.Acc = parseInt(_Memory.mem[this.PC + _PCB.min], 16);
+                        this.Acc = parseInt(_Memory.mem[this.PC], 16);
                         //this.Acc = parseInt(_Memory.mem[this.PC + _PCB.min], 16);
                         //this.PC++;
                         break;
@@ -116,7 +118,7 @@ var TSOS;
                     case "A2":
                         this.Operation = "A2";
                         this.PC++;
-                        this.Xreg = parseInt(_Memory.mem[this.PC + _PCB.min], 16);
+                        this.Xreg = parseInt(_Memory.mem[this.PC], 16);
                         //this.PC++;
                         break;
                     case "AE":
@@ -128,7 +130,7 @@ var TSOS;
                     case "A0":
                         this.Operation = "A0";
                         this.PC++;
-                        this.Yreg = parseInt(_Memory.mem[this.PC + _PCB.min], 16);
+                        this.Yreg = parseInt(_Memory.mem[this.PC], 16);
                         //this.PC++;
                         break;
                     case "AC":
@@ -144,12 +146,12 @@ var TSOS;
                     case "00":
                         if (_readyQueue.isEmpty()) {
                             this.Operation = "00";
-                            _PCB.state = "Complete";
-                            _PCB.PC = this.PC;
-                            _PCB.Acc = this.Acc;
-                            _PCB.Xreg = this.Xreg;
-                            _PCB.Yreg = this.Yreg;
-                            _PCB.Zflag = this.Zflag;
+                            this.currentPCB.state = "Complete";
+                            this.currentPCB.PC = this.PC;
+                            this.currentPCB.Acc = this.Acc;
+                            this.currentPCB.Xreg = this.Xreg;
+                            this.currentPCB.Yreg = this.Yreg;
+                            this.currentPCB.Zflag = this.Zflag;
                             TSOS.Control.updatePCBTable();
                             _KernelInterruptQueue.enqueue(new TSOS.Interrupt(CPU_REPLACE_IRQ, 0));
                         } //empty ready queue
@@ -175,7 +177,7 @@ var TSOS;
                         this.Operation = "D0";
                         ++this.PC;
                         //alert(this.PC);
-                        var branch = this.PC + this.parseConst(_Memory.mem[this.PC + _PCB.min]);
+                        var branch = this.PC + this.parseConst(_Memory.mem[this.PC]);
                         if (this.Zflag == 0) {
                             this.PC = branch;
                             if (this.PC > 255 + _PCB.min) {
@@ -204,7 +206,7 @@ var TSOS;
                             _StdOut.putText(this.Yreg.toString());
                         } //xreg = 1 if
                         else if (this.Xreg == 2) {
-                            index = this.Yreg + _PCB.min;
+                            index = this.Yreg + this.currentPCB.min;
                             while (_Memory.mem[index] != "00") {
                                 outputString = String.fromCharCode(parseInt(_Memory.mem[index], 16));
                                 _StdOut.putText(outputString);
@@ -236,9 +238,9 @@ var TSOS;
         Cpu.prototype.checkMemory = function () {
             var memBlock;
             this.PC++;
-            var block1 = _Memory.mem[this.PC + _PCB.min];
+            var block1 = _Memory.mem[this.PC];
             this.PC++;
-            var block2 = _Memory.mem[this.PC + _PCB.min];
+            var block2 = _Memory.mem[this.PC];
             var newMem = block2.concat(block1);
             memBlock = _PCB.min + parseInt(newMem, 16);
             if (memBlock >= _PCB.min && memBlock < _PCB.max) {

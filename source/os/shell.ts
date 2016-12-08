@@ -357,14 +357,14 @@ module TSOS {
                     exists = true;
 
                     _resList[i].state = "Ready";
-                    _resList[i].PC = 0;
+                    _resList[i].PC = _resList[i].min;
                     _readyQueue.enqueue(_resList[i]);
 
                     for(var j = 0; j < _resList.length; j++){
                         _Kernel.krnTrace("pid: "+_resList[j].pid);
                     }//for
 
-                    Control.updateMemoryTable();
+                    //Control.updateMemoryTable();
                    // _readyQueue.enqueue(_resList[i]);
                     _CPU.isExecuting = true;
                     }//if
@@ -401,7 +401,7 @@ module TSOS {
             for(var i = 0; i < 768; i++){
                 _Memory.mem[i] = "00";
             }//for
-            Control.updateMemoryTable();
+            //Control.updateMemoryTable();
             _MemoryManager.mem = 0;
         }//clearmem
 

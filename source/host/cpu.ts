@@ -28,7 +28,8 @@ module TSOS {
                     public Yreg: number = 0,
                     public Zflag: number = 0,
                     public Operation: String = "",
-                    public isExecuting: boolean = false
+                    public isExecuting: boolean = false,
+                    public currentPCB: any = null
                     ) {
 
         }
@@ -40,6 +41,7 @@ module TSOS {
             this.Yreg = 0;
             this.Zflag = 0;
             this.isExecuting = false;
+            this.currentPCB = null;
         }
 
         public cycle(): void {
@@ -47,21 +49,21 @@ module TSOS {
             // TODO: Accumulate CPU usage and profiling statistics here.
             // Do the real work here. Be sure to set this.isExecuting appropriately.
             if(this.isExecuting){
-                if(_PCB == null){
+                if(this.currentPCB == null){
                     _KernelInterruptQueue.enqueue(new Interrupt(SCHEDULER_INIT_IRQ, 0));
                 }
                 else{
-                    _PCB.PC = this.PC;
-                    _PCB.Acc = this.Acc;
-                    _PCB.Xreg = this.Xreg;
-                    _PCB.Yreg = this.Yreg;
-                    _PCB.Zflag = this.Zflag;
+                    this.PC = this.currentPCB.min;
+                    this.Acc = 0;
+                    this.Xreg = 0;
+                    this.Yreg = 0;
+                    this.Zflag = 0;
                     Control.updatePCBTable();
                 }//not null pcb if
 
                 this.executeCPUCycle();
                 Control.updateCPUTable();
-                Control.updateMemoryTable();
+                //Control.updateMemoryTable();
             }//isExecuting if statement
         }//cycle
 
@@ -74,8 +76,8 @@ module TSOS {
             var hold;
             var outputString;
 
-            command = _Memory.mem[this.PC + _PCB.min];
-            alert("min =  "+_PCB.min);
+            command = _Memory.mem[this.PC];
+            //alert("min =  "+_PCB.min);
             alert("current command = "+command);
             alert("current PC = "+this.PC);
 
@@ -86,7 +88,7 @@ module TSOS {
                     case "A9": //load the accumulator with a constant
                         this.Operation = "A9";
                         this.PC++;
-                        this.Acc = parseInt(_Memory.mem[this.PC + _PCB.min], 16);
+                        this.Acc = parseInt(_Memory.mem[this.PC], 16);
                         //this.Acc = parseInt(_Memory.mem[this.PC + _PCB.min], 16);
                         //this.PC++;
                         break;
@@ -124,7 +126,7 @@ module TSOS {
                     case "A2": //Load the X register with a constant   
                         this.Operation = "A2";
                         this.PC++;
-                        this.Xreg = parseInt(_Memory.mem[this.PC + _PCB.min], 16);
+                        this.Xreg = parseInt(_Memory.mem[this.PC], 16);
                         //this.PC++;
                         break;
 
@@ -138,7 +140,7 @@ module TSOS {
                     case "A0": //load the Y register with a constant    
                         this.Operation = "A0";
                         this.PC++;
-                        this.Yreg = parseInt(_Memory.mem[this.PC + _PCB.min], 16);
+                        this.Yreg = parseInt(_Memory.mem[this.PC], 16);
                         //this.PC++;
                         break;
 
@@ -157,12 +159,12 @@ module TSOS {
                     case "00": //break / System call
                         if(_readyQueue.isEmpty() ){
                             this.Operation = "00"; 
-                            _PCB.state = "Complete";
-                            _PCB.PC = this.PC;
-                            _PCB.Acc = this.Acc;
-                            _PCB.Xreg = this.Xreg;
-                            _PCB.Yreg = this.Yreg;
-                            _PCB.Zflag = this.Zflag;
+                            this.currentPCB.state = "Complete";
+                            this.currentPCB.PC = this.PC;
+                            this.currentPCB.Acc = this.Acc;
+                            this.currentPCB.Xreg = this.Xreg;
+                            this.currentPCB.Yreg = this.Yreg;
+                            this.currentPCB.Zflag = this.Zflag;
                             Control.updatePCBTable();
                             _KernelInterruptQueue.enqueue(new Interrupt(CPU_REPLACE_IRQ, 0));
                         }//empty ready queue
@@ -191,7 +193,7 @@ module TSOS {
                         this.Operation = "D0";
                         ++this.PC;
                         //alert(this.PC);
-                        var branch = this.PC + this.parseConst(_Memory.mem[this.PC + _PCB.min]);
+                        var branch = this.PC + this.parseConst(_Memory.mem[this.PC]);
                         if(this.Zflag == 0){
                             this.PC = branch;
                             if(this.PC > 255 + _PCB.min){
@@ -224,7 +226,7 @@ module TSOS {
                             //this.PC++;
                         }//xreg = 1 if
                         else if(this.Xreg == 2){
-                            index = this.Yreg + _PCB.min;
+                            index = this.Yreg + this.currentPCB.min;
 
                             while(_Memory.mem[index] != "00"){
                                 outputString = String.fromCharCode(parseInt(_Memory.mem[index], 16));
@@ -263,9 +265,9 @@ module TSOS {
             var memBlock;
             this.PC++;
             
-            var block1 = _Memory.mem[this.PC + _PCB.min];
+            var block1 = _Memory.mem[this.PC];
             this.PC++;
-            var block2 = _Memory.mem[this.PC + _PCB.min];
+            var block2 = _Memory.mem[this.PC];
             var newMem = block2.concat(block1);
             memBlock = _PCB.min + parseInt(newMem, 16);
             if(memBlock >= _PCB.min && memBlock < _PCB.max){
