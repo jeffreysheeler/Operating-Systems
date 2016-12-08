@@ -72,17 +72,7 @@ var TSOS;
             var zflag;
             var hold;
             var outputString;
-            if (_PCB.min == 0) {
-                command = _Memory.mem[0 + this.PC];
-            }
-            else if (_PCB.min == 256) {
-                command = _Memory.mem[256 + this.PC];
-            }
-            else if (_PCB.min == 512) {
-                command = _Memory.mem[512 + this.PC];
-            }
-            //command = logicalAddress(_Memory.memMin(), this.PC);
-            //command = _Memory.mem[this.PC];
+            command = _Memory.mem[this.PC + _PCB.min];
             //switch statement for each 6502a opcodes
             if (_Scheduler.tab < _Scheduler.quantum) {
                 switch (command) {
@@ -90,15 +80,6 @@ var TSOS;
                         this.Operation = "A9";
                         this.PC++;
                         this.Acc = parseInt(_Memory.mem[this.PC + _PCB.min], 16);
-                        /*if(_PCB.min == 0){
-                            this.Acc = parseInt(_Memory.mem[this.PC], 16);
-                        }
-                        else if(_PCB.min == 256){
-                            this.Acc = parseInt(_Memory.mem[this.PC + 256], 16);
-                        }
-                        else if(_PCB.min == 512){
-                            this.Acc = parseInt(_Memory.mem[this.PC + 512], 16);
-                        }*/
                         //this.Acc = parseInt(_Memory.mem[this.PC + _PCB.min], 16);
                         //this.PC++;
                         break;

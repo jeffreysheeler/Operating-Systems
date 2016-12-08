@@ -46,6 +46,8 @@ var _MemoryTable;
 var _CPUTable;        
 var _PCBTable;
 var _readyQueueTable;
+
+
 var _resList: any = [];
 var _Scheduler: TSOS.scheduler;
 var _readyQueue: any = null;  

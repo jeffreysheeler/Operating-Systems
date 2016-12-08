@@ -162,15 +162,54 @@ module TSOS {
         }//initCPUTable
         
         public static updatePCBTable(): void{
-            _PCBTable.rows[1].cells[0].innerHTML = _PCB.pid;
-            _PCBTable.rows[1].cells[1].innerHTML = _PCB.state;
-            _PCBTable.rows[1].cells[2].innerHTML = _PCB.PC;
-            _PCBTable.rows[1].cells[3].innerHTML = _PCB.Acc;
-            _PCBTable.rows[1].cells[4].innerHTML = _PCB.Xreg;
-            _PCBTable.rows[1].cells[5].innerHTML = _PCB.Yreg;
-            _PCBTable.rows[1].cells[6].innerHTML = _PCB.Zflag;
-            _PCBTable.rows[1].cells[7].innerHTML = _PCB.min;
-            _PCBTable.rows[1].cells[8].innerHTML = _PCB.max;
+            var thisPCB;
+
+            /*if(_PCB.min == 0){
+                _PCBTable.rows[1].cells[0].innerHTML = _PCB.pid;
+                _PCBTable.rows[1].cells[1].innerHTML = _PCB.state;
+                _PCBTable.rows[1].cells[2].innerHTML = _PCB.PC;
+                _PCBTable.rows[1].cells[3].innerHTML = _PCB.Acc;
+                _PCBTable.rows[1].cells[4].innerHTML = _PCB.Xreg;
+                _PCBTable.rows[1].cells[5].innerHTML = _PCB.Yreg;
+                _PCBTable.rows[1].cells[6].innerHTML = _PCB.Zflag;
+                _PCBTable.rows[1].cells[7].innerHTML = _PCB.min;
+                _PCBTable.rows[1].cells[8].innerHTML = _PCB.max;
+            }
+            else if(_PCB.min == 256){
+                _PCBTable.rows[2].cells[0].innerHTML = _PCB.pid;
+                _PCBTable.rows[2].cells[1].innerHTML = _PCB.state;
+                _PCBTable.rows[2].cells[2].innerHTML = _PCB.PC;
+                _PCBTable.rows[2].cells[3].innerHTML = _PCB.Acc;
+                _PCBTable.rows[2].cells[4].innerHTML = _PCB.Xreg;
+                _PCBTable.rows[2].cells[5].innerHTML = _PCB.Yreg;
+                _PCBTable.rows[2].cells[6].innerHTML = _PCB.Zflag;
+                _PCBTable.rows[2].cells[7].innerHTML = _PCB.min;
+                _PCBTable.rows[2].cells[8].innerHTML = _PCB.max;
+            }
+            else if(_PCB.min == 512){
+                _PCBTable.rows[3].cells[0].innerHTML = _PCB.pid;
+                _PCBTable.rows[3].cells[1].innerHTML = _PCB.state;
+                _PCBTable.rows[3].cells[2].innerHTML = _PCB.PC;
+                _PCBTable.rows[3].cells[3].innerHTML = _PCB.Acc;
+                _PCBTable.rows[3].cells[4].innerHTML = _PCB.Xreg;
+                _PCBTable.rows[3].cells[5].innerHTML = _PCB.Yreg;
+                _PCBTable.rows[3].cells[6].innerHTML = _PCB.Zflag;
+                _PCBTable.rows[3].cells[7].innerHTML = _PCB.min;
+                _PCBTable.rows[3].cells[8].innerHTML = _PCB.max;
+            }*/
+
+            //for(var i = 0; i < _readyQueue.getSize(); i++){
+              //  thisPCB = _readyQueue.getIndex(i-1);
+                _PCBTable.rows[1].cells[0].innerHTML = _PCB.pid;
+                _PCBTable.rows[1].cells[1].innerHTML = _PCB.state;
+                _PCBTable.rows[1].cells[2].innerHTML = _PCB.PC;
+                _PCBTable.rows[1].cells[3].innerHTML = _PCB.Acc;
+                _PCBTable.rows[1].cells[4].innerHTML = _PCB.Xreg;
+                _PCBTable.rows[1].cells[5].innerHTML = _PCB.Yreg;
+                _PCBTable.rows[1].cells[6].innerHTML = _PCB.Zflag;
+                _PCBTable.rows[1].cells[7].innerHTML = _PCB.min;
+                _PCBTable.rows[1].cells[8].innerHTML = _PCB.max;
+            //}//for
         }//updatePCBTable
 
         public static updateReadyQueueTable(): void{

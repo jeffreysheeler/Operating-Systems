@@ -328,6 +328,7 @@ var TSOS;
         Shell.prototype.shellRunAll = function (args) {
             while (_resList.length > 0) {
                 _readyQueue.enqueue(_resList[0]);
+                _resList.dequeue();
             } //while
             _CPU.isExecuting = true;
         }; //runall
