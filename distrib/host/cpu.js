@@ -89,15 +89,16 @@ var TSOS;
                     case "A9":
                         this.Operation = "A9";
                         this.PC++;
-                        if (_PCB.min == 0) {
+                        this.Acc = parseInt(_Memory.mem[this.PC + _PCB.min], 16);
+                        /*if(_PCB.min == 0){
                             this.Acc = parseInt(_Memory.mem[this.PC], 16);
                         }
-                        else if (_PCB.min == 256) {
+                        else if(_PCB.min == 256){
                             this.Acc = parseInt(_Memory.mem[this.PC + 256], 16);
                         }
-                        else if (_PCB.min == 512) {
+                        else if(_PCB.min == 512){
                             this.Acc = parseInt(_Memory.mem[this.PC + 512], 16);
-                        }
+                        }*/
                         //this.Acc = parseInt(_Memory.mem[this.PC + _PCB.min], 16);
                         //this.PC++;
                         break;
@@ -131,7 +132,7 @@ var TSOS;
                     case "A2":
                         this.Operation = "A2";
                         this.PC++;
-                        this.Xreg = parseInt(_Memory.mem[this.PC], 16);
+                        this.Xreg = parseInt(_Memory.mem[this.PC + _PCB.min], 16);
                         //this.PC++;
                         break;
                     case "AE":
@@ -143,7 +144,7 @@ var TSOS;
                     case "A0":
                         this.Operation = "A0";
                         this.PC++;
-                        this.Yreg = parseInt(_Memory.mem[this.PC], 16);
+                        this.Yreg = parseInt(_Memory.mem[this.PC + _PCB.min], 16);
                         //this.PC++;
                         break;
                     case "AC":
@@ -189,7 +190,7 @@ var TSOS;
                         this.Operation = "D0";
                         ++this.PC;
                         //alert(this.PC);
-                        var branch = this.PC + this.parseConst(_Memory.mem[this.PC]);
+                        var branch = this.PC + this.parseConst(_Memory.mem[this.PC + _PCB.min]);
                         if (this.Zflag == 0) {
                             this.PC = branch;
                             if (this.PC > 255 + _PCB.min) {
@@ -249,9 +250,9 @@ var TSOS;
         Cpu.prototype.checkMemory = function () {
             var memBlock;
             this.PC++;
-            var block1 = _Memory.mem[this.PC];
+            var block1 = _Memory.mem[this.PC + _PCB.min];
             this.PC++;
-            var block2 = _Memory.mem[this.PC];
+            var block2 = _Memory.mem[this.PC + _PCB.min];
             var newMem = block2.concat(block1);
             memBlock = _PCB.min + parseInt(newMem, 16);
             if (memBlock >= _PCB.min && memBlock < _PCB.max) {
