@@ -269,7 +269,7 @@ var TSOS;
                 if (args == _resList[i].pid) {
                     exists = true;
                     _resList[i].state = "Ready";
-                    _resList[i].PC = _resList[i].min;
+                    _resList[i].PC = 0;
                     _readyQueue.enqueue(_resList[i]);
                     for (var j = 0; j < _resList.length; j++) {
                         _Kernel.krnTrace("pid: " + _resList[j].pid);

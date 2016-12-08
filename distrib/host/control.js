@@ -189,7 +189,7 @@ var TSOS;
             while (_readyQueueTable.rows.length != 1) {
                 _readyQueueTable.deleteRow(1);
             } //while
-            for (var i = 1; i < _readyQueue.getSize(); i++) {
+            for (var i = 1; i <= _readyQueue.getSize(); i++) {
                 thisPCB = _readyQueue.getIndex(i - 1);
                 var row = _readyQueueTable.insertRow(i);
                 for (var j = 0; j < 9; ++j) {

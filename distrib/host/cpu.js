@@ -73,6 +73,9 @@ var TSOS;
             var hold;
             var outputString;
             command = _Memory.mem[this.PC + _PCB.min];
+            alert("min =  " + _PCB.min);
+            alert(command);
+            alert(this.PC);
             //switch statement for each 6502a opcodes
             if (_Scheduler.tab < _Scheduler.quantum) {
                 switch (command) {
@@ -152,6 +155,7 @@ var TSOS;
                         } //empty ready queue
                         else {
                             this.killProcess();
+                            this.PC = 0;
                         } //else
                         break;
                     case "EC":
@@ -217,7 +221,8 @@ var TSOS;
                         //alert(this.Operation);
                         _StdOut.putText("Invalid opcode");
                 } //opcode switch statement
-                this.PC++;
+                if (this.PC != 0)
+                    this.PC++;
             } //quantum if
             if (_Scheduler.scheduler == "rr") {
                 _Scheduler.tab++;

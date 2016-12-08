@@ -46,7 +46,6 @@ module TSOS {
             _Kernel.krnTrace('CPU cycle');
             // TODO: Accumulate CPU usage and profiling statistics here.
             // Do the real work here. Be sure to set this.isExecuting appropriately.
-
             if(this.isExecuting){
                 if(_PCB == null){
                     _KernelInterruptQueue.enqueue(new Interrupt(SCHEDULER_INIT_IRQ, 0));
@@ -74,7 +73,11 @@ module TSOS {
             var zflag;
             var hold;
             var outputString;
+
             command = _Memory.mem[this.PC + _PCB.min];
+            alert("min =  "+_PCB.min);
+            alert("current command = "+command);
+            alert("current PC = "+this.PC);
 
             //switch statement for each 6502a opcodes
 
@@ -165,6 +168,8 @@ module TSOS {
                         }//empty ready queue
                         else{
                             this.killProcess();
+                            this.PC = 0;
+                            //alert("killed process PC = "+this.PC);
                         }//else
                         break;
 
@@ -240,8 +245,8 @@ module TSOS {
                         //alert(this.Operation);
                         _StdOut.putText("Invalid opcode");
                 }//opcode switch statement
-
-                this.PC++;
+                if(this.PC != 0)
+                    this.PC++;
 
             }//quantum if
             if(_Scheduler.scheduler == "rr"){
