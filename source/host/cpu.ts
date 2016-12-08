@@ -269,12 +269,13 @@ module TSOS {
             this.PC++;
             var block2 = _Memory.mem[this.PC];
             var newMem = block2.concat(block1);
-            memBlock = _PCB.min + parseInt(newMem, 16);
-            if(memBlock >= _PCB.min && memBlock < _PCB.max){
+            memBlock = _CPU.currentPCB.min + parseInt(newMem, 16);
+            if(memBlock >= _CPU.currentPCB.min && memBlock < _CPU.currentPCB.max){
                 return memBlock;
             }//if
             else{
                 _StdOut.putText("Index out of bounds.");
+                _OsShell.shellKill(_CPU.currentPCB.pid);
             }//else
         }//checkMemory
 
@@ -284,12 +285,12 @@ module TSOS {
         }//parseConst
 
         public updatePCB(): void{
-            _PCB.state="waiting";
-            _PCB.PC=this.PC;
-            _PCB.Acc=this.Acc;
-            _PCB.Xreg=this.Xreg;
-            _PCB.Yreg=this.Yreg;
-            _PCB.Zflag=this.Zflag;
+            this.currentPCB.state="waiting";
+            this.currentPCB.PC=this.PC;
+            this.currentPCB.Acc=this.Acc;
+            this.currentPCB.Xreg=this.Xreg;
+            this.currentPCB.Yreg=this.Yreg;
+            this.currentPCB.Zflag=this.Zflag;
             _KernelInterruptQueue.enqueue(new Interrupt(CPU_PROCESS_CHANGE_IRQ, 0));
         }
 

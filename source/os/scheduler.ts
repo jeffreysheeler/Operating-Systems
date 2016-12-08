@@ -14,14 +14,14 @@ module TSOS{
             var readyProg = _readyQueue.dequeue();
             var exists = false;
             var x = 0;
-            var interm;
+            var tempProcess;
             var change;
             
             while(x < _readyQueue.getSize()){
-                interm = _readyQueue.getIndex(x);
+                tempProcess = _readyQueue.getIndex(x);
             }
 
-            change = _readyQueue.remove(interm.pid);
+            change = _readyQueue.remove(tempProcess.pid);
             _MemoryManager.progSwap(change, readyProg);
             readyProg.min = change.min;
             readyProg.max = change.max;
@@ -34,12 +34,8 @@ module TSOS{
 
 
             readyProg.State = "Running";
-            _PCB.PC = readyProg.PC;
-            _PCB.Acc = readyProg.Acc;
-            _PCB.Xreg = readyProg.Xreg;
-            _PCB.Yreg = readyProg.Yreg;
-            _PCB.Zflag = readyProg.Zflag;
-            _CPU.PC = readyProg.min;
+            _CPU.currentPCB = readyProg.PC;
+            _CPU.PC=readyProg.min;
         }
     }
 }
