@@ -52,7 +52,7 @@ module TSOS {
                 if(this.currentPCB == null){
                     _KernelInterruptQueue.enqueue(new Interrupt(SCHEDULER_INIT_IRQ, 0));
                 }
-                else{
+                if(this.currentPCB != null){
                     this.PC = this.currentPCB.min;
                     this.Acc = 0;
                     this.Xreg = 0;

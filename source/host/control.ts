@@ -200,15 +200,15 @@ module TSOS {
 
             //for(var i = 0; i < _readyQueue.getSize(); i++){
               //  thisPCB = _readyQueue.getIndex(i-1);
-                _PCBTable.rows[1].cells[0].innerHTML = _PCB.pid;
-                _PCBTable.rows[1].cells[1].innerHTML = _PCB.state;
-                _PCBTable.rows[1].cells[2].innerHTML = _PCB.PC;
-                _PCBTable.rows[1].cells[3].innerHTML = _PCB.Acc;
-                _PCBTable.rows[1].cells[4].innerHTML = _PCB.Xreg;
-                _PCBTable.rows[1].cells[5].innerHTML = _PCB.Yreg;
-                _PCBTable.rows[1].cells[6].innerHTML = _PCB.Zflag;
-                _PCBTable.rows[1].cells[7].innerHTML = _PCB.min;
-                _PCBTable.rows[1].cells[8].innerHTML = _PCB.max;
+                _PCBTable.rows[1].cells[0].innerHTML = _CPU.currentPCB.pid;
+                _PCBTable.rows[1].cells[1].innerHTML = _CPU.currentPCB.state;
+                _PCBTable.rows[1].cells[2].innerHTML = _CPU.currentPCB.PC;
+                _PCBTable.rows[1].cells[3].innerHTML = _CPU.currentPCB.Acc;
+                _PCBTable.rows[1].cells[4].innerHTML = _CPU.currentPCB.Xreg;
+                _PCBTable.rows[1].cells[5].innerHTML = _CPU.currentPCB.Yreg;
+                _PCBTable.rows[1].cells[6].innerHTML = _CPU.currentPCB.Zflag;
+                _PCBTable.rows[1].cells[7].innerHTML = _CPU.currentPCB.min;
+                _PCBTable.rows[1].cells[8].innerHTML = _CPU.currentPCB.max;
             //}//for
         }//updatePCBTable
 
