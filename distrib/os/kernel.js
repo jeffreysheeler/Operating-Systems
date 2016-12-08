@@ -129,6 +129,15 @@ var TSOS;
                     _Scheduler.init();
                     _Mode = 1;
                     break;
+                case CPU_PROCESS_CHANGE_IRQ:
+                    _Mode = 0;
+                    this.krnTrace("Enqueued: " + _CPU.currentPCB.pid);
+                    if (!_readyQueue.isEmpty()) {
+                        this.krnTrace("Dequeued " + _readyQueue.getIndex(0).pid);
+                    } //if
+                    _Scheduler.changeProcess();
+                    _Mode = 1;
+                    break;
                 default:
                     this.krnTrapError("Invalid Interrupt Request. irq=" + irq + " params=[" + params + "]");
             }

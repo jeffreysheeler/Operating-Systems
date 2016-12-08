@@ -37,5 +37,34 @@ module TSOS{
             _CPU.currentPCB = readyProg.PC;
             _CPU.PC=readyProg.min;
         }
+
+
+        public changeProcess():void{
+            var enqueue;
+            var dequeue;
+
+            if(_readyQueue.getSize() > 0){
+                enqueue = _CPU.currentPCB.pid;
+                enqueue.state = "Waiting";
+
+                dequeue = _readyQueue.dequeue();
+                dequeue.state = "Running";
+
+                _readyQueue.enqueue(enqueue);
+                _Kernel.krnTrace("Enqueued: "+enqueue+" Dequeued: "+dequeue);
+
+                _CPU.PC = dequeue.PC;
+                _CPU.Acc = dequeue.Acc;
+                _CPU.Xreg = dequeue.Xreg;
+                _CPU.Yreg = dequeue.Yreg;
+                _CPU.Zflag = dequeue.Zflag;
+                _CPU.currentPCB = dequeue;
+                Control.updateReadyQueueTable();
+                _CPU.isExecuting = true;
+            }
+            this.tab = 0;
+        }
+       
     }
+     
 }
