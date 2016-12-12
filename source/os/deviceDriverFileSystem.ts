@@ -55,10 +55,45 @@ module TSOS{
             return false;
         }//createFile
 
+        public readFile(fileName): String{
+            fileName = this.fillBlock(Utils.hexFromString(fileName));
+            var temp;
+            var mbr;
+            var readFile;
+            var nextFile;
+
+            for(var i = 0; i < this.sectors; i++){
+                for(var j = 0; j < this.blocks; j++){
+                    temp = this.selectData(0,i,j);
+                    if(temp == fileName){
+                        mbr = this.selectMBR(0,i,j);
+                        do{
+                            readFile += sessionStorage.getItem(mbr).substr(4);
+                            nextFile = sessionStorage.getItem(mbr).substr(1,3);
+                            mbr = nextFile;
+                        }while(mbr != "000");
+
+                        _Kernel.krnTrace("Read file: "+readFile);
+                        return readFile;
+                    }//if
+                }//j for
+            }//i for
+        }//readFile
+
         public selectMeta(t,s,b): String{
             var m = sessionStorage.getItem(t+""+s+""+b).substr(0,4);
             return m;
-        }
+        }//selectMeta
+
+        public selectData(t,s,b): String{
+            var data = sessionStorage.getItem(t+""+s+""+b).substr(0,4);
+            return data;
+        }//selectData
+
+        public selectMBR(t,s,b): String{
+            var mbr = sessionStorage.getItem(t+""+s+""+b).substr(1,3);
+            return mbr;
+        }//selectMBR
 
         public findEmptySpace():String{
             var mbr = "000";
