@@ -12,7 +12,7 @@
 // Global CONSTANTS (TypeScript 1.5 introduced const. Very cool.)
 //
 const APP_NAME: string    = "JEFF OS";   // 'cause Bob and I were at a loss for a better name.
-const APP_VERSION: string = "1.03";   // What did you expect?
+const APP_VERSION: string = "1.04";   // What did you expect?
 
 const CPU_CLOCK_INTERVAL: number = 150;   // This is in ms (milliseconds) so 1000 = 1 second.
 
@@ -77,6 +77,7 @@ var _SarcasticMode: boolean = false;
 
 // Global Device Driver Objects - page 12
 var _krnKeyboardDriver; //  = null;
+var _krnFileSystemDriver;
 
 var _hardwareClockID: number = null;
 

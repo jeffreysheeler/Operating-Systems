@@ -11,6 +11,7 @@ module TSOS {
         public preemptable = false;
         public tracks = 4;
         public sectors = 8;
+        public blocks = 8;
         public blockLength = 64;
         public meta = "";
         public freeSpace = "";

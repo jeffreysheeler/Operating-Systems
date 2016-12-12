@@ -42,6 +42,40 @@ module TSOS {
                 }
             }
             return retVal;
+        }//rot13
+
+        public static hexFromString(str: string): string {
+            var output = "";
+            for(var i = 0; i < str.toString().length; i++){
+                var temp = this.decToHex(str.toString().charCodeAt(i));
+
+                if(temp.length < 2){
+                    temp = "0" + temp;
+                }//if
+                output += temp;
+
+            }//for
+            return output;
+        }//hexFromString
+
+        public static stringFromHex(hex: string):string {
+            var output = "";
+            for(var i = 0; i < hex.length-1; i++){
+                var temp = String.fromCharCode(this.hexToDec(hex.charAt(i)+hex.charAt(i+1)));
+                output += temp;
+                i++;
+            }
+            return output;
+        }//stringFromHex
+
+        public static decToHex(dec: number):string{
+            var hex = dec.toString(16).toUpperCase();
+            return hex;
+        }
+
+        public static hexToDec(hex: string):number{
+            var dec = parseInt(hex, 16);
+            return dec;
         }
     }
 }
