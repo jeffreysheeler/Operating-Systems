@@ -44,7 +44,7 @@ var TSOS;
             this.Yreg = 0;
             this.Zflag = 0;
             this.isExecuting = false;
-            //this.currentPCB = null;
+            this.currentPCB = null;
         };
         Cpu.prototype.loadPCB = function (pcb) {
             this.PC = pcb.PC;
@@ -288,7 +288,8 @@ var TSOS;
             _OsShell.putPrompt();
         }; //killProcess
         Cpu.prototype.physicalAddress = function () {
-            var x = this.PC + this.currentPCB.min;
+            //var x = this.PC + this.currentPCB.min;
+            var x = this.PC;
             return x;
         };
         return Cpu;

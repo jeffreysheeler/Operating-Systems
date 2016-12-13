@@ -41,7 +41,7 @@ module TSOS {
             this.Yreg = 0;
             this.Zflag = 0;
             this.isExecuting = false;
-            //this.currentPCB = null;
+            this.currentPCB = null;
         }
 
         public loadPCB(pcb): void{
@@ -323,7 +323,8 @@ module TSOS {
         }//killProcess
 
         public physicalAddress(){
-            var x = this.PC + this.currentPCB.min;
+            //var x = this.PC + this.currentPCB.min;
+            var x = this.PC;
             return x;
         }
     }
