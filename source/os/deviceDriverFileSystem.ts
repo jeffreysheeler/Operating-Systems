@@ -4,12 +4,12 @@
 ///<reference path="../globals.ts"  />
 ///<reference path="deviceDriver.ts"  />
 ///<reference path="../utils.ts"    />
-///reference path ="../host/control.ts" />
+///<reference path ="../host/control.ts" />
 
 module TSOS{
     export class deviceDriverFileSystem extends DeviceDriver{
         constructor(){
-            super(this.krnHDDDriverEnt, this.fileToDisk;
+            super(this.krnHDDDriverEnt, this.fileToDisk);
         }
 
         public krnHDDDriverEnt(): void{
@@ -32,6 +32,8 @@ module TSOS{
                 }//k for
             }//j for
         }//init
+
+
 
         public createFile(fileName):boolean{
             fileName = Utils.hexFromString(fileName);
@@ -111,7 +113,7 @@ module TSOS{
             return "Unavailable";
         }//findEmptySpace
 
-        private fillBlock(fileData):String{
+        private fillBlock(fileData):string{
             var data = "";
             for(var i = 0; i < (124-fileData.length); i++){
                 data += "0";
@@ -125,9 +127,32 @@ module TSOS{
             var fileData = params[2];
 
             switch(x){
-                case
-            }
-        }
+                case 0:
+                    _Kernel.krnTrace("File being created: "+y);
+                    if(_krnFileSystemDriver.createFile(y)){
+                        _StdOut.putText("File "+y+" was created successfully");
+                        _StdOut.advanceLine();
+                    }//if
+                    else{
+                        _StdOut.putText("Could not create file");
+                        _StdOut.advanceLine();
+                    }//else
+                break;
+                case 1:
+                    _Kernel.krnTrace("Reading file "+y);
+                    var file = _krnFileSystemDriver.readFile(y);
+                    file = Utils.stringFromHex(file);
+                    _StdOut.putText("File: "+y);
+                    _StdOut.advanceLine();
+                    _StdOut.putText("Data: "+file);
+                    _StdOut.advanceLine();
+                break;
+                case 2:
+                    var file = _krnFileSystemDriver.readFile(y);
+                    _Prog = file;
+                break;
+            }//switch
+        }//fileToDisk
 
 
     }

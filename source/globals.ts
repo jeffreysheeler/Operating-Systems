@@ -46,6 +46,7 @@ var _MemoryTable;
 var _CPUTable;        
 var _PCBTable;
 var _readyQueueTable;
+var _Prog:string = "";
 
 
 var _resList: any = [];
