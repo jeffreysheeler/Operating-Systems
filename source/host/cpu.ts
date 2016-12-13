@@ -44,6 +44,16 @@ module TSOS {
             this.currentPCB = null;
         }
 
+        public loadPCB(pcb): void{
+            this.PC = pcb.PC;
+            this.Acc = pcb.Acc;
+            this.Xreg = pcb.Xreg;
+            this.Yreg = pcb.Yreg;
+            this.Zflag = pcb.Zflag;
+            this.isExecuting = true;
+            this.currentPCB = pcb;
+        }//loadPCB
+
         public cycle(): void {
             _Kernel.krnTrace('CPU cycle');
             // TODO: Accumulate CPU usage and profiling statistics here.
@@ -88,7 +98,7 @@ module TSOS {
                     case "A9": //load the accumulator with a constant
                         this.Operation = "A9";
                         this.PC++;
-                        this.Acc = parseInt(_Memory.mem[this.PC], 16);
+                        this.Acc = parseInt(_Memory.mem[this.physicalAddress()], 16);
                         //this.Acc = parseInt(_Memory.mem[this.PC + _PCB.min], 16);
                         //this.PC++;
                         break;
@@ -126,7 +136,7 @@ module TSOS {
                     case "A2": //Load the X register with a constant   
                         this.Operation = "A2";
                         this.PC++;
-                        this.Xreg = parseInt(_Memory.mem[this.PC], 16);
+                        this.Xreg = parseInt(_Memory.mem[this.physicalAddress()], 16);
                         //this.PC++;
                         break;
 
@@ -140,7 +150,7 @@ module TSOS {
                     case "A0": //load the Y register with a constant    
                         this.Operation = "A0";
                         this.PC++;
-                        this.Yreg = parseInt(_Memory.mem[this.PC], 16);
+                        this.Yreg = parseInt(_Memory.mem[this.physicalAddress()], 16);
                         //this.PC++;
                         break;
 
@@ -193,7 +203,7 @@ module TSOS {
                         this.Operation = "D0";
                         ++this.PC;
                         //alert(this.PC);
-                        var branch = this.PC + this.parseConst(_Memory.mem[this.PC]);
+                        var branch = this.PC + this.parseConst(_Memory.mem[this.physicalAddress()]);
                         if(this.Zflag == 0){
                             this.PC = branch;
                             if(this.PC > 255 + _PCB.min){
@@ -265,9 +275,9 @@ module TSOS {
             var memBlock;
             this.PC++;
             
-            var block1 = _Memory.mem[this.PC];
+            var block1 = _Memory.mem[this.physicalAddress()];
             this.PC++;
-            var block2 = _Memory.mem[this.PC];
+            var block2 = _Memory.mem[this.physicalAddress()];
             var newMem = block2.concat(block1);
             memBlock = _CPU.currentPCB.min + parseInt(newMem, 16);
             if(memBlock >= _CPU.currentPCB.min && memBlock < _CPU.currentPCB.max){
@@ -311,8 +321,8 @@ module TSOS {
             _OsShell.putPrompt();
         }//killProcess
 
-        public logicalAddress(currentMemory:number, currentPC:number): number{
-            var x = currentMemory + currentPC;
+        public physicalAddress(): number{
+            var x = this.PC + this.currentPCB.min;
             return x;
         }
     }

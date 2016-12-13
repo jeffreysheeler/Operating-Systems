@@ -27,11 +27,11 @@ var TSOS;
                 change.max = 0;
                 change.PC = 0;
                 _readyQueue.enqueue(change);
-            }
+            } //while
             readyProg.state = "Running";
             _CPU.currentPCB = readyProg;
             _CPU.PC = readyProg.PC;
-        };
+        }; //init
         scheduler.prototype.changeProcess = function () {
             var enqueue;
             var dequeue;
