@@ -60,7 +60,6 @@ var TSOS;
                     this.Xreg = 0;
                     this.Yreg = 0;
                     this.Zflag = 0;
-                    TSOS.Control.updatePCBTable();
                 } //not null pcb if
                 this.executeCPUCycle();
                 TSOS.Control.updateCPUTable();
@@ -152,7 +151,7 @@ var TSOS;
                             this.currentPCB.Xreg = this.Xreg;
                             this.currentPCB.Yreg = this.Yreg;
                             this.currentPCB.Zflag = this.Zflag;
-                            TSOS.Control.updatePCBTable();
+                            //Control.updatePCBTable();
                             _KernelInterruptQueue.enqueue(new TSOS.Interrupt(CPU_REPLACE_IRQ, 0));
                         } //empty ready queue
                         else {
@@ -272,7 +271,7 @@ var TSOS;
             _PCB.Xreg = this.Xreg;
             _PCB.Yreg = this.Yreg;
             _PCB.Zflag = this.Zflag;
-            TSOS.Control.updatePCBTable();
+            //Control.updatePCBTable();
             for (var i = 0; i < _resList.length; i++) {
                 _Kernel.krnTrace("PID: " + _resList[i]);
             }

@@ -16,28 +16,28 @@ module TSOS{
             var x = 0;
             var tempProcess;
             var change;
-            alert(_readyQueue.getSize());
             
-            while(x < _readyQueue.getSize()){
+            while(x < _readyQueue.getSize() && !exists){
                 tempProcess = _readyQueue.getIndex(x);
-            }
+                change = _readyQueue.remove(tempProcess.pid);
+                _MemoryManager.progSwap(change, readyProg);
+                readyProg.min = change.min;
+                readyProg.max = change.max;
+                readyProg.PC = change.PC;
+                change.min = 0;
+                change.max = 0;
+                change.PC = 0;
 
-            change = _readyQueue.remove(tempProcess.pid);
-            _MemoryManager.progSwap(change, readyProg);
-            readyProg.min = change.min;
-            readyProg.max = change.max;
-            readyProg.PC = change.PC;
-            change.min = 0;
-            change.max = 0;
-            change.PC = 0;
+                _readyQueue.enqueue(change);
+            }//while
 
-            _readyQueue.enqueue(change);
+            
 
 
-            readyProg.State = "Running";
-            _CPU.currentPCB = readyProg.PC;
-            _CPU.PC=readyProg.min;
-        }
+            readyProg.state = "Running";
+            _CPU.currentPCB = readyProg;
+            _CPU.PC=readyProg.PC;
+        }//init
 
 
         public changeProcess():void{

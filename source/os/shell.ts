@@ -359,6 +359,7 @@ module TSOS {
                     _resList[i].state = "Ready";
                     _resList[i].PC = _resList[i].min;
                     _readyQueue.enqueue(_resList[i]);
+                    
 
                     for(var j = 0; j < _resList.length; j++){
                         _Kernel.krnTrace("pid: "+_resList[j].pid);
