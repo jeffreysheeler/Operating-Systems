@@ -1,6 +1,7 @@
 ///<reference path="../globals.ts" />
 ///<reference path="queue.ts" />
 ///<reference path="deviceDriverKeyboard.ts" />
+///<reference path="DeviceDriverFileSystem.ts"  />
 ///<reference path="../os/pcb.ts" />
 /* ------------
      Kernel.ts
@@ -41,6 +42,10 @@ var TSOS;
             _krnKeyboardDriver = new TSOS.DeviceDriverKeyboard(); // Construct it.
             _krnKeyboardDriver.driverEntry(); // Call the driverEntry() initialization routine.
             this.krnTrace(_krnKeyboardDriver.status);
+            this.krnTrace("Loading the file system device driver.");
+            _krnFileSystemDriver = new TSOS.deviceDriverFileSystem();
+            _krnFileSystemDriver.driverEntry();
+            this.krnTrace(_krnFileSystemDriver.status);
             //
             // ... more?
             //

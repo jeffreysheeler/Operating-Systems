@@ -9,10 +9,10 @@
 module TSOS{
     export class deviceDriverFileSystem extends DeviceDriver{
         constructor(){
-            super(this.krnHDDDriverEnt, this.fileToDisk);
+            super(this.krnHDDriverEnt, this.fileToDisk);
         }
 
-        public krnHDDDriverEnt(): void{
+        public krnHDDriverEnt(): void{
             this.status = "Loaded";
             this.init();
         }

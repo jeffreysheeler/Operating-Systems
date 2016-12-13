@@ -43,6 +43,34 @@ var TSOS;
                 }
             }
             return retVal;
+        }; //rot13
+        Utils.hexFromString = function (str) {
+            var output = "";
+            for (var i = 0; i < str.toString().length; i++) {
+                var temp = this.decToHex(str.toString().charCodeAt(i));
+                if (temp.length < 2) {
+                    temp = "0" + temp;
+                } //if
+                output += temp;
+            } //for
+            return output;
+        }; //hexFromString
+        Utils.stringFromHex = function (hex) {
+            var output = "";
+            for (var i = 0; i < hex.length - 1; i++) {
+                var temp = String.fromCharCode(this.hexToDec(hex.charAt(i) + hex.charAt(i + 1)));
+                output += temp;
+                i++;
+            }
+            return output;
+        }; //stringFromHex
+        Utils.decToHex = function (dec) {
+            var hex = dec.toString(16).toUpperCase();
+            return hex;
+        };
+        Utils.hexToDec = function (hex) {
+            var dec = parseInt(hex, 16);
+            return dec;
         };
         return Utils;
     }());
