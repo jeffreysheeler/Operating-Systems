@@ -153,7 +153,7 @@ var TSOS;
                         //this.PC++;
                         break;
                     case "00":
-                        if (_readyQueue.isEmpty()) {
+                        if (!_readyQueue.isEmpty()) {
                             this.currentPCB.state = "Complete";
                             this.currentPCB.PC = this.PC;
                             this.currentPCB.Acc = this.Acc;
@@ -273,16 +273,17 @@ var TSOS;
         };
         Cpu.prototype.killProcess = function () {
             this.isExecuting = false;
-            _PCB.state = "Terminated";
-            _PCB.PC = this.PC;
-            _PCB.Acc = this.Acc;
-            _PCB.Xreg = this.Xreg;
-            _PCB.Yreg = this.Yreg;
-            _PCB.Zflag = this.Zflag;
+            this.currentPCB.state = "Terminated";
+            this.currentPCB.PC = this.PC;
+            this.currentPCB.Acc = this.Acc;
+            this.currentPCB.Xreg = this.Xreg;
+            this.currentPCB.Yreg = this.Yreg;
+            this.currentPCB.Zflag = this.Zflag;
             //Control.updatePCBTable();
-            for (var i = 0; i < _resList.length; i++) {
-                _Kernel.krnTrace("PID: " + _resList[i]);
-            }
+            this.init();
+            /*for(var i = 0; i < _resList.length; i++){
+                _Kernel.krnTrace("PID: "+_resList[i]);
+            }*/
             _StdOut.advanceLine();
             _OsShell.putPrompt();
         }; //killProcess
