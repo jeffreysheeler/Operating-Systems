@@ -11,17 +11,17 @@ var __extends = (this && this.__extends) || function (d, b) {
 ///<reference path ="../host/control.ts" />
 var TSOS;
 (function (TSOS) {
-    var deviceDriverFileSystem = (function (_super) {
-        __extends(deviceDriverFileSystem, _super);
-        function deviceDriverFileSystem() {
+    var DeviceDriverFileSystem = (function (_super) {
+        __extends(DeviceDriverFileSystem, _super);
+        function DeviceDriverFileSystem() {
             _super.call(this);
             this.driverEntry = this.krnHDDriverEntry();
         }
-        deviceDriverFileSystem.prototype.krnHDDriverEntry = function () {
+        DeviceDriverFileSystem.prototype.krnHDDriverEntry = function () {
             this.status = "Loaded";
             this.init();
-        };
-        deviceDriverFileSystem.prototype.init = function () {
+        }; //krnHDDriverEntry
+        DeviceDriverFileSystem.prototype.init = function () {
             for (var i = 0; i < 60; i++) {
                 this.freeSpace += "--";
             } //for freeSpace
@@ -35,7 +35,7 @@ var TSOS;
                 } //k for
             } //j for
         }; //init
-        deviceDriverFileSystem.prototype.createFile = function (fileName) {
+        DeviceDriverFileSystem.prototype.createFile = function (fileName) {
             fileName = TSOS.Utils.hexFromString(fileName);
             _Kernel.krnTrace("New file: " + fileName);
             for (var i = 0; i < this.sectors; i++) {
@@ -55,7 +55,7 @@ var TSOS;
             } //for i
             return false;
         }; //createFile
-        deviceDriverFileSystem.prototype.readFile = function (fileName) {
+        DeviceDriverFileSystem.prototype.readFile = function (fileName) {
             fileName = this.fillBlock(TSOS.Utils.hexFromString(fileName));
             var temp;
             var mbr;
@@ -77,19 +77,19 @@ var TSOS;
                 } //j for
             } //i for
         }; //readFile
-        deviceDriverFileSystem.prototype.selectMeta = function (t, s, b) {
+        DeviceDriverFileSystem.prototype.selectMeta = function (t, s, b) {
             var m = sessionStorage.getItem(t + "" + s + "" + b).substr(0, 4);
             return m;
         }; //selectMeta
-        deviceDriverFileSystem.prototype.selectData = function (t, s, b) {
+        DeviceDriverFileSystem.prototype.selectData = function (t, s, b) {
             var data = sessionStorage.getItem(t + "" + s + "" + b).substr(0, 4);
             return data;
         }; //selectData
-        deviceDriverFileSystem.prototype.selectMBR = function (t, s, b) {
+        DeviceDriverFileSystem.prototype.selectMBR = function (t, s, b) {
             var mbr = sessionStorage.getItem(t + "" + s + "" + b).substr(1, 3);
             return mbr;
         }; //selectMBR
-        deviceDriverFileSystem.prototype.findEmptySpace = function () {
+        DeviceDriverFileSystem.prototype.findEmptySpace = function () {
             var mbr = "000";
             for (var i = 1; i < this.tracks; i++) {
                 for (var j = 0; j < this.sectors; j++) {
@@ -104,14 +104,14 @@ var TSOS;
             } //for i
             return "Unavailable";
         }; //findEmptySpace
-        deviceDriverFileSystem.prototype.fillBlock = function (fileData) {
+        DeviceDriverFileSystem.prototype.fillBlock = function (fileData) {
             var data = "";
             for (var i = 0; i < (124 - fileData.length); i++) {
                 data += "0";
             }
             return fileData.concat(data);
         }; //fillBlock
-        deviceDriverFileSystem.prototype.fileToDisk = function (params) {
+        DeviceDriverFileSystem.prototype.fileToDisk = function (params) {
             var x = params[0];
             var y = params[1];
             var fileData = params[2];
@@ -142,7 +142,7 @@ var TSOS;
                     break;
             } //switch
         }; //fileToDisk
-        return deviceDriverFileSystem;
+        return DeviceDriverFileSystem;
     }(TSOS.DeviceDriver));
-    TSOS.deviceDriverFileSystem = deviceDriverFileSystem;
+    TSOS.DeviceDriverFileSystem = DeviceDriverFileSystem;
 })(TSOS || (TSOS = {}));

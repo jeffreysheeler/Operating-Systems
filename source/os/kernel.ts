@@ -49,7 +49,7 @@ module TSOS {
             this.krnTrace(_krnKeyboardDriver.status);
 
             this.krnTrace("Loading the file system device driver.");
-            _krnFileSystemDriver = new deviceDriverFileSystem();
+            _krnFileSystemDriver = new DeviceDriverFileSystem();
             _krnFileSystemDriver.driverEntry();
             this.krnTrace(_krnFileSystemDriver.status);
             //

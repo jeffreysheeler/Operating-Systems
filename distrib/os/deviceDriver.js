@@ -6,15 +6,7 @@
 var TSOS;
 (function (TSOS) {
     var DeviceDriver = (function () {
-        //public driverEntry = null;
-        //public isr = null;
-        // The constructor below is useless because child classes
-        // cannot pass "this" arguments when calling super().
-        function DeviceDriver(driverEntry, isr) {
-            if (driverEntry === void 0) { driverEntry = null; }
-            if (isr === void 0) { isr = null; }
-            this.driverEntry = driverEntry;
-            this.isr = isr;
+        function DeviceDriver() {
             this.version = '0.07';
             this.status = 'unloaded';
             this.preemptable = false;
@@ -24,6 +16,8 @@ var TSOS;
             this.blockLength = 64;
             this.meta = "";
             this.freeSpace = "";
+            this.driverEntry = null;
+            this.isr = null;
         }
         return DeviceDriver;
     }());

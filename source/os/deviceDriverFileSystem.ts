@@ -7,17 +7,17 @@
 ///<reference path ="../host/control.ts" />
 
 module TSOS{
-    export class deviceDriverFileSystem extends DeviceDriver{
+    export class DeviceDriverFileSystem extends DeviceDriver{
         constructor(){
             super();
 
             this.driverEntry = this.krnHDDriverEntry();
-        }
+        }//constructor
 
         public krnHDDriverEntry(): void{
             this.status = "Loaded";
             this.init();
-        }
+        }//krnHDDriverEntry
 
         public init():void{
             for(var i = 0; i < 60; i++){
