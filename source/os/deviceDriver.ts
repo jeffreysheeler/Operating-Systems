@@ -16,13 +16,13 @@ module TSOS {
         public meta = "";
         public freeSpace = "";
 
-        public driverEntry = null;
-        public isr = null;
+        //public driverEntry = null;
+        //public isr = null;
 
         // The constructor below is useless because child classes
         // cannot pass "this" arguments when calling super().
-        constructor(driverEntry = null,
-                    isr = null) {
+        constructor(public driverEntry = null,
+                    public isr = null) {
         }
     }
 }
