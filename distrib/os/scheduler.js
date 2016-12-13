@@ -16,6 +16,7 @@ var TSOS;
             var x = 0;
             var tempProcess;
             var change;
+            alert(_readyQueue.getSize());
             while (x < _readyQueue.getSize()) {
                 tempProcess = _readyQueue.getIndex(x);
             }

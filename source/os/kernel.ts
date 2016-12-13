@@ -45,7 +45,7 @@ module TSOS {
             // Load the Keyboard Device Driver
             this.krnTrace("Loading the keyboard device driver.");
             _krnKeyboardDriver = new DeviceDriverKeyboard();     // Construct it.
-            _krnKeyboardDriver.driverEntry();                    // Call the driverEntry() initialization routine.
+            _krnKeyboardDriver.driverEntry();                   // Call the driverEntry() initialization routine.
             this.krnTrace(_krnKeyboardDriver.status);
 
             this.krnTrace("Loading the file system device driver.");
@@ -168,6 +168,7 @@ module TSOS {
         public krnTimerISR() {
             // The built-in TIMER (not clock) Interrupt Service Routine (as opposed to an ISR coming from a device driver). {
             // Check multiprogramming parameters and enforce quanta here. Call the scheduler / context switch here if necessary.
+            _Scheduler.init();
         }
 
         //

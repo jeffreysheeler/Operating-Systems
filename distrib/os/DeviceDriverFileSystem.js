@@ -15,8 +15,8 @@ var TSOS;
         __extends(DeviceDriverFileSystem, _super);
         function DeviceDriverFileSystem() {
             _super.call(this);
-            this.driverEntry = this.krnHDDriverEntry();
-        }
+            this.driverEntry = this.krnHDDriverEntry;
+        } //constructor
         DeviceDriverFileSystem.prototype.krnHDDriverEntry = function () {
             this.status = "Loaded";
             this.init();

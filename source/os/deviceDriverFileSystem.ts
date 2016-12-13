@@ -11,7 +11,7 @@ module TSOS{
         constructor(){
             super();
 
-            this.driverEntry = this.krnHDDriverEntry();
+            this.driverEntry = this.krnHDDriverEntry;
         }//constructor
 
         public krnHDDriverEntry(): void{
