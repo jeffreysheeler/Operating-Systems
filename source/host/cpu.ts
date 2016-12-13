@@ -29,7 +29,7 @@ module TSOS {
                     public Zflag: number = 0,
                     public Operation: String = "",
                     public isExecuting: boolean = false,
-                    public currentPCB: any = null
+                    public currentPCB: pcb = null
                     ) {
 
         }
@@ -41,7 +41,7 @@ module TSOS {
             this.Yreg = 0;
             this.Zflag = 0;
             this.isExecuting = false;
-            this.currentPCB = null;
+            //this.currentPCB = null;
         }
 
         public loadPCB(pcb): void{
@@ -60,16 +60,18 @@ module TSOS {
             // Do the real work here. Be sure to set this.isExecuting appropriately.
             if(this.isExecuting){
                 if(this.currentPCB == null){
-                    _KernelInterruptQueue.enqueue(new Interrupt(SCHEDULER_INIT_IRQ, 0));
-                }
-                if(this.currentPCB != null){
-                    this.PC = this.currentPCB.min;
-                    this.Acc = 0;
-                    this.Xreg = 0;
-                    this.Yreg = 0;
-                    this.Zflag = 0;
+                    _KernelInterruptQueue.enqueue(new Interrupt(SCHEDULER_INIT_IRQ, 0)); 
+                    _Kernel.krnInterruptHandler(SCHEDULER_INIT_IRQ, 0);
+                    if(this.currentPCB != null){
+                        this.PC = this.currentPCB.min;
+                        this.Acc = 0;
+                        this.Xreg = 0;
+                        this.Yreg = 0;
+                        this.Zflag = 0;
                     //Control.updatePCBTable();
-                }//not null pcb if
+                    }//not null currentPCB if
+                }//null currentPCB if
+                
 
                 this.executeCPUCycle();
                 Control.updateCPUTable();
@@ -85,11 +87,12 @@ module TSOS {
             var zflag;
             var hold;
             var outputString;
+            var physicalAddress = this.physicalAddress();
 
-            command = _Memory.mem[this.PC];
-            //alert("min =  "+_PCB.min);
-            alert("current command = "+command);
-            alert("current PC = "+this.PC);
+            command = _Memory.mem[physicalAddress];
+            //alert("current command = "+command);
+            //alert("current PC = "+this.PC);
+            
 
             //switch statement for each 6502a opcodes
 
@@ -167,21 +170,18 @@ module TSOS {
                         break;
 
                     case "00": //break / System call
-                        if(_readyQueue.isEmpty() ){
-                            this.Operation = "00"; 
+                        if(_readyQueue.isEmpty()){
                             this.currentPCB.state = "Complete";
                             this.currentPCB.PC = this.PC;
-                            this.currentPCB.Acc = this.Acc;
+                            this.currentPCB.Acc = this.Acc
                             this.currentPCB.Xreg = this.Xreg;
                             this.currentPCB.Yreg = this.Yreg;
                             this.currentPCB.Zflag = this.Zflag;
-                            //Control.updatePCBTable();
                             _KernelInterruptQueue.enqueue(new Interrupt(CPU_REPLACE_IRQ, 0));
-                        }//empty ready queue
+                        }//if
                         else{
                             this.killProcess();
                             this.PC = 0;
-                            //alert("killed process PC = "+this.PC);
                         }//else
                         break;
 
@@ -321,7 +321,7 @@ module TSOS {
             _OsShell.putPrompt();
         }//killProcess
 
-        public physicalAddress(): number{
+        public physicalAddress(){
             var x = this.PC + this.currentPCB.min;
             return x;
         }

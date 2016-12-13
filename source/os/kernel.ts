@@ -86,6 +86,7 @@ module TSOS {
 
 
         public krnOnCPUClockPulse() {
+            //Control.updateCPUTable();
             /* This gets called from the host hardware simulation every time there is a hardware clock pulse.
                This is NOT the same as a TIMER, which causes an interrupt and is handled like other interrupts.
                This, on the other hand, is the clock pulse from the hardware / VM / host that tells the kernel
@@ -145,12 +146,14 @@ module TSOS {
                     _StdIn.handleInput();
                     break;
                 case SCHEDULER_INIT_IRQ:
-                    _Mode = 0;
-                    var currentProcess = _readyQueue.getIndex(0);
-                    this.krnTrace("Process: "+currentProcess.pid);
-                    _Scheduler.init();
-                    _Mode = 1;
-                    break;
+                    if(!_readyQueue.isEmpty()){
+                        _Mode = 0;
+                        var currentProcess = _readyQueue.getIndex(0);
+                        this.krnTrace("Process: "+currentProcess.pid);
+                        _Scheduler.init();
+                        _Mode = 1;
+                    }//if
+                        break;
                 case CPU_PROCESS_CHANGE_IRQ:
                     _Mode = 0;
                     this.krnTrace("Enqueued: "+_CPU.currentPCB.pid);

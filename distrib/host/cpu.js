@@ -44,8 +44,17 @@ var TSOS;
             this.Yreg = 0;
             this.Zflag = 0;
             this.isExecuting = false;
-            this.currentPCB = null;
+            //this.currentPCB = null;
         };
+        Cpu.prototype.loadPCB = function (pcb) {
+            this.PC = pcb.PC;
+            this.Acc = pcb.Acc;
+            this.Xreg = pcb.Xreg;
+            this.Yreg = pcb.Yreg;
+            this.Zflag = pcb.Zflag;
+            this.isExecuting = true;
+            this.currentPCB = pcb;
+        }; //loadPCB
         Cpu.prototype.cycle = function () {
             _Kernel.krnTrace('CPU cycle');
             // TODO: Accumulate CPU usage and profiling statistics here.
@@ -53,14 +62,15 @@ var TSOS;
             if (this.isExecuting) {
                 if (this.currentPCB == null) {
                     _KernelInterruptQueue.enqueue(new TSOS.Interrupt(SCHEDULER_INIT_IRQ, 0));
-                }
-                if (this.currentPCB != null) {
-                    this.PC = this.currentPCB.min;
-                    this.Acc = 0;
-                    this.Xreg = 0;
-                    this.Yreg = 0;
-                    this.Zflag = 0;
-                } //not null pcb if
+                    _Kernel.krnInterruptHandler(SCHEDULER_INIT_IRQ, 0);
+                    if (this.currentPCB != null) {
+                        this.PC = this.currentPCB.min;
+                        this.Acc = 0;
+                        this.Xreg = 0;
+                        this.Yreg = 0;
+                        this.Zflag = 0;
+                    } //not null currentPCB if
+                } //null currentPCB if
                 this.executeCPUCycle();
                 TSOS.Control.updateCPUTable();
             } //isExecuting if statement
@@ -73,17 +83,17 @@ var TSOS;
             var zflag;
             var hold;
             var outputString;
-            command = _Memory.mem[this.PC];
-            //alert("min =  "+_PCB.min);
-            alert("current command = " + command);
-            alert("current PC = " + this.PC);
+            var physicalAddress = this.physicalAddress();
+            command = _Memory.mem[physicalAddress];
+            //alert("current command = "+command);
+            //alert("current PC = "+this.PC);
             //switch statement for each 6502a opcodes
             if (_Scheduler.tab < _Scheduler.quantum) {
                 switch (command) {
                     case "A9":
                         this.Operation = "A9";
                         this.PC++;
-                        this.Acc = parseInt(_Memory.mem[this.PC], 16);
+                        this.Acc = parseInt(_Memory.mem[this.physicalAddress()], 16);
                         //this.Acc = parseInt(_Memory.mem[this.PC + _PCB.min], 16);
                         //this.PC++;
                         break;
@@ -117,7 +127,7 @@ var TSOS;
                     case "A2":
                         this.Operation = "A2";
                         this.PC++;
-                        this.Xreg = parseInt(_Memory.mem[this.PC], 16);
+                        this.Xreg = parseInt(_Memory.mem[this.physicalAddress()], 16);
                         //this.PC++;
                         break;
                     case "AE":
@@ -129,7 +139,7 @@ var TSOS;
                     case "A0":
                         this.Operation = "A0";
                         this.PC++;
-                        this.Yreg = parseInt(_Memory.mem[this.PC], 16);
+                        this.Yreg = parseInt(_Memory.mem[this.physicalAddress()], 16);
                         //this.PC++;
                         break;
                     case "AC":
@@ -144,16 +154,14 @@ var TSOS;
                         break;
                     case "00":
                         if (_readyQueue.isEmpty()) {
-                            this.Operation = "00";
                             this.currentPCB.state = "Complete";
                             this.currentPCB.PC = this.PC;
                             this.currentPCB.Acc = this.Acc;
                             this.currentPCB.Xreg = this.Xreg;
                             this.currentPCB.Yreg = this.Yreg;
                             this.currentPCB.Zflag = this.Zflag;
-                            //Control.updatePCBTable();
                             _KernelInterruptQueue.enqueue(new TSOS.Interrupt(CPU_REPLACE_IRQ, 0));
-                        } //empty ready queue
+                        } //if
                         else {
                             this.killProcess();
                             this.PC = 0;
@@ -176,7 +184,7 @@ var TSOS;
                         this.Operation = "D0";
                         ++this.PC;
                         //alert(this.PC);
-                        var branch = this.PC + this.parseConst(_Memory.mem[this.PC]);
+                        var branch = this.PC + this.parseConst(_Memory.mem[this.physicalAddress()]);
                         if (this.Zflag == 0) {
                             this.PC = branch;
                             if (this.PC > 255 + _PCB.min) {
@@ -237,9 +245,9 @@ var TSOS;
         Cpu.prototype.checkMemory = function () {
             var memBlock;
             this.PC++;
-            var block1 = _Memory.mem[this.PC];
+            var block1 = _Memory.mem[this.physicalAddress()];
             this.PC++;
-            var block2 = _Memory.mem[this.PC];
+            var block2 = _Memory.mem[this.physicalAddress()];
             var newMem = block2.concat(block1);
             memBlock = _CPU.currentPCB.min + parseInt(newMem, 16);
             if (memBlock >= _CPU.currentPCB.min && memBlock < _CPU.currentPCB.max) {
@@ -278,8 +286,8 @@ var TSOS;
             _StdOut.advanceLine();
             _OsShell.putPrompt();
         }; //killProcess
-        Cpu.prototype.logicalAddress = function (currentMemory, currentPC) {
-            var x = currentMemory + currentPC;
+        Cpu.prototype.physicalAddress = function () {
+            var x = this.PC + this.currentPCB.min;
             return x;
         };
         return Cpu;
