@@ -86,6 +86,7 @@ module TSOS{
 
         public selectMeta(t,s,b): String{
             var m = sessionStorage.getItem(""+t+""+s+""+b+"").substr(0,4);
+            //m = m.substr(4);
             return m;
         }//selectMeta
 
