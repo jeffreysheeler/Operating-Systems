@@ -326,10 +326,10 @@ var TSOS;
             }
         }; //shellQuantum
         Shell.prototype.shellRunAll = function (args) {
-            while (_resList.length > 0) {
-                _readyQueue.enqueue(_resList[0]);
-                _resList.dequeue();
-            } //while
+            for (var i = 0; i < _resList.length; i++) {
+                _readyQueue.enqueue(_resList[i]);
+            } //for
+            _resList = [];
             _CPU.isExecuting = true;
         }; //runall
         Shell.prototype.shellPS = function (args) {

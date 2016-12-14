@@ -359,7 +359,7 @@ module TSOS {
                     _resList[i].state = "Ready";
                     _resList[i].PC = _resList[i].min;
                     _readyQueue.enqueue(_resList[i]);
-                    
+
 
                     for(var j = 0; j < _resList.length; j++){
                         _Kernel.krnTrace("pid: "+_resList[j].pid);
@@ -428,10 +428,10 @@ module TSOS {
         }//shellQuantum
 
         public shellRunAll(args)    {
-            while(_resList.length > 0){
-                _readyQueue.enqueue(_resList[0]);
-                _resList.dequeue();
-            }//while
+            for(var i = 0; i < _resList.length; i++){
+                _readyQueue.enqueue(_resList[i]);
+            }//for
+            _resList = [];
             _CPU.isExecuting = true;
         }//runall
 

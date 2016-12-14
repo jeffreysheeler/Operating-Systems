@@ -41,6 +41,20 @@ var TSOS;
             var x = this.q[index];
             return x;
         }; //getIndex
+        Queue.prototype.remove = function (pid) {
+            var remove;
+            for (var i = 0; i < this.getSize(); i++) {
+                if (this.q[i] == pid) {
+                    this.swap(this.q, 0, i);
+                    remove = this.dequeue;
+                } //if
+            } //for
+        }; //remove
+        Queue.prototype.swap = function (array, x, y) {
+            var a = array[x];
+            array[x] = array[y];
+            array[y] = a;
+        }; //swap
         return Queue;
     }());
     TSOS.Queue = Queue;
