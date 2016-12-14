@@ -93,6 +93,8 @@ var TSOS;
             this.commandList[this.commandList.length] = sc;
             sc = new TSOS.ShellCommand(this.shellCreateFile, "create", "<string> - creates the file");
             this.commandList[this.commandList.length] = sc;
+            sc = new TSOS.ShellCommand(this.shellFormat, "format", "Initializes all blocks in all sectors in all tracks");
+            this.commandList[this.commandList.length] = sc;
             //
             // Display the initial prompt.
             this.putPrompt();
@@ -384,10 +386,16 @@ var TSOS;
                 } //else
             } //if isExecuting
         }; //shellKill
+        Shell.prototype.shellFormat = function (args) {
+            _krnFileSystemDriver.init();
+            _StdOut.putText("Format successful");
+            _StdOut.advanceLine();
+        }; //shellFormat
         Shell.prototype.shellCreateFile = function (args) {
             if (args.length > 0) {
                 var file = "" + args;
-                _Kernel.krnTrace("Creating file: " + file);
+                _StdOut.putText("Creating file: " + file);
+                _StdOut.advanceLine();
                 _krnFileSystemDriver.createFile(file);
             } //if
             else {
@@ -446,6 +454,10 @@ var TSOS;
                         break;
                     case "create":
                         _StdOut.putText("Creates a file with a specified name");
+                        break;
+                    case "format":
+                        _StdOut.putText("Initializes all blocks in all sectors in all tracks");
+                        break;
                     // TODO: Make descriptive MANual page entries for the the rest of the shell commands here.
                     default:
                         _StdOut.putText("No manual entry for " + args[0] + ".");

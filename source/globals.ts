@@ -53,7 +53,7 @@ var _Prog:string = "";
 
 var _resList: any = [];
 var _Scheduler: TSOS.scheduler;
-var _hardDrive: TSOS.hardDrive;
+//var _hardDrive: TSOS.hardDrive;
 var _readyQueue: any = null;  
 var _DrawingContext: any; // = _Canvas.getContext("2d");  // Assigned here for type safety, but re-initialized in Control.hostInit() for OCD and logic.
 var _DefaultFontFamily: string = "sans";        // Ignored, I think. The was just a place-holder in 2008, but the HTML canvas may have use for it.

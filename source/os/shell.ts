@@ -500,7 +500,7 @@ module TSOS {
         }//shellKill
 
         public shellFormat(args){
-            _krnFileSystemDriver.formatHardDrive();
+            _krnFileSystemDriver.init();
             _StdOut.putText("Format successful");
             _StdOut.advanceLine();
         }//shellFormat

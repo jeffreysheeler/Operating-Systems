@@ -78,8 +78,8 @@ var TSOS;
             } //i for
         }; //readFile
         DeviceDriverFileSystem.prototype.selectMeta = function (t, s, b) {
-            var m = sessionStorage.getItem("" + t + "" + s + "" + b + ""); //.substr(4);
-            m = m.substr(4);
+            var m = sessionStorage.getItem("" + t + "" + s + "" + b + "").substr(0, 4);
+            //m = m.substr(4);
             return m;
         }; //selectMeta
         DeviceDriverFileSystem.prototype.selectData = function (t, s, b) {

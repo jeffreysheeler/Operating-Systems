@@ -27,7 +27,7 @@ module TSOS{
 
             for(var j = 0; j < this.tracks; j++){
                 for(var k = 0; k < this.sectors; k++){
-                    for(var l = 0; l < this.blockLength; l++){
+                    for(var l = 0; l < this.blocks; l++){
                         var empty = this.meta.concat(this.freeSpace);
                         sessionStorage.setItem(j.toString() + k.toString() + l.toString, empty);
                     }//l for
