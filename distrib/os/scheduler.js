@@ -11,12 +11,16 @@ var TSOS;
             this.scheduler = scheduler;
         }
         scheduler.prototype.init = function () {
+            if (_CPU.isExecuting) {
+                _readyQueue.enqueue(_CPU.currentPCB);
+            }
             var readyProg = _readyQueue.dequeue();
-            var exists = false;
+            /*var exists = false;
             var x = 0;
             var tempProcess;
             var change;
-            while (x < _readyQueue.getSize() && !exists) {
+            
+            while(x < _readyQueue.getSize() && !exists){
                 tempProcess = _readyQueue.getIndex(x);
                 change = _readyQueue.remove(tempProcess.pid);
                 _MemoryManager.progSwap(change, readyProg);
@@ -26,8 +30,10 @@ var TSOS;
                 change.min = 0;
                 change.max = 0;
                 change.PC = 0;
+
                 _readyQueue.enqueue(change);
-            } //while
+            }//while
+            */
             readyProg.state = "Running";
             _CPU.currentPCB = readyProg;
             _CPU.PC = readyProg.PC;

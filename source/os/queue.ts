@@ -1,3 +1,5 @@
+///<reference path="../globals.ts" />
+
 /* ------------
    Queue.ts
 

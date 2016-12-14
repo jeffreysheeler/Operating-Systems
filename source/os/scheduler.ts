@@ -11,8 +11,11 @@ module TSOS{
 
 
         public init(): void{
+            if(_CPU.isExecuting){
+                _readyQueue.enqueue(_CPU.currentPCB);
+            }
             var readyProg = _readyQueue.dequeue();
-            var exists = false;
+            /*var exists = false;
             var x = 0;
             var tempProcess;
             var change;
@@ -30,7 +33,7 @@ module TSOS{
 
                 _readyQueue.enqueue(change);
             }//while
-
+            */
             
 
 
