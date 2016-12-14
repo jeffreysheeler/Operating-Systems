@@ -437,7 +437,7 @@ module TSOS {
 
         public shellPS(args)    {
             if(_CPU.isExecuting){
-                _StdOut.putText("Executing process: "+_PCB.pid);
+                _StdOut.putText("Executing process: "+_CPU.currentPCB.pid);
                 _StdOut.advanceLine();
                 for(var i = 0; i < _readyQueue.getSize(); i++){
                     _StdOut.putText("Processes in queue: "+_readyQueue.getIndex(i).pid);
@@ -455,8 +455,38 @@ module TSOS {
             var exists;
 
             if(_CPU.isExecuting){
+                if(isNaN(parseInt(args)) || (pid = parseInt(args)<0){
+                    _StdOut.putText("Enter a valid PID");
+                    _StdOut.advanceLine();
+                }//acceptable args if
+                else{
+                    if(pid == _CPU.currentPCB.pid){
+                        if(!_readyQueue.isEmpty()){
+                            _KernelInterruptQueue.enqueue(new Interrupt(CPU_REPLACE_IRQ, 0));
+                        }//non empty readyQueue
+                        else{
+                            _CPU.killProcess();
+                        }//else
 
-            }//if
+                        exists = true;
+                        _StdOut.putText("Killed process: "+pid);
+                        _StdOut.advanceLine();
+                    }//if
+                    else{
+                        for(var i = 0; i < _readyQueue.getSize(); i++){
+                            if(pid == _readyQueue.getIndex(i)){
+                                _readyQueue.remove(pid);
+                                _StdOut.putText("Killed process: "+pid);
+                                _StdOut.advanceLine();
+                            }//if
+                        }//for
+                    }//else
+                    if(!exists){
+                        _StdOut.putText("Please enter a valid pid");
+                        _StdOut.advanceLine();
+                    }//if not exists
+                }//else
+            }//if isExecuting
         }//shellKill
 
         public shellMan(args) {

@@ -100,6 +100,7 @@ module TSOS{
         }//selectMBR
 
         public findEmptySpace():String{
+            var x = "Unavailable;
             var mbr = "000";
             for(var i = 1; i < this.tracks; i++){
                 for(var j = 0; j < this.sectors; j++){
@@ -107,12 +108,12 @@ module TSOS{
                         var m = this.selectMeta(i,j,k);
                         if(m.charAt(0) == "0"){
                             sessionStorage.setItem(i+""+j+""+k, "1"+mbr.concat(this.freeSpace));
-                            return i+""+j+""+k;
+                            x = i+""+j+""+k;
                         }//if4
                     }//for k
                 }//for j
             }//for i
-            return "Unavailable";
+            return x;
         }//findEmptySpace
 
         private fillBlock(fileData):string{
@@ -160,4 +161,4 @@ module TSOS{
     }
 
    
-}
+}}

@@ -73,6 +73,7 @@ var TSOS;
                 } //null currentPCB if
                 this.executeCPUCycle();
                 TSOS.Control.updateCPUTable();
+                TSOS.Control.updateMemoryTable();
             } //isExecuting if statement
         }; //cycle
         Cpu.prototype.executeCPUCycle = function () {
@@ -153,6 +154,7 @@ var TSOS;
                         //this.PC++;
                         break;
                     case "00":
+                        this.Operation = "00";
                         if (!_readyQueue.isEmpty()) {
                             this.currentPCB.state = "Complete";
                             this.currentPCB.PC = this.PC;
@@ -161,6 +163,7 @@ var TSOS;
                             this.currentPCB.Yreg = this.Yreg;
                             this.currentPCB.Zflag = this.Zflag;
                             _KernelInterruptQueue.enqueue(new TSOS.Interrupt(CPU_REPLACE_IRQ, 0));
+                            TSOS.Control.updateCPUTable();
                         } //if
                         else {
                             this.killProcess();
@@ -279,7 +282,7 @@ var TSOS;
             this.currentPCB.Xreg = this.Xreg;
             this.currentPCB.Yreg = this.Yreg;
             this.currentPCB.Zflag = this.Zflag;
-            //Control.updatePCBTable();
+            TSOS.Control.updateCPUTable();
             this.init();
             /*for(var i = 0; i < _resList.length; i++){
                 _Kernel.krnTrace("PID: "+_resList[i]);
