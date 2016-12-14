@@ -75,7 +75,7 @@ module TSOS {
 
                 this.executeCPUCycle();
                 Control.updateCPUTable();
-                //Control.updateMemoryTable();
+                Control.updateMemoryTable();
             }//isExecuting if statement
         }//cycle
 
@@ -170,6 +170,7 @@ module TSOS {
                         break;
 
                     case "00": //break / System call
+                        this.Operation = "00";
                         if(!_readyQueue.isEmpty()){
                             this.currentPCB.state = "Complete";
                             this.currentPCB.PC = this.PC;
@@ -178,6 +179,7 @@ module TSOS {
                             this.currentPCB.Yreg = this.Yreg;
                             this.currentPCB.Zflag = this.Zflag;
                             _KernelInterruptQueue.enqueue(new Interrupt(CPU_REPLACE_IRQ, 0));
+                            Control.updateCPUTable();
                         }//if
                         else{
                             this.killProcess();
@@ -312,7 +314,7 @@ module TSOS {
             this.currentPCB.Xreg = this.Xreg;
             this.currentPCB.Yreg = this.Yreg;
             this.currentPCB.Zflag = this.Zflag;
-            //Control.updatePCBTable();
+            Control.updateCPUTable();
             this.init();
 
             /*for(var i = 0; i < _resList.length; i++){
