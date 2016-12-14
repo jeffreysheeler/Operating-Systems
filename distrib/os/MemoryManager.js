@@ -51,19 +51,16 @@ var TSOS;
             return _Memory.mem[address];
         };
         MemoryManager.prototype.progSwap = function (oldPCB, program) {
-            var x = oldPCB.min;
+            var x;
             var atMemory;
-            for (var i = oldPCB.min; i < oldPCB.max; i++) {
-                x++;
-            } //for
             x = oldPCB.min;
-            for (var j = 0; j < program.length; j++) {
-                atMemory = program.slice(j, j + 2);
+            for (var i = 0; i < program.length; i++) {
+                atMemory = program.slice(i, i + 2);
                 _Memory.mem[i] = atMemory;
-                j++;
+                i++;
                 x++;
             } //for
-        };
+        }; //progSwap
         return MemoryManager;
     }());
     TSOS.MemoryManager = MemoryManager;
