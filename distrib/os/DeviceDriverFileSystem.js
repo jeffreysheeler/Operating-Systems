@@ -37,7 +37,7 @@ var TSOS;
         }; //init
         DeviceDriverFileSystem.prototype.createFile = function (fileName) {
             fileName = TSOS.Utils.hexFromString(fileName);
-            _Kernel.krnTrace("New file: " + fileName);
+            //_Kernel.krnTrace("New file: "+fileName);
             for (var i = 0; i < this.sectors; i++) {
                 for (var j = 0; j < this.blocks; j++) {
                     var metaData = this.selectMeta(0, i, j);
@@ -78,7 +78,7 @@ var TSOS;
             } //i for
         }; //readFile
         DeviceDriverFileSystem.prototype.selectMeta = function (t, s, b) {
-            var m = sessionStorage.getItem(t + "" + s + "" + b).substr(0, 4);
+            var m = sessionStorage.getItem("" + t + "" + s + "" + b + "").substr(0, 4);
             return m;
         }; //selectMeta
         DeviceDriverFileSystem.prototype.selectData = function (t, s, b) {
@@ -90,6 +90,7 @@ var TSOS;
             return mbr;
         }; //selectMBR
         DeviceDriverFileSystem.prototype.findEmptySpace = function () {
+            var x = "Unavailable";
             var mbr = "000";
             for (var i = 1; i < this.tracks; i++) {
                 for (var j = 0; j < this.sectors; j++) {
@@ -97,12 +98,12 @@ var TSOS;
                         var m = this.selectMeta(i, j, k);
                         if (m.charAt(0) == "0") {
                             sessionStorage.setItem(i + "" + j + "" + k, "1" + mbr.concat(this.freeSpace));
-                            return i + "" + j + "" + k;
+                            x = i + "" + j + "" + k;
                         } //if4
                     } //for k
                 } //for j
             } //for i
-            return "Unavailable";
+            return x;
         }; //findEmptySpace
         DeviceDriverFileSystem.prototype.fillBlock = function (fileData) {
             var data = "";

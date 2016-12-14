@@ -39,7 +39,7 @@ module TSOS{
 
         public createFile(fileName):boolean{
             fileName = Utils.hexFromString(fileName);
-            _Kernel.krnTrace("New file: "+fileName);
+            //_Kernel.krnTrace("New file: "+fileName);
             for(var i = 0; i < this.sectors; i++){
                 for(var j = 0; j < this.blocks; j++){
                     var metaData = this.selectMeta(0,i,j);
@@ -85,7 +85,7 @@ module TSOS{
         }//readFile
 
         public selectMeta(t,s,b): String{
-            var m = sessionStorage.getItem(t+""+s+""+b).substr(0,4);
+            var m = sessionStorage.getItem(""+t+""+s+""+b+"").substr(0,4);
             return m;
         }//selectMeta
 
@@ -100,7 +100,7 @@ module TSOS{
         }//selectMBR
 
         public findEmptySpace():String{
-            var x = "Unavailable;
+            var x = "Unavailable";
             var mbr = "000";
             for(var i = 1; i < this.tracks; i++){
                 for(var j = 0; j < this.sectors; j++){
@@ -161,4 +161,4 @@ module TSOS{
     }
 
    
-}}
+}

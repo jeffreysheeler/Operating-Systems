@@ -163,6 +163,11 @@ module TSOS {
                     _Scheduler.changeProcess();
                     _Mode = 1;
                     break;
+                case HD_IRQ:
+                    _Mode = 0;
+                    _krnFileSystemDriver.isr(params);
+                    _Mode = 1;
+                    break;
                 default:
                     this.krnTrapError("Invalid Interrupt Request. irq=" + irq + " params=[" + params + "]");
             }

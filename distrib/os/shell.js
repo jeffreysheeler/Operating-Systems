@@ -91,6 +91,8 @@ var TSOS;
             // kill <id> - kills the specified process id.
             sc = new TSOS.ShellCommand(this.shellKill, "kill", "<int> - kills the specified process id");
             this.commandList[this.commandList.length] = sc;
+            sc = new TSOS.ShellCommand(this.shellCreateFile, "create", "<string> - creates the file");
+            this.commandList[this.commandList.length] = sc;
             //
             // Display the initial prompt.
             this.putPrompt();
@@ -334,7 +336,7 @@ var TSOS;
         }; //runall
         Shell.prototype.shellPS = function (args) {
             if (_CPU.isExecuting) {
-                _StdOut.putText("Executing process: " + _PCB.pid);
+                _StdOut.putText("Executing process: " + _CPU.currentPCB.pid);
                 _StdOut.advanceLine();
                 for (var i = 0; i < _readyQueue.getSize(); i++) {
                     _StdOut.putText("Processes in queue: " + _readyQueue.getIndex(i).pid);
@@ -350,8 +352,49 @@ var TSOS;
             var pid;
             var exists;
             if (_CPU.isExecuting) {
-            } //if
+                if (isNaN(parseInt(args)) || (pid = parseInt(args) < 0)) {
+                    _StdOut.putText("Enter a valid PID");
+                    _StdOut.advanceLine();
+                } //acceptable args if
+                else {
+                    if (pid == _CPU.currentPCB.pid) {
+                        if (!_readyQueue.isEmpty()) {
+                            _KernelInterruptQueue.enqueue(new TSOS.Interrupt(CPU_REPLACE_IRQ, 0));
+                        } //non empty readyQueue
+                        else {
+                            _CPU.killProcess();
+                        } //else
+                        exists = true;
+                        _StdOut.putText("Killed process: " + pid);
+                        _StdOut.advanceLine();
+                    } //if
+                    else {
+                        for (var i = 0; i < _readyQueue.getSize(); i++) {
+                            if (pid == _readyQueue.getIndex(i)) {
+                                _readyQueue.remove(pid);
+                                _StdOut.putText("Killed process: " + pid);
+                                _StdOut.advanceLine();
+                            } //if
+                        } //for
+                    } //else
+                    if (!exists) {
+                        _StdOut.putText("Please enter a valid pid");
+                        _StdOut.advanceLine();
+                    } //if not exists
+                } //else
+            } //if isExecuting
         }; //shellKill
+        Shell.prototype.shellCreateFile = function (args) {
+            if (args.length > 0) {
+                var file = "" + args;
+                _Kernel.krnTrace("Creating file: " + file);
+                _krnFileSystemDriver.createFile(file);
+            } //if
+            else {
+                _StdOut.putText("Enter a valid file name");
+                _StdOut.advanceLine();
+            } //else
+        }; //shellCreateFile
         Shell.prototype.shellMan = function (args) {
             if (args.length > 0) {
                 var topic = args[0];
@@ -400,6 +443,9 @@ var TSOS;
                         break;
                     case "marist":
                         _StdOut.putText("Changes the background of the canvas to red.");
+                        break;
+                    case "create":
+                        _StdOut.putText("Creates a file with a specified name");
                     // TODO: Make descriptive MANual page entries for the the rest of the shell commands here.
                     default:
                         _StdOut.putText("No manual entry for " + args[0] + ".");

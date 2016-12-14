@@ -157,6 +157,11 @@ module TSOS {
                                     "<int> - kills the specified process id");
             this.commandList[this.commandList.length] = sc;
 
+            sc = new ShellCommand(this.shellCreateFile,
+                                   "create",
+                                   "<string> - creates the file");
+            this.commandList[this.commandList.length] = sc;
+
             //
             // Display the initial prompt.
             this.putPrompt();
@@ -489,6 +494,19 @@ module TSOS {
             }//if isExecuting
         }//shellKill
 
+        public shellCreateFile(args){
+            if(args.length > 0){
+                var file = ""+args;
+                _Kernel.krnTrace("Creating file: "+file);
+                _krnFileSystemDriver.createFile(file);
+                //_KernelInterruptQueue(new Interrupt(HD_IRQ, [0,file]));
+            }//if
+            else{
+                _StdOut.putText("Enter a valid file name");
+                _StdOut.advanceLine();
+            }//else
+        }//shellCreateFile
+
         public shellMan(args) {
             if (args.length > 0) {
                 var topic = args[0];
@@ -537,6 +555,9 @@ module TSOS {
                     break;
                     case "marist":
                         _StdOut.putText("Changes the background of the canvas to red.")
+                    break;
+                    case "create":
+                        _StdOut.putText("Creates a file with a specified name");
                     // TODO: Make descriptive MANual page entries for the the rest of the shell commands here.
                     default:
                         _StdOut.putText("No manual entry for " + args[0] + ".");

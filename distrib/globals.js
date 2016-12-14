@@ -19,6 +19,7 @@ var KEYBOARD_IRQ = 1;
 var SCHEDULER_INIT_IRQ = 2;
 var CPU_PROCESS_CHANGE_IRQ = 3;
 var CPU_REPLACE_IRQ = 4;
+var HD_IRQ = 5;
 //
 // Global Variables
 // TODO: Make a global object and use that instead of the "_" naming convention in the global namespace.

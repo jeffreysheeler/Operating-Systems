@@ -26,6 +26,8 @@ const CPU_PROCESS_CHANGE_IRQ: number = 3;
 
 const CPU_REPLACE_IRQ: number = 4;
 
+const HD_IRQ: number = 5;
+
 
 //
 // Global Variables
