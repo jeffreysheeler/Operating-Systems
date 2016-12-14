@@ -455,7 +455,7 @@ module TSOS {
             var exists;
 
             if(_CPU.isExecuting){
-                if(isNaN(parseInt(args)) || (pid = parseInt(args)<0){
+                if(isNaN(parseInt(args)) || (pid = parseInt(args)<0)){
                     _StdOut.putText("Enter a valid PID");
                     _StdOut.advanceLine();
                 }//acceptable args if
