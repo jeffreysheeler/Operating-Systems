@@ -37,6 +37,7 @@ module TSOS {
             _MemoryManager = new MemoryManager();
             _Scheduler = new scheduler();
             _readyQueue = new Queue();
+            //_hardDrive = new hardDrive();
 
             // Initialize standard input and output to the _Console.
             _StdIn  = _Console;
@@ -51,6 +52,7 @@ module TSOS {
             this.krnTrace("Loading the file system device driver.");
             _krnFileSystemDriver = new DeviceDriverFileSystem();
             _krnFileSystemDriver.driverEntry();
+            _krnFileSystemDriver.init();
             this.krnTrace(_krnFileSystemDriver.status);
             //
             // ... more?

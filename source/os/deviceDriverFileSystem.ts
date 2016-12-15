@@ -83,7 +83,7 @@ module TSOS{
             var nextFile;
 
             for(var i = 0; i < this.sectors; i++){
-                for(var j = 1; j < this.blocks; j++){
+                for(var j = 0; j < this.blocks; j++){
                     temp = this.selectData(0,i,j);
                     if(temp == fileName){
                         mbr = this.selectMBR(0,i,j);
@@ -99,6 +99,46 @@ module TSOS{
                 }//j for
             }//i for
         }//readFile
+
+        public writeFile(fileName, writeData): boolean{
+            var file = this.fillBlock(Utils.hexFromString(fileName));
+            var neededBlocks = Math.ceil(writeData.length / 120);
+            var temp;
+            var mbr;
+            var nextBlock;
+            var limit = 0;
+            var toFile = "";
+
+            for(var i = 0; i < this.sectors; i++){
+                for(var j = 0; j < this.blocks; j++){  
+                    temp = this.selectData(0,i,j);
+                    if(temp == file){
+                        mbr = this.selectMBR(0,i,j);
+                        for(var x = 0; x < neededBlocks; x++){
+                            if(x != neededBlocks - 1){
+                                nextBlock = this.findEmptySpace(0,i,j);
+                            }//if neededBlocks not 1
+                            var z = 0; 
+                            while(z < writeData.length && limit < 120){
+                                toFile += writeData.charAt(z);
+                                z++;
+                                limit++;
+                            }//while
+                            if(toFile.length < 120-1){
+                                toFile += this.fillBlock(toFile);
+                            }//if
+                            toFile = "1"+nextBlock.concat(toFile);
+                            sessionStorage.setItem(mbr, toFile);
+                            toFile = "";
+                            limit = 0;
+                            mbr = nextBlock;
+                        }//for x
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }//writeFile
 
         public selectMeta(t,s,b): String{
             var m = sessionStorage.getItem(""+t+""+s+""+b+"").substr(0,4);
