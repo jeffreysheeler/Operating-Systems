@@ -34,6 +34,7 @@ var TSOS;
             _MemoryManager = new TSOS.MemoryManager();
             _Scheduler = new TSOS.scheduler();
             _readyQueue = new TSOS.Queue();
+            //_hardDrive = new hardDrive();
             // Initialize standard input and output to the _Console.
             _StdIn = _Console;
             _StdOut = _Console;
@@ -45,6 +46,7 @@ var TSOS;
             this.krnTrace("Loading the file system device driver.");
             _krnFileSystemDriver = new TSOS.DeviceDriverFileSystem();
             _krnFileSystemDriver.driverEntry();
+            _krnFileSystemDriver.init();
             this.krnTrace(_krnFileSystemDriver.status);
             //
             // ... more?
