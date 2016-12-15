@@ -3,6 +3,9 @@
 ///<reference path="../host/cpu.ts" />
 ///<reference path="../host/devices.ts" />
 ///<reference path="../os/kernel.ts" />
+///<reference path="../os/deviceDriverFileSystem.ts"   />
+///<reference path="../host/memory.ts"  />
+///<reference path="../os/MemoryManager.ts" />
 
 /* ------------
      Control.ts
@@ -40,6 +43,7 @@ module TSOS {
             _CPUTable = <HTMLTableElement>document.getElementById('CPUTable');
             _PCBTable = <HTMLTableElement>document.getElementById('PCBTable');
             _readyQueueTable = <HTMLTableElement>document.getElementById('readyQueueTable');
+            _HDTable = <HTMLTableElement>document.getElementById('hardDriveTable');
 
             this.initMemoryTable();
 
@@ -187,6 +191,29 @@ module TSOS {
                 _readyQueueTable.rows[i].cells[8].innerHTML = thisPCB.Zflag;
             }//for
         }//updateReadyQueueTable
+
+        public static editHDTable(): void{
+            var countRows = 1;
+            for(var i = 0; i < _krnFileSystemDriver.tracks; i++){
+                for(var j = 0; j < _krnFileSystemDriver.sectors; j++){
+                    for(var k = 0; k < _krnFileSystemDriver.blocks; k++){
+                        var tsb = ""+i+j+k;
+                        var meta = sessionStorage.getItem(tsb).substr(0,4);
+                        var data = sessionStorage.getItem(tsb).substr(4);
+
+                        var row = _HDTable.insertRow(countRows);
+                        for(var x = 0; x < 3; x++){
+                            var cell = row.insertCell(x);
+                        }//for x
+                        _HDTable.rows[x].cells[0].innerHTML = tsb;
+                        _HDTable.rows[x].cells[1].innerHTML = meta;
+                        _HDTable.rows[x].cells[2].innerHTML = data;
+                        
+                        countRows++;
+                    }//for k
+                }//for j
+            }//for i
+        }
 
         public static hostBtnHaltOS_click(btn): void {
             Control.hostLog("Emergency halt", "host");
