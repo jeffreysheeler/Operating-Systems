@@ -48,6 +48,7 @@ var _MemoryTable;
 var _CPUTable;        
 var _PCBTable;
 var _readyQueueTable;
+var _HDTable;
 var _Prog:string = "";
 
 

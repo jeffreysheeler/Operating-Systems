@@ -177,6 +177,11 @@ module TSOS {
                                    "Returns the current scheduling algorithm");
             this.commandList[this.commandList.length] = sc;
 
+            sc = new ShellCommand(this.shellWriteFile,
+                                   "write",
+                                   "<string> \" data\" - Writes data to the selected file");
+            this.commandList[this.commandList.length] = sc;
+
             //
             // Display the initial prompt.
             this.putPrompt();
@@ -385,7 +390,7 @@ module TSOS {
                         _Kernel.krnTrace("pid: "+_resList[j].pid);
                     }//for
 
-                    //Control.updateMemoryTable();
+                    Control.updateMemoryTable();
                    // _readyQueue.enqueue(_resList[i]);
                     _CPU.isExecuting = true;
                     }//if
@@ -422,7 +427,7 @@ module TSOS {
             for(var i = 0; i < 768; i++){
                 _Memory.mem[i] = "00";
             }//for
-            //Control.updateMemoryTable();
+            Control.updateMemoryTable();
             _MemoryManager.mem = 0;
         }//clearmem
 
@@ -531,6 +536,7 @@ module TSOS {
             _krnFileSystemDriver.init();
             _StdOut.putText("Format successful");
             _StdOut.advanceLine();
+            //Control.updateHDTable();
         }//shellFormat
 
         public shellCreateFile(args){
@@ -547,6 +553,36 @@ module TSOS {
                 _StdOut.advanceLine();
             }//else
         }//shellCreateFile
+
+        public shellWriteFile(args){
+            var i = 0;
+
+            var file = "";
+            var toFile = "";
+
+            while(i < args.length || args.toString().charAt(i) != String.fromCharCode(44)){
+                file += args.toString.charAt(i);
+                i++;
+            }//while i
+
+            var j = i+2;
+            while(j < args.length || args.toString().charAt(j) != String.fromCharCode(34)){
+                toFile += args.toString().charAt(j);
+                j++;
+            }//while j
+
+            file = file.trim();
+            toFile = Utils.hexFromString(toFile);
+
+            if(_krnFileSystemDriver.writeFile(file, toFile)){
+                _StdOut.putText(file+" was successfully written");
+                _StdOut.advanceLine();
+            }//if
+            else{
+                _StdOut.putText(file+" was not written");
+                _StdOut.advanceLine();
+            }//else
+        }//shellWriteFile
 
         public shellMan(args) {
             if (args.length > 0) {
@@ -608,6 +644,9 @@ module TSOS {
                     break;
                     case "setschedule":
                         _StdOut.putText("Allows the user to select a CPU scheduling algorithm");
+                    break;
+                    case "writeFile":
+                        _StdOut.putText("Allows the user to alter the data of a file");
                     break;
                     // TODO: Make descriptive MANual page entries for the the rest of the shell commands here.
                     default:

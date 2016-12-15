@@ -3,6 +3,9 @@
 ///<reference path="../host/cpu.ts" />
 ///<reference path="../host/devices.ts" />
 ///<reference path="../os/kernel.ts" />
+///<reference path="../os/deviceDriverFileSystem.ts"   />
+///<reference path="../host/memory.ts"  />
+///<reference path="../os/MemoryManager.ts" />
 /* ------------
      Control.ts
 
@@ -37,6 +40,7 @@ var TSOS;
             _CPUTable = document.getElementById('CPUTable');
             _PCBTable = document.getElementById('PCBTable');
             _readyQueueTable = document.getElementById('readyQueueTable');
+            _HDTable = document.getElementById('hardDriveTable');
             this.initMemoryTable();
             // Get a global reference to the drawing context.
             _DrawingContext = _Canvas.getContext("2d");
@@ -110,7 +114,7 @@ var TSOS;
         Control.updateMemoryTable = function () {
             var row;
             var col;
-            var slot;
+            var slot = 0;
             for (var i = 0; i < (768 / 8); ++i) {
                 row = i;
                 for (var j = 0; j < 9; ++j) {
@@ -137,27 +141,49 @@ var TSOS;
             _CPUTable.rows[1].cells[5].innerHTML = _CPU.Operation;
         }; //initCPUTable
         Control.updateReadyQueueTable = function () {
-            var thisPCB;
-            while (_readyQueueTable.rows.length != 1) {
-                _readyQueueTable.deleteRow(1);
-            } //while
-            for (var i = 1; i <= _readyQueue.getSize(); i++) {
-                thisPCB = _readyQueue.getIndex(i - 1);
-                var row = _readyQueueTable.insertRow(i);
-                for (var j = 0; j < 9; ++j) {
-                    var cell = row.insertCell(j);
+            if (!_readyQueue.isEmpty()) {
+                var thisPCB;
+                while (_readyQueueTable.rows.length != 1) {
+                    _readyQueueTable.deleteRow(1);
+                } //while
+                for (var i = 0; i < _readyQueue.getSize(); i++) {
+                    thisPCB = _readyQueue.getIndex(i);
+                    var row = _readyQueueTable.insertRow(i + 1);
+                    for (var j = 0; j < 9; ++j) {
+                        var cell = row.insertCell(j);
+                    } //for
+                    _readyQueueTable.rows[i + 1].cells[0].innerHTML = thisPCB.pid;
+                    _readyQueueTable.rows[i + 1].cells[1].innerHTML = thisPCB.state;
+                    _readyQueueTable.rows[i + 1].cells[2].innerHTML = thisPCB.min;
+                    _readyQueueTable.rows[i + 1].cells[3].innerHTML = thisPCB.max;
+                    _readyQueueTable.rows[i + 1].cells[4].innerHTML = thisPCB.PC;
+                    _readyQueueTable.rows[i + 1].cells[5].innerHTML = thisPCB.Acc;
+                    _readyQueueTable.rows[i + 1].cells[6].innerHTML = thisPCB.Xreg;
+                    _readyQueueTable.rows[i + 1].cells[7].innerHTML = thisPCB.Yreg;
+                    _readyQueueTable.rows[i + 1].cells[8].innerHTML = thisPCB.Zflag;
                 } //for
-                _readyQueueTable.rows[i].cells[0].innerHTML = thisPCB.pid;
-                _readyQueueTable.rows[i].cells[1].innerHTML = thisPCB.state;
-                _readyQueueTable.rows[i].cells[2].innerHTML = thisPCB.min;
-                _readyQueueTable.rows[i].cells[3].innerHTML = thisPCB.max;
-                _readyQueueTable.rows[i].cells[4].innerHTML = thisPCB.PC;
-                _readyQueueTable.rows[i].cells[5].innerHTML = thisPCB.Acc;
-                _readyQueueTable.rows[i].cells[6].innerHTML = thisPCB.Xreg;
-                _readyQueueTable.rows[i].cells[7].innerHTML = thisPCB.Yreg;
-                _readyQueueTable.rows[i].cells[8].innerHTML = thisPCB.Zflag;
-            } //for
+            } //if
         }; //updateReadyQueueTable
+        Control.updateHDTable = function () {
+            var countRows = 1;
+            for (var i = 0; i < _krnFileSystemDriver.tracks; i++) {
+                for (var j = 0; j < _krnFileSystemDriver.sectors; j++) {
+                    for (var k = 0; k < _krnFileSystemDriver.blocks; k++) {
+                        var tsb = "" + i + j + k;
+                        var meta = sessionStorage.getItem(tsb).substr(0, 4);
+                        var data = sessionStorage.getItem(tsb).substr(4);
+                        var row = _HDTable.insertRow(countRows);
+                        for (var x = 0; x < 3; x++) {
+                            var cell = row.insertCell(x);
+                        } //for x
+                        _HDTable.rows[x].cells[0].innerHTML = tsb;
+                        _HDTable.rows[x].cells[1].innerHTML = meta;
+                        _HDTable.rows[x].cells[2].innerHTML = data;
+                        countRows++;
+                    } //for k
+                } //for j
+            } //for i
+        }; //updateHDTable
         Control.hostBtnHaltOS_click = function (btn) {
             Control.hostLog("Emergency halt", "host");
             Control.hostLog("Attempting Kernel shutdown.", "host");

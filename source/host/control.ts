@@ -137,7 +137,7 @@ module TSOS {
         public static updateMemoryTable(): void{
             var row;
             var col;
-            var slot;
+            var slot = 0;
             for(var i = 0; i < (768/8); ++i){
                 row = i;
                 for(var j =0; j < 9; ++j){
@@ -166,33 +166,35 @@ module TSOS {
         }//initCPUTable
 
         public static updateReadyQueueTable(): void{
+            if(!_readyQueue.isEmpty()){
             var thisPCB;
 
             while(_readyQueueTable.rows.length!=1){
                 _readyQueueTable.deleteRow(1);
             }//while
 
-            for(var i = 1; i <= _readyQueue.getSize(); i++){
-                thisPCB = _readyQueue.getIndex(i-1);
-                var row = _readyQueueTable.insertRow(i);
+            for(var i = 0; i < _readyQueue.getSize(); i++){
+                thisPCB = _readyQueue.getIndex(i);
+                var row = _readyQueueTable.insertRow(i+1);
 
                 for(var j = 0; j < 9; ++j){
                     var cell = row.insertCell(j);
                 }//for
 
-                _readyQueueTable.rows[i].cells[0].innerHTML = thisPCB.pid;
-                _readyQueueTable.rows[i].cells[1].innerHTML = thisPCB.state;
-                _readyQueueTable.rows[i].cells[2].innerHTML = thisPCB.min;
-                _readyQueueTable.rows[i].cells[3].innerHTML = thisPCB.max;
-                _readyQueueTable.rows[i].cells[4].innerHTML = thisPCB.PC;
-                _readyQueueTable.rows[i].cells[5].innerHTML = thisPCB.Acc;
-                _readyQueueTable.rows[i].cells[6].innerHTML = thisPCB.Xreg;
-                _readyQueueTable.rows[i].cells[7].innerHTML = thisPCB.Yreg;
-                _readyQueueTable.rows[i].cells[8].innerHTML = thisPCB.Zflag;
+                _readyQueueTable.rows[i+1].cells[0].innerHTML = thisPCB.pid;
+                _readyQueueTable.rows[i+1].cells[1].innerHTML = thisPCB.state;
+                _readyQueueTable.rows[i+1].cells[2].innerHTML = thisPCB.min;
+                _readyQueueTable.rows[i+1].cells[3].innerHTML = thisPCB.max;
+                _readyQueueTable.rows[i+1].cells[4].innerHTML = thisPCB.PC;
+                _readyQueueTable.rows[i+1].cells[5].innerHTML = thisPCB.Acc;
+                _readyQueueTable.rows[i+1].cells[6].innerHTML = thisPCB.Xreg;
+                _readyQueueTable.rows[i+1].cells[7].innerHTML = thisPCB.Yreg;
+                _readyQueueTable.rows[i+1].cells[8].innerHTML = thisPCB.Zflag;
             }//for
+            }//if
         }//updateReadyQueueTable
 
-        public static editHDTable(): void{
+        public static updateHDTable(): void{
             var countRows = 1;
             for(var i = 0; i < _krnFileSystemDriver.tracks; i++){
                 for(var j = 0; j < _krnFileSystemDriver.sectors; j++){
@@ -213,7 +215,7 @@ module TSOS {
                     }//for k
                 }//for j
             }//for i
-        }
+        }//updateHDTable
 
         public static hostBtnHaltOS_click(btn): void {
             Control.hostLog("Emergency halt", "host");

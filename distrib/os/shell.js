@@ -99,6 +99,8 @@ var TSOS;
             this.commandList[this.commandList.length] = sc;
             sc = new TSOS.ShellCommand(this.shellGetSchedule, "getschedule", "Returns the current scheduling algorithm");
             this.commandList[this.commandList.length] = sc;
+            sc = new TSOS.ShellCommand(this.shellWriteFile, "write", "<string> \" data\" - Writes data to the selected file");
+            this.commandList[this.commandList.length] = sc;
             //
             // Display the initial prompt.
             this.putPrompt();
@@ -282,7 +284,7 @@ var TSOS;
                     for (var j = 0; j < _resList.length; j++) {
                         _Kernel.krnTrace("pid: " + _resList[j].pid);
                     } //for
-                    //Control.updateMemoryTable();
+                    TSOS.Control.updateMemoryTable();
                     // _readyQueue.enqueue(_resList[i]);
                     _CPU.isExecuting = true;
                 } //if
@@ -311,7 +313,7 @@ var TSOS;
             for (var i = 0; i < 768; i++) {
                 _Memory.mem[i] = "00";
             } //for
-            //Control.updateMemoryTable();
+            TSOS.Control.updateMemoryTable();
             _MemoryManager.mem = 0;
         }; //clearmem
         Shell.prototype.shellQuantum = function (args) {
@@ -409,6 +411,7 @@ var TSOS;
             _krnFileSystemDriver.init();
             _StdOut.putText("Format successful");
             _StdOut.advanceLine();
+            //Control.updateHDTable();
         }; //shellFormat
         Shell.prototype.shellCreateFile = function (args) {
             if (args.length > 0) {
@@ -423,6 +426,30 @@ var TSOS;
                 _StdOut.advanceLine();
             } //else
         }; //shellCreateFile
+        Shell.prototype.shellWriteFile = function (args) {
+            var i = 0;
+            var file = "";
+            var toFile = "";
+            while (i < args.length || args.toString().charAt(i) != String.fromCharCode(44)) {
+                file += args.toString.charAt(i);
+                i++;
+            } //while i
+            var j = i + 2;
+            while (j < args.length || args.toString().charAt(j) != String.fromCharCode(34)) {
+                toFile += args.toString().charAt(j);
+                j++;
+            } //while j
+            file = file.trim();
+            toFile = TSOS.Utils.hexFromString(toFile);
+            if (_krnFileSystemDriver.writeFile(file, toFile)) {
+                _StdOut.putText(file + " was successfully written");
+                _StdOut.advanceLine();
+            } //if
+            else {
+                _StdOut.putText(file + " was not written");
+                _StdOut.advanceLine();
+            } //else
+        }; //shellWriteFile
         Shell.prototype.shellMan = function (args) {
             if (args.length > 0) {
                 var topic = args[0];
@@ -483,6 +510,9 @@ var TSOS;
                         break;
                     case "setschedule":
                         _StdOut.putText("Allows the user to select a CPU scheduling algorithm");
+                        break;
+                    case "writeFile":
+                        _StdOut.putText("Allows the user to alter the data of a file");
                         break;
                     // TODO: Make descriptive MANual page entries for the the rest of the shell commands here.
                     default:
