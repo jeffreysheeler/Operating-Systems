@@ -17,7 +17,7 @@ var TSOS;
             this.memMin = memMin;
             this.memMax = memMax;
         } //constructor
-        MemoryManager.prototype.loadInput = function (input) {
+        MemoryManager.prototype.loadInput = function (input, priority) {
             var addToMem;
             var memIndex = this.memMin[this.mem];
             if (this.mem < 3 && input.length / 2 <= 256) {
@@ -32,19 +32,34 @@ var TSOS;
                 var min = this.memMin[this.mem];
                 var max = this.memMax[this.mem];
                 _PCB = new TSOS.pcb();
-                _PCB.init(min, max);
+                _PCB.init(min, max, 0, priority);
                 _PCB.pid = _OsShell.pid;
                 _resList[_resList.length] = _PCB;
                 _StdOut.putText("Program loaded to memory, pid = " + _OsShell.pid);
                 _OsShell.pid++;
-                //Control.updateMemoryTable();
+                TSOS.Control.updateMemoryTable();
                 this.mem++;
                 for (var j = 0; j < _resList.length; j++) {
                     _Kernel.krnTrace("Resident list: " + _resList[j].pid);
                 }
+                _PCB = null;
             } //if
+            else if (input.length / 2 <= 256) {
+                min = 0;
+                max = 0;
+                _PCB = new TSOS.pcb();
+                _PCB.init(min, max, 1, priority);
+                _resList[_resList.length] = _PCB;
+                var file = _PCB.pid;
+                _krnFileSystemDriver.createFile(file);
+                _krnFileSystemDriver.writeFile(file, input);
+                _StdOut("Program loaded to disk, pid = " + _PCB.pid);
+                _StdOut.advanceLine();
+                _OsShell.pid++;
+                _PCB = null;
+            }
             else {
-                _StdOut.putText("Failed to load to memory");
+                _StdOut.putText("Failed to load the program");
             }
         }; //loadInput
         MemoryManager.prototype.getMemoryAddress = function (address) {

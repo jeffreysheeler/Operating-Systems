@@ -13,6 +13,7 @@ var TSOS;
         scheduler.prototype.init = function () {
             if (_CPU.isExecuting) {
                 _readyQueue.enqueue(_CPU.currentPCB);
+                TSOS.Control.updateReadyQueueTable();
             }
             var readyProg = _readyQueue.dequeue();
             /*var exists = false;

@@ -13,6 +13,7 @@ module TSOS{
         public init(): void{
             if(_CPU.isExecuting){
                 _readyQueue.enqueue(_CPU.currentPCB);
+                Control.updateReadyQueueTable();
             }
             var readyProg = _readyQueue.dequeue();
             /*var exists = false;

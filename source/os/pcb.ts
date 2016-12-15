@@ -16,11 +16,13 @@ module TSOS{
                     public Yreg: number = 0,
                     public Zflag: number = 0,
                     public min: number = 0,
-                    public max: number = 0){
+                    public max: number = 0,
+                    public locality: number = 0,
+                    public priority: number = 0){
 
                     }
         
-        public init(min, max): void{
+        public init(min, max, locality, priority): void{
             this.pid = _OsShell.pid;
             this.state = "new";
             this.PC = this.min;
@@ -30,6 +32,8 @@ module TSOS{
             this.Zflag = 0;
             this.min = min;
             this.max = max;
+            this.locality = locality;
+            this.priority = priority;
         }
     }
 }

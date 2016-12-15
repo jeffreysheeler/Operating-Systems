@@ -259,20 +259,27 @@ var TSOS;
             userStatus.value = returnStatus;
         };
         Shell.prototype.shellLoad = function (args) {
+            var priority;
             var input = document.getElementById("taProgramInput").value;
             var regexp = new RegExp('^[0-9A-Fa-f\\s]+$');
+            if (args == "") {
+                priority = 10;
+            }
+            else if (priority = parseInt(args) < 0) {
+                _StdOut.putText("Priority must be positive");
+            }
             if (regexp.test(input)) {
                 input = input.replace(/[\s]/g, "");
                 //_StdOut.putText("That is valid input!");
                 _StdOut.advanceLine;
                 //_StdOut.putText(input);
                 _Kernel.krnTrace("Program " + input);
-                _MemoryManager.loadInput(input); //loads program in to memory
+                _MemoryManager.loadInput(input, priority); //loads program in to memory
             } //if
             else {
                 _StdOut.putText("That is not valid input.");
             }
-        };
+        }; //shellLoad
         Shell.prototype.shellRun = function (args) {
             var exists = false;
             for (var i = 0; i < _resList.length; i++) {

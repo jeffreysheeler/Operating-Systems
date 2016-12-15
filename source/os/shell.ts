@@ -355,8 +355,16 @@ module TSOS {
         }
 
         public shellLoad(args)  {
+            var priority;
             var input = (<HTMLInputElement>document.getElementById("taProgramInput")).value;
             var regexp = new RegExp('^[0-9A-Fa-f\\s]+$');
+
+            if(args==""){
+                priority = 10;
+            }
+            else if(priority = parseInt(args) < 0){
+                _StdOut.putText("Priority must be positive");
+            }
 
             if(regexp.test(input)){
                 input = input.replace(/[\s]/g, "");
@@ -366,13 +374,13 @@ module TSOS {
 
                 _Kernel.krnTrace("Program "+input);
 
-                _MemoryManager.loadInput(input);                //loads program in to memory
+                _MemoryManager.loadInput(input, priority);                //loads program in to memory
             }//if
             else{
                 _StdOut.putText("That is not valid input.");
             }
 
-        }
+        }//shellLoad
 
         public shellRun(args){
             var exists = false;
