@@ -55,7 +55,7 @@ module TSOS{
                 for(var j = 1; j < this.blocks; j++){
                     var metaData = this.selectMeta(0,i,j);
                     if(metaData.charAt(0) == "0"){
-                        var index = this.findEmptySpace();
+                        var index = this.findEmptySpace(0,i,j);
                         if(index != "Unavailable"){
                             var file = "1"+index.concat(fileName);
                             file = this.fillBlock(file);
@@ -99,7 +99,6 @@ module TSOS{
 
         public selectMeta(t,s,b): String{
             var m = sessionStorage.getItem(""+t+""+s+""+b+"").substr(0,4);
-            //m = m.substr(4);
             return m;
         }//selectMeta
 
@@ -113,16 +112,19 @@ module TSOS{
             return mbr;
         }//selectMBR
 
-        public findEmptySpace():String{
+        public findEmptySpace(t,s,b):String{
             var x = "Unavailable";
-            var mbr = "000";
+            var dir = ""+t+""+s+""+b;
             for(var i = 1; i < this.tracks; i++){
                 for(var j = 0; j < this.sectors; j++){
                     for(var k = 0; k < this.blocks; k++){
                         var m = this.selectMeta(i,j,k);
                         if(m.charAt(0) == "0"){
-                            sessionStorage.setItem(i+""+j+""+k, "1"+mbr.concat(this.freeSpace));
+                            sessionStorage.setItem(""+i+j+k, "1"+dir.concat(this.freeSpace));
                             x = i+""+j+""+k;
+                            i = this.tracks;
+                            j = this.sectors;
+                            k = this.blocks;
                         }//if4
                     }//for k
                 }//for j
@@ -133,7 +135,7 @@ module TSOS{
         private fillBlock(fileData):string{
             var data = "";
             for(var i = 0; i < (124-fileData.length); i++){
-                data += "0";
+                data += "-";
             }
             return fileData.concat(data);
         }//fillBlock
