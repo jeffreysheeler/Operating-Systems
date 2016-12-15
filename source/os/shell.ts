@@ -167,6 +167,11 @@ module TSOS {
                                    "Initializes all blocks in all sectors in all tracks");
             this.commandList[this.commandList.length] = sc;
 
+            sc = new ShellCommand(this.shellSetSchedule,
+                                   "setschedule",
+                                   "<string> - Sets the scheduling algorithm: rr, fcfs, priority");
+            this.commandList[this.commandList.length] = sc;
+
             //
             // Display the initial prompt.
             this.putPrompt();
@@ -498,6 +503,24 @@ module TSOS {
                 }//else
             }//if isExecuting
         }//shellKill
+
+        public shellSetSchedule(args){
+            var scheduler = args;
+
+            if(scheduler != "rr" && scheduler != "fcfs" && scheduler != "priority"){
+                _StdOut.putText("Please enter a valid scheduling algorithm");
+                _StdOut.advanceLine();
+            }//if
+            else{
+                _Scheduler.scheduler = scheduler;
+                _StdOut.putText("Now using the "+scheduler+" scheduling algorithm");
+                _StdOut.advanceLine();
+            }//else
+        }//shellSetSchedule
+
+        public shellGetSchedule(args){
+            _StdOut.putText("Currently using the "+_Scheduler.scheduler+" scheduling algorithm");
+        }//shellGetScheduler
 
         public shellFormat(args){
             _krnFileSystemDriver.init();
