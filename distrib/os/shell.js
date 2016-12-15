@@ -95,6 +95,10 @@ var TSOS;
             this.commandList[this.commandList.length] = sc;
             sc = new TSOS.ShellCommand(this.shellFormat, "format", "Initializes all blocks in all sectors in all tracks");
             this.commandList[this.commandList.length] = sc;
+            sc = new TSOS.ShellCommand(this.shellSetSchedule, "setschedule", "<string> - Sets the scheduling algorithm: rr, fcfs, priority");
+            this.commandList[this.commandList.length] = sc;
+            sc = new TSOS.ShellCommand(this.shellGetSchedule, "getschedule", "Returns the current scheduling algorithm");
+            this.commandList[this.commandList.length] = sc;
             //
             // Display the initial prompt.
             this.putPrompt();
@@ -386,6 +390,21 @@ var TSOS;
                 } //else
             } //if isExecuting
         }; //shellKill
+        Shell.prototype.shellSetSchedule = function (args) {
+            var scheduler = args;
+            if (scheduler != "rr" && scheduler != "fcfs" && scheduler != "priority") {
+                _StdOut.putText("Please enter a valid scheduling algorithm");
+                _StdOut.advanceLine();
+            } //if
+            else {
+                _Scheduler.scheduler = scheduler;
+                _StdOut.putText("Now using the " + scheduler + " scheduling algorithm");
+                _StdOut.advanceLine();
+            } //else
+        }; //shellSetSchedule
+        Shell.prototype.shellGetSchedule = function (args) {
+            _StdOut.putText("Currently using the " + _Scheduler.scheduler + " scheduling algorithm");
+        }; //shellGetScheduler
         Shell.prototype.shellFormat = function (args) {
             _krnFileSystemDriver.init();
             _StdOut.putText("Format successful");
@@ -394,9 +413,10 @@ var TSOS;
         Shell.prototype.shellCreateFile = function (args) {
             if (args.length > 0) {
                 var file = "" + args;
-                _StdOut.putText("Creating file: " + file);
-                _StdOut.advanceLine();
-                _krnFileSystemDriver.createFile(file);
+                if (_krnFileSystemDriver.createFile(file)) {
+                    _StdOut.putText("Creating file: " + file);
+                    _StdOut.advanceLine();
+                } //if
             } //if
             else {
                 _StdOut.putText("Enter a valid file name");
@@ -457,6 +477,12 @@ var TSOS;
                         break;
                     case "format":
                         _StdOut.putText("Initializes all blocks in all sectors in all tracks");
+                        break;
+                    case "getschedule":
+                        _StdOut.putText("Returns the currently selected CPU scheduling algorithm");
+                        break;
+                    case "setschedule":
+                        _StdOut.putText("Allows the user to select a CPU scheduling algorithm");
                         break;
                     // TODO: Make descriptive MANual page entries for the the rest of the shell commands here.
                     default:

@@ -172,6 +172,11 @@ module TSOS {
                                    "<string> - Sets the scheduling algorithm: rr, fcfs, priority");
             this.commandList[this.commandList.length] = sc;
 
+            sc = new ShellCommand(this.shellGetSchedule,
+                                   "getschedule",
+                                   "Returns the current scheduling algorithm");
+            this.commandList[this.commandList.length] = sc;
+
             //
             // Display the initial prompt.
             this.putPrompt();
@@ -531,9 +536,10 @@ module TSOS {
         public shellCreateFile(args){
             if(args.length > 0){
                 var file = ""+args;
-                _StdOut.putText("Creating file: "+file);
-                _StdOut.advanceLine();
-                _krnFileSystemDriver.createFile(file);
+                if(_krnFileSystemDriver.createFile(file)){
+                    _StdOut.putText("Creating file: "+file);
+                    _StdOut.advanceLine();
+                }//if
                 //_KernelInterruptQueue(new Interrupt(HD_IRQ, [0,file]));
             }//if
             else{
@@ -596,6 +602,12 @@ module TSOS {
                     break;
                     case "format":
                         _StdOut.putText("Initializes all blocks in all sectors in all tracks");
+                    break;
+                    case "getschedule":
+                        _StdOut.putText("Returns the currently selected CPU scheduling algorithm");
+                    break;
+                    case "setschedule":
+                        _StdOut.putText("Allows the user to select a CPU scheduling algorithm");
                     break;
                     // TODO: Make descriptive MANual page entries for the the rest of the shell commands here.
                     default:

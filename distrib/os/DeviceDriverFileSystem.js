@@ -22,24 +22,33 @@ var TSOS;
             this.init();
         }; //krnHDDriverEntry
         DeviceDriverFileSystem.prototype.init = function () {
+            sessionStorage.clear();
             for (var i = 0; i < 60; i++) {
                 this.freeSpace += "--";
             } //for freeSpace
             this.meta = "0000";
             for (var j = 0; j < this.tracks; j++) {
                 for (var k = 0; k < this.sectors; k++) {
-                    for (var l = 0; l < this.blockLength; l++) {
+                    for (var l = 0; l < this.blocks; l++) {
                         var empty = this.meta.concat(this.freeSpace);
-                        sessionStorage.setItem(j.toString() + k.toString() + l.toString, empty);
+                        if (j == 0 && k == 0 && l == 0) {
+                            sessionStorage.setItem('' + j + '' + k + '' + l, empty);
+                        }
+                        else {
+                            sessionStorage.setItem('' + j + '' + k + '' + l, empty);
+                        } //else
                     } //l for
                 } //k for
             } //j for
         }; //init
         DeviceDriverFileSystem.prototype.createFile = function (fileName) {
             fileName = TSOS.Utils.hexFromString(fileName);
+            while (fileName.length < 120) {
+                fileName += "-";
+            } //while         
             //_Kernel.krnTrace("New file: "+fileName);
             for (var i = 0; i < this.sectors; i++) {
-                for (var j = 0; j < this.blocks; j++) {
+                for (var j = 1; j < this.blocks; j++) {
                     var metaData = this.selectMeta(0, i, j);
                     if (metaData.charAt(0) == "0") {
                         var index = this.findEmptySpace();
@@ -47,6 +56,8 @@ var TSOS;
                             var file = "1" + index.concat(fileName);
                             file = this.fillBlock(file);
                             sessionStorage.setItem("0" + i + "" + j, file);
+                            i = 8;
+                            j = 8;
                         } //Unavailable if
                         //Control.updateHDDTable();
                         return true;
@@ -62,7 +73,7 @@ var TSOS;
             var readFile;
             var nextFile;
             for (var i = 0; i < this.sectors; i++) {
-                for (var j = 0; j < this.blocks; j++) {
+                for (var j = 1; j < this.blocks; j++) {
                     temp = this.selectData(0, i, j);
                     if (temp == fileName) {
                         mbr = this.selectMBR(0, i, j);
