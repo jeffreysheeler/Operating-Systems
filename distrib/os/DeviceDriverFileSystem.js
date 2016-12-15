@@ -45,17 +45,19 @@ var TSOS;
             fileName = TSOS.Utils.hexFromString(fileName);
             while (fileName.length < 120) {
                 fileName += "-";
-            } //while         
+            } //while
+            var dir;
             //_Kernel.krnTrace("New file: "+fileName);
             for (var i = 0; i < this.sectors; i++) {
                 for (var j = 1; j < this.blocks; j++) {
                     var metaData = this.selectMeta(0, i, j);
                     if (metaData.charAt(0) == "0") {
+                        dir = "0" + i + "" + j;
                         var index = this.findEmptySpace(0, i, j);
                         if (index != "Unavailable") {
                             var file = "1" + index.concat(fileName);
                             file = this.fillBlock(file);
-                            sessionStorage.setItem("0" + i + "" + j, file);
+                            sessionStorage.setItem(dir, file);
                             i = 8;
                             j = 8;
                         } //Unavailable if
@@ -102,13 +104,15 @@ var TSOS;
         }; //selectMBR
         DeviceDriverFileSystem.prototype.findEmptySpace = function (t, s, b) {
             var x = "Unavailable";
+            var dataBlock;
             var dir = "" + t + "" + s + "" + b;
             for (var i = 1; i < this.tracks; i++) {
                 for (var j = 0; j < this.sectors; j++) {
                     for (var k = 0; k < this.blocks; k++) {
+                        dataBlock = "" + i + j + k;
                         var m = this.selectMeta(i, j, k);
                         if (m.charAt(0) == "0") {
-                            sessionStorage.setItem("" + i + j + k, "1" + dir.concat(this.freeSpace));
+                            sessionStorage.setItem(dataBlock, "1" + dir.concat(this.freeSpace));
                             x = i + "" + j + "" + k;
                             i = this.tracks;
                             j = this.sectors;
