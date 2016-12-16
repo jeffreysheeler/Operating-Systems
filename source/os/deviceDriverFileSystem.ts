@@ -140,7 +140,7 @@ module TSOS{
             return false;
         }//writeFile
 
-        public deleteFile(file){
+        public deleteFile(file): boolean{
             file = this.fillBlock(Utils.hexFromString);
             var temp;
             var mbr;
