@@ -1,4 +1,5 @@
 ///<reference path="../globals.ts" />
+///<
 var TSOS;
 (function (TSOS) {
     var scheduler = (function () {
@@ -16,13 +17,19 @@ var TSOS;
                 TSOS.Control.updateReadyQueueTable();
             }
             var readyProg = _readyQueue.dequeue();
-            /*var exists = false;
+            var exists = false;
             var x = 0;
             var tempProcess;
             var change;
-            
-            while(x < _readyQueue.getSize() && !exists){
-                tempProcess = _readyQueue.getIndex(x);
+            if (readyProg.locality == 1) {
+                var program = _krnFileSystemDriver.readFile(readyProg.pid);
+                _krnFileSystemDriver.deleteFile(readyProg.pid);
+                while (x < _readyQueue.getSize() && !exists) {
+                    tempProcess = _readyQueue.getIndex(x);
+                    if (tempProcess.locality == 0) {
+                        exists = true;
+                    } //if
+                } //while
                 change = _readyQueue.remove(tempProcess.pid);
                 _MemoryManager.progSwap(change, readyProg);
                 readyProg.min = change.min;
@@ -31,10 +38,11 @@ var TSOS;
                 change.min = 0;
                 change.max = 0;
                 change.PC = 0;
-
                 _readyQueue.enqueue(change);
-            }//while
-            */
+                if (this.scheduler == "priority") {
+                    _readyQueue.sort(0, _readyQueue.getSize());
+                } //if
+            } //if
             readyProg.state = "Running";
             _CPU.currentPCB = readyProg;
             _CPU.PC = readyProg.PC;

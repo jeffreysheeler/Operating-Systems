@@ -140,6 +140,31 @@ module TSOS{
             return false;
         }//writeFile
 
+        public deleteFile(file){
+            file = this.fillBlock(Utils.hexFromString);
+            var temp;
+            var mbr;
+            var nextBlock;
+
+            for(var i = 0; i < this.sectors; i++){
+                for(var j = 0; j < this.blocks; j++){
+                    temp = this.selectData(0,i,j);
+                    if(temp == file){
+                        mbr = this.selectMBR(0,i,j);
+                        sessionStorage.setItem("0"+i+j, "0000"+this.freeSpace);
+                        do{
+                            nextBlock = sessionStorage.getItem(mbr).substr(1,3);
+                            sessionStorage.setItem(mbr, "0000"+this.freeSpace);
+                            mbr = nextBlock;
+                        }while(mbr != "000");
+                        //Control.updateHDTable();
+                        return true;
+                    }//if
+                }//for j
+            }//for i
+            return false;
+        }//deleteFile
+
         public listFiles(): void{
             var file;
             for(var i = 0; i < this.sectors; i++){

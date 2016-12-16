@@ -57,6 +57,38 @@ var TSOS;
             array[x] = array[y];
             array[y] = a;
         }; //swap
+        Queue.prototype.sort = function (leftBound, rightBound) {
+            var x;
+            if (this.q.length > 1) {
+                x = this.format(leftBound, rightBound);
+                if (leftBound < x - 1) {
+                    this.sort(leftBound, x - 1);
+                } //if
+                if (x < rightBound) {
+                    this.sort(x, rightBound);
+                } //if
+            } //if
+            return this.q;
+        }; //sort
+        Queue.prototype.format = function (leftBound, rightBound) {
+            var mid = this.q[Math.floor((rightBound + leftBound) / 2)].priority;
+            var l = leftBound;
+            var r = rightBound;
+            while (l <= r) {
+                while (this.q[l].priority < mid) {
+                    l++;
+                } //while leftBound
+                while (this.q[r].priority > mid) {
+                    r--;
+                } //while rightBound
+                if (l <= r) {
+                    this.swap(this.q, l, r);
+                    l++;
+                    r--;
+                } //if
+            } //while
+            return l;
+        }; //format
         return Queue;
     }());
     TSOS.Queue = Queue;
