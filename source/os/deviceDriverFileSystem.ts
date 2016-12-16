@@ -57,7 +57,7 @@ module TSOS{
                 for(var j = 1; j < this.blocks; j++){
                     var metaData = this.selectMeta(0,i,j);
                     if(metaData.charAt(0) == "0"){
-                        dir = "0"+ i +""+j;
+                        dir = "0"+i+j;
                         var index = this.findEmptySpace(0,i,j);
                         if(index != "Unavailable"){
                             var file = "1"+index.concat(fileName);

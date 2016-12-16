@@ -52,7 +52,7 @@ var TSOS;
                 for (var j = 1; j < this.blocks; j++) {
                     var metaData = this.selectMeta(0, i, j);
                     if (metaData.charAt(0) == "0") {
-                        dir = "0" + i + "" + j;
+                        dir = "0" + i + j;
                         var index = this.findEmptySpace(0, i, j);
                         if (index != "Unavailable") {
                             var file = "1" + index.concat(fileName);
@@ -128,6 +128,19 @@ var TSOS;
             }
             return false;
         }; //writeFile
+        DeviceDriverFileSystem.prototype.listFiles = function () {
+            var file;
+            for (var i = 0; i < this.sectors; i++) {
+                for (var j = 0; j < this.blocks; j++) {
+                    file = this.selectData(0, i, j);
+                    if (file != this.freeSpace) {
+                        file = TSOS.Utils.stringFromHex(file);
+                        _StdOut.putText(file + " ");
+                        _StdOut.advanceLine();
+                    } //if
+                } //for j
+            } //for i
+        }; //listFiles
         DeviceDriverFileSystem.prototype.selectMeta = function (t, s, b) {
             var m = sessionStorage.getItem("" + t + "" + s + "" + b + "").substr(0, 4);
             return m;

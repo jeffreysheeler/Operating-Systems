@@ -101,6 +101,8 @@ var TSOS;
             this.commandList[this.commandList.length] = sc;
             sc = new TSOS.ShellCommand(this.shellWriteFile, "write", "<string> \" data\" - Writes data to the selected file");
             this.commandList[this.commandList.length] = sc;
+            sc = new TSOS.ShellCommand(this.shellLS, "ls", "lists files currently stored on disk");
+            this.commandList[this.commandList.length] = sc;
             //
             // Display the initial prompt.
             this.putPrompt();
@@ -457,6 +459,9 @@ var TSOS;
                 _StdOut.advanceLine();
             } //else
         }; //shellWriteFile
+        Shell.prototype.shellLS = function (args) {
+            _krnFileSystemDriver.listFiles();
+        }; //shellLS
         Shell.prototype.shellMan = function (args) {
             if (args.length > 0) {
                 var topic = args[0];
@@ -520,6 +525,9 @@ var TSOS;
                         break;
                     case "writeFile":
                         _StdOut.putText("Allows the user to alter the data of a file");
+                        break;
+                    case "ls":
+                        _StdOut.putText("Lists all files currently on disk");
                         break;
                     // TODO: Make descriptive MANual page entries for the the rest of the shell commands here.
                     default:
