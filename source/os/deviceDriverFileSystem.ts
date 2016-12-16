@@ -140,6 +140,20 @@ module TSOS{
             return false;
         }//writeFile
 
+        public listFiles(): void{
+            var file;
+            for(var i = 0; i < this.sectors; i++){
+                for(var j = 0; j < this.blocks; j++){
+                    file = this.selectData(0,i,j);
+                    if(file!=this.freeSpace){
+                        file = Utils.stringFromHex(file);
+                        _StdOut.putText(file+" ");
+                        _StdOut.advanceLine();
+                    }//if
+                }//for j
+            }//for i
+        }//listFiles
+
         public selectMeta(t,s,b): String{
             var m = sessionStorage.getItem(""+t+""+s+""+b+"").substr(0,4);
             return m;

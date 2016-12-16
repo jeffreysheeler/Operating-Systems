@@ -182,6 +182,11 @@ module TSOS {
                                    "<string> \" data\" - Writes data to the selected file");
             this.commandList[this.commandList.length] = sc;
 
+            sc = new ShellCommand(this.shellLS,
+                                   "ls",
+                                   "lists files currently stored on disk");
+            this.commandList[this.commandList.length] = sc;
+
             //
             // Display the initial prompt.
             this.putPrompt();
@@ -592,6 +597,10 @@ module TSOS {
             }//else
         }//shellWriteFile
 
+        public shellLS(args){
+            _krnFileSystemDriver.listFiles();
+        }//shellLS
+
         public shellMan(args) {
             if (args.length > 0) {
                 var topic = args[0];
@@ -655,6 +664,9 @@ module TSOS {
                     break;
                     case "writeFile":
                         _StdOut.putText("Allows the user to alter the data of a file");
+                    break;
+                    case "ls":
+                        _StdOut.putText("Lists all files currently on disk");
                     break;
                     // TODO: Make descriptive MANual page entries for the the rest of the shell commands here.
                     default:
