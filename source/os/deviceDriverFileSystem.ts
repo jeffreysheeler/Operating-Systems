@@ -50,7 +50,7 @@ module TSOS{
                 fileName += "-";
             }//while
 
-            var dir;         
+            var dir = "";         
 
             //_Kernel.krnTrace("New file: "+fileName);
             for(var i = 0; i < this.sectors; i++){
@@ -67,7 +67,7 @@ module TSOS{
                             j = 8;
                         }//Unavailable if
 
-                        //Control.updateHDDTable();
+                        //Control.updateHDTable();
                         return true;
                     }//if metaData
                 }
@@ -155,24 +155,24 @@ module TSOS{
         }//listFiles
 
         public selectMeta(t,s,b): String{
-            var m = sessionStorage.getItem(""+t+""+s+""+b+"").substr(0,4);
+            var m = sessionStorage.getItem(""+t+s+b).substr(0,4);
             return m;
         }//selectMeta
 
         public selectData(t,s,b): String{
-            var data = sessionStorage.getItem(t+""+s+""+b).substr(0,4);
+            var data = sessionStorage.getItem(""+t+s+b).substr(0,4);
             return data;
         }//selectData
 
         public selectMBR(t,s,b): String{
-            var mbr = sessionStorage.getItem(t+""+s+""+b).substr(1,3);
+            var mbr = sessionStorage.getItem(""+t+s+b).substr(1,3);
             return mbr;
         }//selectMBR
 
         public findEmptySpace(t,s,b):String{
             var x = "Unavailable";
-            var dataBlock;
-            var dir = ""+t+""+s+""+b;
+            var dataBlock = "";
+            var dir = ""+t+s+b;
             for(var i = 1; i < this.tracks; i++){
                 for(var j = 0; j < this.sectors; j++){
                     for(var k = 0; k < this.blocks; k++){
@@ -180,7 +180,7 @@ module TSOS{
                         var m = this.selectMeta(i,j,k);
                         if(m.charAt(0) == "0"){
                             sessionStorage.setItem(dataBlock, "1"+dir.concat(this.freeSpace));
-                            x = i+""+j+""+k;
+                            x = ""+i+j+k;
                             i = this.tracks;
                             j = this.sectors;
                             k = this.blocks;
