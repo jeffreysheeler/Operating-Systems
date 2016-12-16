@@ -187,6 +187,11 @@ module TSOS {
                                    "lists files currently stored on disk");
             this.commandList[this.commandList.length] = sc;
 
+            sc = new ShellCommand(this.shellDeleteFile,
+                                   "delete",
+                                   "<string> - Removes the specified file from storage");
+            this.commandList[this.commandList.length] = sc;
+
             //
             // Display the initial prompt.
             this.putPrompt();
@@ -596,6 +601,18 @@ module TSOS {
                 _StdOut.advanceLine();
             }//else
         }//shellWriteFile
+
+        public shellDeleteFile(args){
+            var file = args;
+            if(_krnFileSystemDriver.deleteFile(file)){
+                _StdOut.putText("File successfully deleted");
+                _StdOut.advanceLine();
+            }//if
+            else{
+                _StdOut.putText("Could not delete the specified file");
+                _StdOut.advanceLine();
+            }//else
+        }//shellDeleteFile
 
         public shellLS(args){
             _krnFileSystemDriver.listFiles();
