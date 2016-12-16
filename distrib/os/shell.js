@@ -103,6 +103,8 @@ var TSOS;
             this.commandList[this.commandList.length] = sc;
             sc = new TSOS.ShellCommand(this.shellLS, "ls", "lists files currently stored on disk");
             this.commandList[this.commandList.length] = sc;
+            sc = new TSOS.ShellCommand(this.shellDeleteFile, "delete", "<string> - Removes the specified file from storage");
+            this.commandList[this.commandList.length] = sc;
             //
             // Display the initial prompt.
             this.putPrompt();
@@ -459,6 +461,17 @@ var TSOS;
                 _StdOut.advanceLine();
             } //else
         }; //shellWriteFile
+        Shell.prototype.shellDeleteFile = function (args) {
+            var file = args;
+            if (_krnFileSystemDriver.deleteFile(file)) {
+                _StdOut.putText("File successfully deleted");
+                _StdOut.advanceLine();
+            } //if
+            else {
+                _StdOut.putText("Could not delete the specified file");
+                _StdOut.advanceLine();
+            } //else
+        }; //shellDeleteFile
         Shell.prototype.shellLS = function (args) {
             _krnFileSystemDriver.listFiles();
         }; //shellLS

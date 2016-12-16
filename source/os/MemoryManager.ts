@@ -59,7 +59,7 @@ module TSOS{
                 var file = _PCB.pid;
                 _krnFileSystemDriver.createFile(file);
                 _krnFileSystemDriver.writeFile(file, input);
-                _StdOut("Program loaded to disk, pid = "+_PCB.pid);
+                _StdOut.putText("Program loaded to disk, pid = "+_PCB.pid);
                 _StdOut.advanceLine();
                 _OsShell.pid++;
                 _PCB = null;
